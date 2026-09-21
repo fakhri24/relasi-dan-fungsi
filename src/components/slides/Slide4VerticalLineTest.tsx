@@ -151,10 +151,10 @@ export const Slide4VerticalLineTest: React.FC = () => {
       </div>
 
       {/* Interactive Graph Canvas */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center bg-slate-900/90 border border-slate-800 p-6 rounded-2xl shadow-xl">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-center bg-slate-900/90 border border-slate-800 p-4 md:p-5 rounded-2xl shadow-xl flex-1 min-h-0 my-1">
         {/* Canvas */}
-        <div className="md:col-span-7 flex justify-center items-center bg-slate-950 p-4 rounded-2xl border border-slate-800/80">
-          <svg className="w-full max-w-[420px] h-[300px]" viewBox="0 0 400 300">
+        <div className="md:col-span-7 flex justify-center items-center bg-slate-950 p-2.5 rounded-2xl border border-slate-800/80">
+          <svg className="w-full max-w-[380px] h-[230px]" viewBox="0 0 400 300">
             {/* Grid background */}
             <defs>
               <pattern id="grid" width="35" height="25" patternUnits="userSpaceOnUse">
@@ -247,38 +247,38 @@ export const Slide4VerticalLineTest: React.FC = () => {
 
           {/* Status Hasil Potong */}
           <div
-            className={`p-5 rounded-2xl border transition-all ${
+            className={`p-3.5 rounded-xl border transition-all ${
               intersections.length > 1
                 ? 'bg-rose-950/40 border-rose-500/60 text-rose-200'
                 : 'bg-emerald-950/40 border-emerald-500/60 text-emerald-200'
             }`}
           >
-            <div className="flex items-center gap-3 mb-1.5">
+            <div className="flex items-center gap-2.5 mb-1">
               {intersections.length > 1 ? (
-                <XCircle className="w-6 h-6 text-rose-400" />
+                <XCircle className="w-5 h-5 text-rose-400" />
               ) : (
-                <CheckCircle2 className="w-6 h-6 text-emerald-400" />
+                <CheckCircle2 className="w-5 h-5 text-emerald-400" />
               )}
-              <span className="text-lg font-extrabold">
+              <span className="text-base font-extrabold">
                 {intersections.length} Titik Potong Terdeteksi
               </span>
             </div>
-            <p className="text-sm leading-relaxed text-slate-300">
+            <p className="text-xs leading-relaxed text-slate-300">
               {selectedGraph.verdict}
             </p>
           </div>
 
-          <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs text-slate-400">
+          <div className="p-2 bg-slate-950 rounded-xl border border-slate-800 text-[11px] text-slate-400">
             💬 Ajukan ke siswa: "Kenapa lingkaran tidak bisa disebut fungsi <MathFormula math="y = f(x)" />? Berapa nilai <MathFormula math="y" /> saat <MathFormula math="x = 0" />?"
           </div>
         </div>
       </div>
 
       {/* Footer Takeaway */}
-      <div className="bg-slate-900 border-l-4 border-brand-500 p-4 rounded-r-xl flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <span className="font-mono text-sm px-2.5 py-1 rounded bg-brand-500/20 text-brand-300 font-bold">RUMUS CEPAT</span>
-          <p className="text-slate-200 text-lg font-semibold">
+      <div className="bg-slate-900 border-l-4 border-brand-500 p-2.5 px-4 rounded-r-xl flex items-center justify-between mt-1 shrink-0">
+        <div className="flex items-center gap-2.5">
+          <span className="font-mono text-xs px-2 py-0.5 rounded bg-brand-500/20 text-brand-300 font-bold">RUMUS CEPAT</span>
+          <p className="text-slate-200 text-sm md:text-base font-semibold">
             1 Garis Vertikal <MathFormula math="\to" /> Maksimal 1 Titik Potong = <span className="text-emerald-400">FUNGSI</span>. Lebih dari 1 Titik = <span className="text-rose-400">BUKAN FUNGSI</span>.
           </p>
         </div>

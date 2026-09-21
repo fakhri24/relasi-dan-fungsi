@@ -4,7 +4,7 @@ Dokumen perencanaan dan pelacakan progres pengembangan media pembelajaran intera
 
 ---
 
-## 📌 Status Terkini: v1.0.0 (Tahap Rilis Awal)
+## 📌 Status Terkini: v1.1.0 (Audit KaTeX & 16:9 Zero-Scroll Selesai ✅)
 - [x] Riset kurikulum SuperMath MTK X & modul Bab 7 (Relasi & Fungsi).
 - [x] Pemangkasan materi teoretis formal (Injektif/Surjektif/Bijektif, Fungsi Genap/Ganjil, manipulasi aljabar rumit SNBT).
 - [x] Inisialisasi arsitektur React 19 + TypeScript + Vite + Tailwind CSS + KaTeX.
@@ -12,6 +12,9 @@ Dokumen perencanaan dan pelacakan progres pengembangan media pembelajaran intera
 - [x] Pembuatan komponen `WorksheetPrint.tsx` untuk pencetakan instan Lembar Kerja Proyek A4 (`window.print()`).
 - [x] Konfigurasi deployment GitHub Pages (`vite.config.ts` base: `'./'` + `.github/workflows/deploy.yml`).
 - [x] Pembuatan memori agen AI (`AGENTS.md` dan `PLAN.md`).
+- [x] **Audit KaTeX Anti-Double Render**: Memperbaiki duplikasi rendering rumus KaTeX dengan opsi `output: 'html'`, bundling lokal stylesheet `katex/dist/katex.min.css`, dan failsafe CSS `.katex-mathml { display: none !important; }`. (Skor: 10/10)
+- [x] **Audit Layout 16:9 Zero-Scroll**: Mengunci kontainer pada `h-screen max-h-screen overflow-hidden`, membatasi `SlideContainer` pada `h-[calc(100vh-3.5rem)]`, dan mengompakkan proporsi SVG/card di semua slide agar pas 100% pada resolusi 1366×768 (WXGA proyektor) dan 1920×1080 tanpa scrollbar. (Skor: 9.8/10)
+- [x] **Dukungan Deep Linking URL**: Navigasi langsung slide via query parameter `?slide=1` s.d. `?slide=10`.
 
 ---
 

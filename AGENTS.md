@@ -50,7 +50,14 @@ Setiap kali ada perubahan, penambahan fitur, atau perbaikan kode:
 
 - **Framework**: React 19 + TypeScript + Vite.
 - **Styling**: Tailwind CSS (tema gelap kontras tinggi `slate-950` dengan aksen `brand-500` dan glow proyektor).
-- **Notasi Matematika**: KaTeX (`katex.renderToString` via komponen `MathFormula.tsx`).
+- **Aturan KaTeX Anti-Double Render**:
+  - Wajib mengimpor stylesheet lokal `import 'katex/dist/katex.min.css';` di `src/main.tsx` (ter-bundle langsung oleh Vite, hindari CDN eksternal dengan hash integrity yang rentan gagal).
+  - Wajib menetapkan `output: 'html'` pada opsi `katex.renderToString` di `MathFormula.tsx` agar tidak merender elemen MathML secara ganda.
+  - Failsafe `.katex-mathml { display: none !important; }` di `src/index.css`.
+- **Standar Tampilan 16:9 Proyektor (Zero-Scroll)**:
+  - Kontainer aplikasi wajib `h-screen max-h-screen overflow-hidden`.
+  - `SlideContainer` dibatasi tepat pada `h-[calc(100vh-3.5rem)]` dengan `overflow-hidden`.
+  - Setiap slide wajib memanfaatkan `flex-1 min-h-0` dan batas tinggi komponen (misal SVG $\le$ 230px) agar seluruh konten dan footer terlihat 100% pada resolusi 1366×768 (WXGA proyektor) tanpa memicu scrollbar vertikal.
 - **Ikonografi**: Lucide React.
 - **Deployment**: GitHub Pages melalui GitHub Actions (`.github/workflows/deploy.yml`) dengan `base: './'` di `vite.config.ts`.
 

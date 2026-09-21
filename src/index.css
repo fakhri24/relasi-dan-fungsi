@@ -5,8 +5,13 @@
 /* Classroom Projector Optimizations */
 @layer base {
   body {
-    @apply bg-slate-950 text-slate-100 antialiased;
+    @apply bg-slate-950 text-slate-100 antialiased overflow-hidden select-none;
   }
+}
+
+/* Failsafe to prevent any double rendering of MathML alongside KaTeX HTML */
+.katex-mathml {
+  display: none !important;
 }
 
 /* Custom animations and styling */

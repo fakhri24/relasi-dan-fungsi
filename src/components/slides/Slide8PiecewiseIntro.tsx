@@ -37,25 +37,25 @@ export const Slide8PiecewiseIntro: React.FC = () => {
       </div>
 
       {/* Main Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center bg-slate-900/90 border border-slate-800 p-6 rounded-2xl shadow-xl my-2">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-center bg-slate-900/90 border border-slate-800 p-4 md:p-5 rounded-2xl shadow-xl my-1 flex-1 min-h-0">
         {/* Kolom Kiri: Notasi KaTeX Bercabang dengan Highlight */}
-        <div className="md:col-span-6 flex flex-col justify-between space-y-4">
-          <div className="p-5 bg-slate-950 rounded-2xl border border-slate-800">
-            <span className="text-xs uppercase font-bold tracking-widest text-slate-500 block mb-3">
+        <div className="md:col-span-6 flex flex-col justify-between space-y-3">
+          <div className="p-3.5 bg-slate-950 rounded-2xl border border-slate-800">
+            <span className="text-[11px] uppercase font-bold tracking-widest text-slate-500 block mb-2">
               Notasi Formal Piecewise
             </span>
 
             {/* Render 3 Baris Cabang dengan State Highlight */}
-            <div className="space-y-2.5 font-mono text-base">
+            <div className="space-y-2 font-mono text-sm">
               <div
-                className={`p-3 rounded-xl border transition-all ${
+                className={`p-2 px-3 rounded-xl border transition-all ${
                   currentBranch.branch === 1
                     ? 'bg-brand-600/30 border-brand-400 text-white shadow-lg ring-1 ring-brand-400'
                     : 'bg-slate-900/50 border-slate-800/80 text-slate-400'
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-lg">
+                  <span className="font-bold text-base">
                     <MathFormula math="f(x) = 4" />
                   </span>
                   <span className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-800 text-slate-300">
@@ -130,9 +130,9 @@ export const Slide8PiecewiseIntro: React.FC = () => {
         </div>
 
         {/* Kolom Kanan: SVG Grafik Piecewise & Slider x */}
-        <div className="md:col-span-6 flex flex-col justify-between space-y-4">
-          <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800/80">
-            <svg className="w-full h-[240px]" viewBox="0 0 420 260">
+        <div className="md:col-span-6 flex flex-col justify-between space-y-3">
+          <div className="bg-slate-950 p-3 rounded-2xl border border-slate-800/80">
+            <svg className="w-full h-[190px]" viewBox="0 0 420 260">
               {/* Sumbu X & Y */}
               <line x1="50" y1="240" x2="400" y2="240" stroke="#64748b" strokeWidth="2" />
               <line x1="50" y1="20" x2="50" y2="240" stroke="#64748b" strokeWidth="2" />
@@ -205,10 +205,10 @@ export const Slide8PiecewiseIntro: React.FC = () => {
           </div>
 
           {/* Slider Kontrol Tracker x */}
-          <div className="p-4 bg-slate-950 rounded-xl border border-slate-800">
-            <div className="flex justify-between items-center text-xs font-bold text-slate-400 mb-2">
+          <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
+            <div className="flex justify-between items-center text-xs font-bold text-slate-400 mb-1.5">
               <span>Geser Nilai Input (<MathFormula math="x" />):</span>
-              <span className="text-brand-300 font-mono text-sm font-bold">
+              <span className="text-brand-300 font-mono text-xs font-bold">
                 x = {activeX.toFixed(1)} <MathFormula math="\to" /> y = {currentBranch.val.toFixed(1)}
               </span>
             </div>
@@ -219,17 +219,17 @@ export const Slide8PiecewiseIntro: React.FC = () => {
               step="0.1"
               value={activeX}
               onChange={(e) => setActiveX(parseFloat(e.target.value))}
-              className="w-full accent-brand-500 cursor-pointer h-2 bg-slate-800 rounded-lg"
+              className="w-full accent-brand-500 cursor-pointer h-1.5 bg-slate-800 rounded-lg"
             />
           </div>
         </div>
       </div>
 
       {/* Footer Takeaway */}
-      <div className="bg-slate-900 border-l-4 border-brand-500 p-4 rounded-r-xl flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <span className="font-mono text-sm px-2.5 py-1 rounded bg-brand-500/20 text-brand-300 font-bold">KUNCI MEMBACA</span>
-          <p className="text-slate-200 text-lg font-semibold">
+      <div className="bg-slate-900 border-l-4 border-brand-500 p-2.5 px-4 rounded-r-xl flex items-center justify-between mt-1 shrink-0">
+        <div className="flex items-center gap-2.5">
+          <span className="font-mono text-xs px-2 py-0.5 rounded bg-brand-500/20 text-brand-300 font-bold">KUNCI MEMBACA</span>
+          <p className="text-slate-200 text-sm md:text-base font-semibold">
             Lihat dulu nilai <MathFormula math="x" /> masuk di syarat yang mana, baru gunakan rumus di baris tersebut!
           </p>
         </div>

@@ -30,17 +30,42 @@ const SLIDES: SlideItem[] = [
 ];
 
 export const App: React.FC = () => {
-  const [currentSlideIndex, setCurrentSlideIndex] = useState<number>(0);
+  const getInitialSlide = () => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const slideParam = params.get('slide');
+      if (slideParam) {
+        const idx = parseInt(slideParam, 10) - 1;
+        if (idx >= 0 && idx < SLIDES.length) return idx;
+      }
+    } catch {
+      // fallback
+    }
+    return 0;
+  };
+
+  const [currentSlideIndex, setCurrentSlideIndex] = useState<number>(getInitialSlide);
+
+  const updateSlide = (newIndex: number) => {
+    setCurrentSlideIndex(newIndex);
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.set('slide', String(newIndex + 1));
+      window.history.replaceState(null, '', url.toString());
+    } catch {
+      // ignore
+    }
+  };
 
   const handleNext = () => {
     if (currentSlideIndex < SLIDES.length - 1) {
-      setCurrentSlideIndex((prev) => prev + 1);
+      updateSlide(currentSlideIndex + 1);
     }
   };
 
   const handlePrev = () => {
     if (currentSlideIndex > 0) {
-      setCurrentSlideIndex((prev) => prev - 1);
+      updateSlide(currentSlideIndex - 1);
     }
   };
 
@@ -72,12 +97,12 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col justify-between font-sans">
+    <div className="h-screen max-h-screen overflow-hidden bg-slate-950 flex flex-col justify-between font-sans">
       {/* Navbar & Slide Controller */}
       <Navbar
         slides={SLIDES}
         currentIndex={currentSlideIndex}
-        onSelectSlide={setCurrentSlideIndex}
+        onSelectSlide={updateSlide}
         onNext={handleNext}
         onPrev={handlePrev}
       />

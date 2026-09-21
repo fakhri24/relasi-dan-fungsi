@@ -38,10 +38,10 @@ export const Slide6LinearGraph: React.FC = () => {
       </div>
 
       {/* Main Interactive Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center bg-slate-900/90 border border-slate-800 p-6 rounded-2xl shadow-xl my-2">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-center bg-slate-900/90 border border-slate-800 p-4 md:p-5 rounded-2xl shadow-xl my-1 flex-1 min-h-0">
         {/* SVG Graphic */}
-        <div className="md:col-span-7 flex justify-center items-center bg-slate-950 p-4 rounded-2xl border border-slate-800/80">
-          <svg className="w-full max-w-[440px] h-[280px]" viewBox="0 0 420 280">
+        <div className="md:col-span-7 flex justify-center items-center bg-slate-950 p-3 rounded-2xl border border-slate-800/80">
+          <svg className="w-full max-w-[390px] h-[230px]" viewBox="0 0 420 280">
             {/* Grid horizontal */}
             {[0, 10, 20, 30, 40].map((val) => {
               const y = mapY(val);
@@ -178,10 +178,10 @@ export const Slide6LinearGraph: React.FC = () => {
       </div>
 
       {/* Footer Takeaway */}
-      <div className="bg-slate-900 border-l-4 border-brand-500 p-4 rounded-r-xl flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <span className="font-mono text-sm px-2.5 py-1 rounded bg-brand-500/20 text-brand-300 font-bold">PEMAHAMAN GRAFIK</span>
-          <p className="text-slate-200 text-lg font-semibold">
+      <div className="bg-slate-900 border-l-4 border-brand-500 p-2.5 px-4 rounded-r-xl flex items-center justify-between mt-1 shrink-0">
+        <div className="flex items-center gap-2.5">
+          <span className="font-mono text-xs px-2 py-0.5 rounded bg-brand-500/20 text-brand-300 font-bold">PEMAHAMAN GRAFIK</span>
+          <p className="text-slate-200 text-sm md:text-base font-semibold">
             Semakin mahal tarif per km (<MathFormula math="a" />), semakin <span className="text-indigo-400 font-bold">curam/tegak</span> garisnya. Biaya buka pintu (<MathFormula math="b" />) menentukan <span className="text-emerald-400 font-bold">titik awal</span> di sumbu tegak.
           </p>
         </div>

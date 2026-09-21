@@ -89,10 +89,10 @@ export const Slide3ArrowDiagram: React.FC = () => {
       </div>
 
       {/* Visual Diagram Panah */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center bg-slate-900/90 border border-slate-800 p-8 rounded-2xl shadow-xl">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-center bg-slate-900/90 border border-slate-800 p-4 md:p-5 rounded-2xl shadow-xl my-1 flex-1 min-h-0">
         {/* SVG Diagram Canvas */}
-        <div className="md:col-span-7 flex justify-center items-center bg-slate-950 p-6 rounded-2xl border border-slate-800/80 min-h-[300px]">
-          <svg className="w-full max-w-[460px] h-[260px]" viewBox="0 0 460 260">
+        <div className="md:col-span-7 flex justify-center items-center bg-slate-950 p-3 rounded-2xl border border-slate-800/80">
+          <svg className="w-full max-w-[420px] h-[220px]" viewBox="0 0 460 260">
             <defs>
               <marker
                 id="arrowhead-brand"
@@ -179,47 +179,47 @@ export const Slide3ArrowDiagram: React.FC = () => {
 
           {revealed ? (
             <div
-              className={`p-5 rounded-2xl border transition-all animate-fadeIn ${
+              className={`p-3.5 rounded-xl border transition-all animate-fadeIn ${
                 activePreset.isFunction
                   ? 'bg-emerald-950/40 border-emerald-500/50 text-emerald-200'
                   : 'bg-rose-950/40 border-rose-500/50 text-rose-200'
               }`}
             >
-              <div className="flex items-center gap-3 mb-2">
+              <div className="flex items-center gap-2 mb-1">
                 {activePreset.isFunction ? (
-                  <CheckCircle className="w-7 h-7 text-emerald-400" />
+                  <CheckCircle className="w-5 h-5 text-emerald-400" />
                 ) : (
-                  <XCircle className="w-7 h-7 text-rose-400" />
+                  <XCircle className="w-5 h-5 text-rose-400" />
                 )}
-                <span className="text-xl font-extrabold tracking-wide">
+                <span className="text-base font-extrabold tracking-wide">
                   {activePreset.verdict}
                 </span>
               </div>
-              <p className="text-base leading-relaxed text-slate-300">
+              <p className="text-xs leading-relaxed text-slate-300">
                 {activePreset.reason}
               </p>
             </div>
           ) : (
             <button
               onClick={() => setRevealed(true)}
-              className="py-4 px-6 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-lg shadow-xl transition-all flex items-center justify-center gap-2"
+              className="py-2.5 px-5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-base shadow-xl transition-all flex items-center justify-center gap-2"
             >
-              <Sparkles className="w-5 h-5" />
+              <Sparkles className="w-4 h-4" />
               Buktikan Jawaban Kelas!
             </button>
           )}
 
-          <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs text-slate-400">
+          <div className="p-2 bg-slate-950 rounded-xl border border-slate-800 text-[11px] text-slate-400">
             📌 Rumus ingatan cepat: <span className="text-brand-300 font-bold">Daerah Asal tidak boleh Jomblo & tidak boleh Selingkuh!</span>
           </div>
         </div>
       </div>
 
       {/* Footer Takeaway */}
-      <div className="bg-slate-900 border-l-4 border-brand-500 p-4 rounded-r-xl flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <span className="font-mono text-sm px-2.5 py-1 rounded bg-brand-500/20 text-brand-300 font-bold">ATURAN EMAS</span>
-          <p className="text-slate-200 text-lg font-semibold">
+      <div className="bg-slate-900 border-l-4 border-brand-500 p-2.5 px-4 rounded-r-xl flex items-center justify-between mt-1 shrink-0">
+        <div className="flex items-center gap-2.5">
+          <span className="font-mono text-xs px-2 py-0.5 rounded bg-brand-500/20 text-brand-300 font-bold">ATURAN EMAS</span>
+          <p className="text-slate-200 text-sm md:text-base font-semibold">
             Semua fungsi adalah relasi, tetapi tidak semua relasi adalah fungsi.
           </p>
         </div>

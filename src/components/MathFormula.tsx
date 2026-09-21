@@ -17,6 +17,7 @@ export const MathFormula: React.FC<MathFormulaProps> = ({
       return katex.renderToString(math, {
         displayMode: block,
         throwOnError: false,
+        output: 'html', // Ensures only visual HTML is rendered, never double-rendering MathML
       });
     } catch (error) {
       console.error('KaTeX rendering error:', error);
