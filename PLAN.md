@@ -17,11 +17,11 @@ Dokumen perencanaan dan pelacakan progres pengembangan media pembelajaran intera
 
 ## 🗺️ Roadmap & Rencana Pengembangan Selanjutnya
 
-### Fase 1: Inisialisasi & Deployment (Sedang Berjalan)
+### Fase 1: Inisialisasi & Deployment (Selesai ✅)
 - [x] Inisialisasi repositori Git lokal.
-- [ ] Buat repositori remote di GitHub dengan nama `relasi-dan-fungsi` menggunakan GitHub CLI (`gh`).
-- [ ] Push commit perdana ke branch `main`.
-- [ ] Verifikasi workflow deployment GitHub Actions dan pastikan link GitHub Pages aktif.
+- [x] Buat repositori remote di GitHub dengan nama `relasi-dan-fungsi` menggunakan GitHub CLI (`gh`).
+- [x] Push commit perdana ke branch `main`: [github.com/fakhri24/relasi-dan-fungsi](https://github.com/fakhri24/relasi-dan-fungsi)
+- [x] Konfigurasi dan verifikasi GitHub Pages via GitHub Actions: [fakhri24.github.io/relasi-dan-fungsi](https://fakhri24.github.io/relasi-dan-fungsi/)
 
 ### Fase 2: Peningkatan Interaktivitas & Fitur Presenter (Next Steps)
 - [ ] **Mode Presenter Dual-Screen**: Menambahkan catatan khusus guru (*teacher notes* / kunci jawaban / panduan pertanyaan pemantik) yang bisa dibuka di layar kedua atau di-toggle dengan shortcut `T`.
