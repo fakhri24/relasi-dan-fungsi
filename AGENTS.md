@@ -70,8 +70,10 @@ relasi-dan-fungsi/
 ├── README.md                      # Dokumentasi umum & panduan penggunaan
 ├── index.html                     # Entry HTML slide, memuat stylesheet KaTeX & font
 ├── panduan-guru.html              # Dokumen panduan modul ajar guru (root fallback)
+├── lks-siswa.html                 # Lembar Kerja Siswa A4 bolak-balik monokrom (root fallback)
 ├── public/
-│   └── panduan-guru.html          # Dokumen panduan guru (ter-bundle ke dist/ oleh Vite)
+│   ├── panduan-guru.html          # Dokumen panduan guru (ter-bundle ke dist/ oleh Vite)
+│   └── lks-siswa.html             # Lembar Kerja Siswa A4 bolak-balik (ter-bundle ke dist/ oleh Vite)
 ├── package.json                   # Dependensi proyek
 ├── vite.config.ts                 # Konfigurasi Vite (base: './')
 ├── tailwind.config.js             # Konfigurasi token warna & font
@@ -82,7 +84,7 @@ relasi-dan-fungsi/
 │   ├── types/slides.ts            # Tipe TypeScript data slide dan topik proyek
 │   └── components/
 │       ├── MathFormula.tsx        # Komponen wrapper KaTeX yang aman
-│       ├── Navbar.tsx             # Navigasi atas, progress bar, fullscreen, drawer & link panduan guru
+│       ├── Navbar.tsx             # Navigasi atas, progress bar, fullscreen, drawer & link panduan guru / LKPD
 │       ├── SlideContainer.tsx     # Frame slide 16:9 + event listener keyboard (←, →, Spasi)
 │       ├── WorksheetPrint.tsx     # Lembar kerja siswa A4 print-only (Ctrl+P)
 │       └── slides/

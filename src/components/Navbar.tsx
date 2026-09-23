@@ -8,6 +8,7 @@ import {
   X,
   Compass,
   BookOpen,
+  FileText,
 } from 'lucide-react';
 import { SlideItem } from '../types/slides';
 
@@ -117,6 +118,17 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span className="hidden xl:inline">Panduan Guru</span>
             </a>
 
+            <a
+              href="./lks-siswa.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition-all ml-1 flex items-center gap-1.5 text-xs font-bold"
+              title="Cetak Lembar Kerja Siswa (LKPD A4)"
+            >
+              <FileText className="w-4 h-4 text-emerald-400" />
+              <span className="hidden xl:inline">LKPD Siswa</span>
+            </a>
+
             <button
               onClick={toggleFullscreen}
               className="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 transition-all ml-1"
@@ -178,7 +190,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               </div>
             </div>
 
-            <div className="pt-4 border-t border-slate-800 space-y-2.5">
+            <div className="pt-4 border-t border-slate-800 space-y-2">
               <a
                 href="./panduan-guru.html"
                 target="_blank"
@@ -186,6 +198,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                 className="w-full p-2.5 rounded-xl bg-brand-600/20 hover:bg-brand-600/30 border border-brand-500/40 text-brand-300 transition-all flex items-center justify-center gap-2 text-xs font-bold"
               >
                 <BookOpen className="w-4 h-4" /> Buka Panduan Guru (4 Pertemuan) ↗
+              </a>
+              <a
+                href="./lks-siswa.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full p-2.5 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-emerald-300 transition-all flex items-center justify-center gap-2 text-xs font-bold"
+              >
+                <FileText className="w-4 h-4" /> Cetak Lembar Kerja Siswa (LKPD 1-4) ↗
               </a>
               <div className="text-xs text-slate-500">
                 💡 Pintasan Keyboard: <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300 font-mono">←</kbd> Sebelumnya · <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300 font-mono">→</kbd> Berikutnya

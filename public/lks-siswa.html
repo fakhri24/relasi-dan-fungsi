@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lembar Kerja Peserta Didik (LKPD) Relasi & Fungsi - SuperMath MTK X</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              200: '#c7d2fe',
+              300: '#a5b4fc',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              800: '#3730a3',
+              900: '#312e81',
+              950: '#1e1b4b',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+            mono: ['JetBrains Mono', 'Courier New', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- KaTeX for math formulas -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+
+  <style>
+    /* Styling Layar Browser (Tampilan Pratinjau Lembar A4) */
+    body {
+      background-color: #0f172a;
+      color: #0f172a;
+    }
+
+    .a4-page {
+      width: 210mm;
+      min-height: 296mm;
+      padding: 10mm 12mm;
+      margin: 15px auto;
+      background: #ffffff;
+      color: #0f172a;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      border-radius: 4px;
+      box-sizing: border-box;
+      position: relative;
+      font-size: 10pt;
+      line-height: 1.35;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Styling Print Standar Cetak & Fotokopi */
+    @page {
+      size: A4 portrait;
+      margin: 8mm 10mm;
+    }
+
+    @media print {
+      body {
+        background: transparent !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .a4-page {
+        width: 100% !important;
+        min-height: auto !important;
+        height: 279mm !important;
+        margin: 0 !important;
+        padding: 4mm 6mm !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        overflow: hidden !important;
+      }
+      .a4-page:last-child {
+        page-break-after: auto !important;
+        break-after: auto !important;
+      }
+    }
+
+    .dashed-box {
+      border: 1.5px dashed #475569;
+      border-radius: 6px;
+    }
+    .solid-box {
+      border: 1.5px solid #1e293b;
+      border-radius: 6px;
+    }
+    .write-line {
+      border-bottom: 1px dotted #64748b;
+      height: 22px;
+    }
+  </style>
+</head>
+<body class="font-sans antialiased">
+
+  <!-- Toolbar Atas (No-Print) -->
+  <header class="no-print sticky top-0 z-50 bg-slate-950/95 backdrop-blur-md border-b border-slate-800 px-4 py-3 text-white">
+    <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <span class="text-xl">📄</span>
+        <div>
+          <h1 class="text-sm md:text-base font-extrabold text-white">Lembar Kerja Peserta Didik (LKPD)</h1>
+          <p class="text-xs text-slate-400">Format A4 Bolak-Balik · Monokrom Hemat Tinta & Ramah Fotokopi</p>
+        </div>
+      </div>
+
+      <!-- Selector Tampilan LKS -->
+      <div class="flex items-center gap-1.5 flex-wrap">
+        <button onclick="filterLKS('all')" class="lks-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-brand-600 text-white transition-all" data-tab="all">
+          Cetak Semua (4-in-1)
+        </button>
+        <button onclick="filterLKS('lks1')" class="lks-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-900 border border-slate-700 text-slate-300 hover:text-white transition-all" data-tab="lks1">
+          LKS 1 (P1: Relasi & Mesin)
+        </button>
+        <button onclick="filterLKS('lks2')" class="lks-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-900 border border-slate-700 text-slate-300 hover:text-white transition-all" data-tab="lks2">
+          LKS 2 (P2: Batasan & Linier)
+        </button>
+        <button onclick="filterLKS('lks3')" class="lks-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-900 border border-slate-700 text-slate-300 hover:text-white transition-all" data-tab="lks3">
+          LKS 3 (P3: Piecewise)
+        </button>
+        <button onclick="filterLKS('lks4')" class="lks-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-900 border border-slate-700 text-slate-300 hover:text-white transition-all" data-tab="lks4">
+          LKS 4 (P4: Proyek Katalog)
+        </button>
+      </div>
+
+      <!-- Print & Return Buttons -->
+      <div class="flex items-center gap-2">
+        <button onclick="window.print()" class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-lg transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+          <span>Cetak Dokumen (Ctrl+P)</span>
+        </button>
+        <a href="./index.html" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition-all">
+          Kembali ke Slide
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- LEMBAR KERJA 1 (PERTEMUAN 1: SLIDE 1 s.d. 4) -->
+  <!-- ========================================================================= -->
+
+  <!-- LKS 1: HALAMAN 1 (DEPAN) -->
+  <div class="a4-page lks-group lks1" id="lks1-p1">
+    <div>
+      <!-- Header Dokumen -->
+      <div class="border-b-2 border-slate-900 pb-2 flex justify-between items-start">
+        <div>
+          <span class="text-[9pt] font-mono uppercase font-bold tracking-wider text-slate-600 block">Kurikulum Merdeka · Matematika Fase E (Kelas X) · Bab 7</span>
+          <h2 class="text-base font-black tracking-tight text-slate-900 mt-0.5">LKPD 1: MISTERI MESIN RUSAK & SYARAT SAH PEMETAAN</h2>
+        </div>
+        <div class="text-right">
+          <span class="text-xs font-bold px-2 py-0.5 border border-slate-900 rounded font-mono">Pertemuan 1 (2 JP)</span>
+          <span class="block text-[8pt] text-slate-500 mt-0.5">Hal. 1 dari 2</span>
+        </div>
+      </div>
+
+      <!-- Kotak Identitas Siswa -->
+      <div class="grid grid-cols-4 gap-2 my-2.5 p-2 solid-box bg-slate-50 text-[9pt]">
+        <div><span class="font-bold text-slate-600 block text-[8pt]">Nama Lengkap:</span>.............................................</div>
+        <div><span class="font-bold text-slate-600 block text-[8pt]">Kelas / Fase:</span> X - ...... / Fase E</div>
+        <div><span class="font-bold text-slate-600 block text-[8pt]">No. Presensi:</span> ...........</div>
+        <div><span class="font-bold text-slate-600 block text-[8pt]">Tanggal:</span> ..... / ..... / 202...</div>
+      </div>
+
+      <!-- Bagian A: Prediksi & Amati -->
+      <div class="mt-2 space-y-1.5">
+        <div class="flex items-center gap-1.5 bg-slate-200 px-2 py-0.5 rounded font-bold text-[9pt] uppercase tracking-wide">
+          <span>Bagian A · Prediksi & Amati (Sinkron Slide 1 & 2 di Proyektor)</span>
+        </div>
+        <p class="text-[9pt] text-slate-700">
+          <strong>1. Vending Machine Rusak:</strong> Bayangkan kamu memasukkan uang dan menekan tombol <em>"Susu Cokelat"</em>, namun mesin mengeluarkan <em>"Kopi Hitam"</em> atau bahkan koinmu ditelan tanpa ada barang keluar. Mengapa situasi ini membuat konsumen kecewa? Hubungkan dengan prinsip <strong>kepastian</strong>:
+        </p>
+        <div class="dashed-box p-2 text-[9pt] text-slate-500 italic bg-white">
+          Jawaban Prediksi Saya: ....................................................................................................................................................................<br>
+          ......................................................................................................................................................................................................
+        </div>
+
+        <!-- SVG Ilustrasi Mesin Fungsi Monokrom -->
+        <div class="my-2 p-2 border border-slate-300 rounded-lg flex items-center justify-between gap-4">
+          <div class="w-1/2">
+            <span class="text-[8.5pt] font-bold block text-slate-800">Model Mental Mesin Fungsi:</span>
+            <p class="text-[8pt] text-slate-600">Fungsi bekerja seperti mesin pabrik. Setiap kali input $x$ dimasukkan, mesin mengeksekusi aturan $f$ dan menghasilkan tepat satu output $y$.</p>
+            <div class="mt-1.5 text-[8.5pt] font-mono">
+              Jika aturan mesin: <span class="font-bold">$f(x) = 2x + 3$</span><br>
+              • Input $x = 4 \implies y = $ ........<br>
+              • Input $x = -1 \implies y = $ ........
+            </div>
+          </div>
+          <div class="w-1/2 flex justify-center">
+            <svg width="220" height="75" viewBox="0 0 220 75" class="stroke-slate-900 fill-none">
+              <!-- Input arrow -->
+              <line x1="10" y1="38" x2="60" y2="38" stroke-width="2" marker-end="url(#arrow-mono)" />
+              <text x="35" y="28" text-anchor="middle" font-size="9" font-weight="bold" fill="#000" stroke="none">Input (x)</text>
+              
+              <!-- Machine Body -->
+              <rect x="65" y="10" width="90" height="55" rx="4" stroke-width="2" fill="#f8fafc" />
+              <text x="110" y="32" text-anchor="middle" font-size="10" font-weight="bold" fill="#000" stroke="none">MESIN f(x)</text>
+              <text x="110" y="48" text-anchor="middle" font-size="8" fill="#475569" stroke="none">Aturan Pasti</text>
+              
+              <!-- Output arrow -->
+              <line x1="160" y1="38" x2="210" y2="38" stroke-width="2" />
+              <polygon points="210,38 202,34 202,42" fill="#000" stroke="none" />
+              <text x="185" y="28" text-anchor="middle" font-size="9" font-weight="bold" fill="#000" stroke="none">Output (y)</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bagian B1: Tantangan Diagram Panah -->
+      <div class="mt-2 space-y-1.5">
+        <div class="flex items-center gap-1.5 bg-slate-200 px-2 py-0.5 rounded font-bold text-[9pt] uppercase tracking-wide">
+          <span>Bagian B1 · Penyelidikan Diagram Panah (Sinkron Slide 3)</span>
+        </div>
+        <p class="text-[9pt] text-slate-700">
+          Amati 4 diagram relasi pesanan kantin di bawah ini. Daerah Asal (A) adalah siswa pemesan, dan Daerah Kawan (B) adalah menu makanan. <strong>Tentukan apakah relasi tersebut FUNGSI atau BUKAN FUNGSI</strong> dan lingkari pelanggarannya jika ada!
+        </p>
+
+        <!-- 4 Diagram Panah Grid -->
+        <div class="grid grid-cols-2 gap-2 mt-1">
+          <!-- Kasus 1 -->
+          <div class="border border-slate-300 rounded p-1.5 bg-white text-[8pt]">
+            <span class="font-bold block text-slate-800">Kasus 1: Pesanan Standar</span>
+            <div class="flex justify-center my-1">
+              <svg width="180" height="70" viewBox="0 0 180 70" class="stroke-slate-800 fill-none text-[7pt]">
+                <!-- Oval A & B -->
+                <ellipse cx="35" cy="35" rx="25" ry="32" stroke-width="1.5" />
+                <ellipse cx="145" cy="35" rx="25" ry="32" stroke-width="1.5" />
+                <!-- Panah -->
+                <line x1="45" y1="18" x2="135" y2="20" stroke-width="1.2" />
+                <line x1="45" y1="30" x2="135" y2="40" stroke-width="1.2" />
+                <line x1="45" y1="42" x2="135" y2="20" stroke-width="1.2" />
+                <line x1="45" y1="54" x2="135" y2="55" stroke-width="1.2" />
+                <!-- Label Titik A -->
+                <text x="35" y="20" text-anchor="middle" fill="#000" stroke="none">Ali</text>
+                <text x="35" y="32" text-anchor="middle" fill="#000" stroke="none">Budi</text>
+                <text x="35" y="44" text-anchor="middle" fill="#000" stroke="none">Citra</text>
+                <text x="35" y="56" text-anchor="middle" fill="#000" stroke="none">Dewi</text>
+                <!-- Label Titik B -->
+                <text x="145" y="22" text-anchor="middle" fill="#000" stroke="none">Bakso</text>
+                <text x="145" y="42" text-anchor="middle" fill="#000" stroke="none">Mie</text>
+                <text x="145" y="58" text-anchor="middle" fill="#000" stroke="none">Soto</text>
+              </svg>
+            </div>
+            <div class="flex justify-between items-center text-[8.5pt]">
+              <span>Status: <strong>[ ] FUNGSI  [ ] BUKAN</strong></span>
+            </div>
+            <span class="text-[7.5pt] text-slate-500 block">Alasan: ................................................................</span>
+          </div>
+
+          <!-- Kasus 2 -->
+          <div class="border border-slate-300 rounded p-1.5 bg-white text-[8pt]">
+            <span class="font-bold block text-slate-800">Kasus 2: Ada yang Tidak Pesan</span>
+            <div class="flex justify-center my-1">
+              <svg width="180" height="70" viewBox="0 0 180 70" class="stroke-slate-800 fill-none text-[7pt]">
+                <ellipse cx="35" cy="35" rx="25" ry="32" stroke-width="1.5" />
+                <ellipse cx="145" cy="35" rx="25" ry="32" stroke-width="1.5" />
+                <line x1="45" y1="18" x2="135" y2="20" stroke-width="1.2" />
+                <line x1="45" y1="30" x2="135" y2="40" stroke-width="1.2" />
+                <line x1="45" y1="54" x2="135" y2="55" stroke-width="1.2" />
+                <text x="35" y="20" text-anchor="middle" fill="#000" stroke="none">Ali</text>
+                <text x="35" y="32" text-anchor="middle" fill="#000" stroke="none">Budi</text>
+                <text x="35" y="44" text-anchor="middle" fill="#000" stroke="none">Citra</text>
+                <text x="35" y="56" text-anchor="middle" fill="#000" stroke="none">Dewi</text>
+                <text x="145" y="22" text-anchor="middle" fill="#000" stroke="none">Bakso</text>
+                <text x="145" y="42" text-anchor="middle" fill="#000" stroke="none">Mie</text>
+                <text x="145" y="58" text-anchor="middle" fill="#000" stroke="none">Soto</text>
+              </svg>
+            </div>
+            <div class="flex justify-between items-center text-[8.5pt]">
+              <span>Status: <strong>[ ] FUNGSI  [ ] BUKAN</strong></span>
+            </div>
+            <span class="text-[7.5pt] text-slate-500 block">Siapa yang melanggar?: ........................................</span>
+          </div>
+
+          <!-- Kasus 3 -->
+          <div class="border border-slate-300 rounded p-1.5 bg-white text-[8pt]">
+            <span class="font-bold block text-slate-800">Kasus 3: Memesan Dua Menu</span>
+            <div class="flex justify-center my-1">
+              <svg width="180" height="70" viewBox="0 0 180 70" class="stroke-slate-800 fill-none text-[7pt]">
+                <ellipse cx="35" cy="35" rx="25" ry="32" stroke-width="1.5" />
+                <ellipse cx="145" cy="35" rx="25" ry="32" stroke-width="1.5" />
+                <line x1="45" y1="18" x2="135" y2="20" stroke-width="1.2" />
+                <line x1="45" y1="30" x2="135" y2="40" stroke-width="1.2" />
+                <line x1="45" y1="30" x2="135" y2="55" stroke-width="1.2" />
+                <line x1="45" y1="44" x2="135" y2="20" stroke-width="1.2" />
+                <line x1="45" y1="54" x2="135" y2="55" stroke-width="1.2" />
+                <text x="35" y="20" text-anchor="middle" fill="#000" stroke="none">Ali</text>
+                <text x="35" y="32" text-anchor="middle" fill="#000" stroke="none">Budi</text>
+                <text x="35" y="44" text-anchor="middle" fill="#000" stroke="none">Citra</text>
+                <text x="35" y="56" text-anchor="middle" fill="#000" stroke="none">Dewi</text>
+                <text x="145" y="22" text-anchor="middle" fill="#000" stroke="none">Bakso</text>
+                <text x="145" y="42" text-anchor="middle" fill="#000" stroke="none">Mie</text>
+                <text x="145" y="58" text-anchor="middle" fill="#000" stroke="none">Soto</text>
+              </svg>
+            </div>
+            <div class="flex justify-between items-center text-[8.5pt]">
+              <span>Status: <strong>[ ] FUNGSI  [ ] BUKAN</strong></span>
+            </div>
+            <span class="text-[7.5pt] text-slate-500 block">Siapa yang melanggar?: ........................................</span>
+          </div>
+
+          <!-- Kasus 4 -->
+          <div class="border border-slate-300 rounded p-1.5 bg-white text-[8pt]">
+            <span class="font-bold block text-slate-800">Kasus 4: Semua Memilih Bakso</span>
+            <div class="flex justify-center my-1">
+              <svg width="180" height="70" viewBox="0 0 180 70" class="stroke-slate-800 fill-none text-[7pt]">
+                <ellipse cx="35" cy="35" rx="25" ry="32" stroke-width="1.5" />
+                <ellipse cx="145" cy="35" rx="25" ry="32" stroke-width="1.5" />
+                <line x1="45" y1="18" x2="135" y2="20" stroke-width="1.2" />
+                <line x1="45" y1="30" x2="135" y2="20" stroke-width="1.2" />
+                <line x1="45" y1="44" x2="135" y2="20" stroke-width="1.2" />
+                <line x1="45" y1="54" x2="135" y2="20" stroke-width="1.2" />
+                <text x="35" y="20" text-anchor="middle" fill="#000" stroke="none">Ali</text>
+                <text x="35" y="32" text-anchor="middle" fill="#000" stroke="none">Budi</text>
+                <text x="35" y="44" text-anchor="middle" fill="#000" stroke="none">Citra</text>
+                <text x="35" y="56" text-anchor="middle" fill="#000" stroke="none">Dewi</text>
+                <text x="145" y="22" text-anchor="middle" fill="#000" stroke="none">Bakso</text>
+                <text x="145" y="42" text-anchor="middle" fill="#000" stroke="none">Mie</text>
+                <text x="145" y="58" text-anchor="middle" fill="#000" stroke="none">Soto</text>
+              </svg>
+            </div>
+            <div class="flex justify-between items-center text-[8.5pt]">
+              <span>Status: <strong>[ ] FUNGSI  [ ] BUKAN</strong></span>
+            </div>
+            <span class="text-[7.5pt] text-slate-500 block">Apakah Mie/Soto boleh kosong?: ..........................</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Halaman 1 -->
+    <div class="border-t border-slate-400 pt-1 text-[8pt] text-slate-500 flex justify-between items-center">
+      <span>SuperMath MTK X · Modul Relasi & Fungsi</span>
+      <span>Balik ke Halaman 2 ➔</span>
+    </div>
+  </div>
+
+  <!-- LKS 1: HALAMAN 2 (BELAKANG) -->
+  <div class="a4-page lks-group lks1" id="lks1-p2">
+    <div>
+      <!-- Header Dokumen Mini -->
+      <div class="border-b border-slate-900 pb-1 flex justify-between items-center text-[8.5pt]">
+        <span class="font-bold text-slate-800">LKPD 1 · Lembar Balik (Tantangan Mandiri & Refleksi)</span>
+        <span class="font-mono text-slate-600">Hal. 2 dari 2</span>
+      </div>
+
+      <!-- Bagian B2: Vertical Line Test -->
+      <div class="mt-2 space-y-1.5">
+        <div class="flex items-center gap-1.5 bg-slate-200 px-2 py-0.5 rounded font-bold text-[9pt] uppercase tracking-wide">
+          <span>Bagian B2 · Uji Garis Vertikal / Scanner Test (Sinkron Slide 4)</span>
+        </div>
+        <p class="text-[9pt] text-slate-700">
+          <strong>Petunjuk:</strong> Gunakan penggaris dan pensilmu. Gambarlah satu garis vertikal (tegak) putus-putus <span class="font-mono text-xs">x = c</span> di sembarang posisi pada masing-masing kurva. Beri tanda titik tebal (•) pada setiap perpotongan garis dengan kurva!
+        </p>
+
+        <!-- 4 Kurva Uji Garis Vertikal SVG -->
+        <div class="grid grid-cols-2 gap-3 my-2">
+          <!-- Grafik 1: Garis Lurus -->
+          <div class="border border-slate-300 rounded p-2 text-center bg-white">
+            <span class="text-[8pt] font-bold block text-slate-700">Kurva A: Garis Lurus Miring</span>
+            <svg width="180" height="100" viewBox="0 0 180 100" class="mx-auto stroke-slate-800 fill-none">
+              <!-- Sumbu X & Y -->
+              <line x1="20" y1="50" x2="160" y2="50" stroke-width="1" stroke-dasharray="2 2" stroke="#94a3b8" />
+              <line x1="90" y1="10" x2="90" y2="90" stroke-width="1" stroke-dasharray="2 2" stroke="#94a3b8" />
+              <!-- Garis Kurva -->
+              <line x1="30" y1="80" x2="150" y2="20" stroke-width="2" stroke="#000" />
+            </svg>
+            <div class="mt-1 text-[8pt] flex justify-center gap-4">
+              <label><input type="radio" name="g1" /> Fungsi Sah</label>
+              <label><input type="radio" name="g1" /> Bukan Fungsi</label>
+            </div>
+            <span class="text-[7.5pt] text-slate-500 block mt-0.5">Jumlah titik potong maks: ....... titik</span>
+          </div>
+
+          <!-- Grafik 2: Parabola Rebah -->
+          <div class="border border-slate-300 rounded p-2 text-center bg-white">
+            <span class="text-[8pt] font-bold block text-slate-700">Kurva B: Parabola Rebah</span>
+            <svg width="180" height="100" viewBox="0 0 180 100" class="mx-auto stroke-slate-800 fill-none">
+              <line x1="20" y1="50" x2="160" y2="50" stroke-width="1" stroke-dasharray="2 2" stroke="#94a3b8" />
+              <line x1="90" y1="10" x2="90" y2="90" stroke-width="1" stroke-dasharray="2 2" stroke="#94a3b8" />
+              <!-- Parabola y^2 = x -->
+              <path d="M 150,15 Q 50,50 150,85" stroke-width="2" stroke="#000" />
+            </svg>
+            <div class="mt-1 text-[8pt] flex justify-center gap-4">
+              <label><input type="radio" name="g2" /> Fungsi Sah</label>
+              <label><input type="radio" name="g2" /> Bukan Fungsi</label>
+            </div>
+            <span class="text-[7.5pt] text-slate-500 block mt-0.5">Jumlah titik potong maks: ....... titik</span>
+          </div>
+
+          <!-- Grafik 3: Lingkaran -->
+          <div class="border border-slate-300 rounded p-2 text-center bg-white">
+            <span class="text-[8pt] font-bold block text-slate-700">Kurva C: Lingkaran</span>
+            <svg width="180" height="100" viewBox="0 0 180 100" class="mx-auto stroke-slate-800 fill-none">
+              <line x1="20" y1="50" x2="160" y2="50" stroke-width="1" stroke-dasharray="2 2" stroke="#94a3b8" />
+              <line x1="90" y1="10" x2="90" y2="90" stroke-width="1" stroke-dasharray="2 2" stroke="#94a3b8" />
+              <!-- Lingkaran -->
+              <circle cx="90" cy="50" r="32" stroke-width="2" stroke="#000" />
+            </svg>
+            <div class="mt-1 text-[8pt] flex justify-center gap-4">
+              <label><input type="radio" name="g3" /> Fungsi Sah</label>
+              <label><input type="radio" name="g3" /> Bukan Fungsi</label>
+            </div>
+            <span class="text-[7.5pt] text-slate-500 block mt-0.5">Jumlah titik potong maks: ....... titik</span>
+          </div>
+
+          <!-- Grafik 4: Parabola Tegak -->
+          <div class="border border-slate-300 rounded p-2 text-center bg-white">
+            <span class="text-[8pt] font-bold block text-slate-700">Kurva D: Parabola Tegak (Kuadrat)</span>
+            <svg width="180" height="100" viewBox="0 0 180 100" class="mx-auto stroke-slate-800 fill-none">
+              <line x1="20" y1="50" x2="160" y2="50" stroke-width="1" stroke-dasharray="2 2" stroke="#94a3b8" />
+              <line x1="90" y1="10" x2="90" y2="90" stroke-width="1" stroke-dasharray="2 2" stroke="#94a3b8" />
+              <!-- Parabola y = x^2 -->
+              <path d="M 40,15 Q 90,85 140,15" stroke-width="2" stroke="#000" />
+            </svg>
+            <div class="mt-1 text-[8pt] flex justify-center gap-4">
+              <label><input type="radio" name="g4" /> Fungsi Sah</label>
+              <label><input type="radio" name="g4" /> Bukan Fungsi</label>
+            </div>
+            <span class="text-[7.5pt] text-slate-500 block mt-0.5">Jumlah titik potong maks: ....... titik</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bagian C: Refleksi & Rumusan Aturan Emas Siswa -->
+      <div class="mt-3 space-y-2">
+        <div class="flex items-center gap-1.5 bg-slate-900 text-white px-2 py-0.5 rounded font-bold text-[9pt] uppercase tracking-wide">
+          <span>Bagian C · Rumusan "Aturan Emas" Saya</span>
+        </div>
+        <p class="text-[8.5pt] text-slate-700">Lengkapilah kesimpulan berikut menggunakan kata-katamu sendiri:</p>
+
+        <div class="solid-box p-2.5 bg-slate-50 space-y-2 text-[9pt] leading-relaxed">
+          <p>
+            1. Pada <strong>Diagram Panah</strong>, suatu relasi sah disebut <strong>FUNGSI</strong> jika seluruh anggota himpunan asal memenuhi dua syarat mutlak, yaitu:
+            <br>a. Tidak boleh jomblo, artinya: ...........................................................................................................................
+            <br>b. Tidak boleh selingkuh/mendua, artinya: ..........................................................................................................
+          </p>
+          <p>
+            2. Pada <strong>Grafik Bidang Kartesius</strong>, suatu relasi merupakan fungsi jika setiap garis tegak (vertikal) yang ditarik memotong kurva tepat di ........................ titik. Jika memotong di 2 titik atau lebih, artinya ada satu nilai input $x$ yang menghasilkan .................................................... sehingga ia <strong>BUKAN FUNGSI</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kotak Nilai & Paraf Guru -->
+    <div class="border-t border-slate-900 pt-2 flex justify-between items-center text-[8pt]">
+      <div class="space-y-0.5">
+        <span class="font-bold">Catatan / Evaluasi Guru:</span>
+        <div class="w-96 border-b border-dotted border-slate-400"></div>
+      </div>
+      <div class="flex gap-4">
+        <div class="border border-slate-400 rounded px-4 py-1 text-center">
+          <span class="block text-[7pt] text-slate-500 font-bold uppercase">Paraf Guru</span>
+          <div class="h-6"></div>
+        </div>
+        <div class="border border-slate-400 rounded px-4 py-1 text-center">
+          <span class="block text-[7pt] text-slate-500 font-bold uppercase">Nilai Skor</span>
+          <span class="text-sm font-black text-slate-900">/ 100</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- LEMBAR KERJA 2 (PERTEMUAN 2: SLIDE 5 & 6) -->
+  <!-- ========================================================================= -->
+
+  <!-- LKS 2: HALAMAN 1 (DEPAN) -->
+  <div class="a4-page lks-group lks2" id="lks2-p1">
+    <div>
+      <div class="border-b-2 border-slate-900 pb-2 flex justify-between items-start">
+        <div>
+          <span class="text-[9pt] font-mono uppercase font-bold tracking-wider text-slate-600 block">Kurikulum Merdeka · Matematika Fase E (Kelas X) · Bab 7</span>
+          <h2 class="text-base font-black tracking-tight text-slate-900 mt-0.5">LKPD 2: BATASAN FISIK DOMAIN-RANGE & MODEL LINEAR</h2>
+        </div>
+        <div class="text-right">
+          <span class="text-xs font-bold px-2 py-0.5 border border-slate-900 rounded font-mono">Pertemuan 2 (2 JP)</span>
+          <span class="block text-[8pt] text-slate-500 mt-0.5">Hal. 1 dari 2</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-4 gap-2 my-2.5 p-2 solid-box bg-slate-50 text-[9pt]">
+        <div><span class="font-bold text-slate-600 block text-[8pt]">Nama Lengkap:</span>.............................................</div>
+        <div><span class="font-bold text-slate-600 block text-[8pt]">Kelas / Fase:</span> X - ...... / Fase E</div>
+        <div><span class="font-bold text-slate-600 block text-[8pt]">No. Presensi:</span> ...........</div>
+        <div><span class="font-bold text-slate-600 block text-[8pt]">Tanggal:</span> ..... / ..... / 202...</div>
+      </div>
+
+      <!-- Bagian A: Menalar Batasan Fisik Realita -->
+      <div class="mt-2 space-y-1.5">
+        <div class="flex items-center gap-1.5 bg-slate-200 px-2 py-0.5 rounded font-bold text-[9pt] uppercase tracking-wide">
+          <span>Bagian A · Menalar Batasan Fisik di Dunia Nyata (Sinkron Slide 5)</span>
+        </div>
+        <p class="text-[9pt] text-slate-700">
+          Di matematika murni, variabel $x$ bebas bernilai berapa saja ($\mathbb{R}$). Namun di dunia nyata, hukum fisika dan logika bisnis membatasi nilai input (Domain) dan hasil (Range).
+        </p>
+
+        <!-- Tabel 3 Kasus Fisik -->
+        <table class="w-full border-collapse border border-slate-400 text-[8pt] my-2">
+          <thead class="bg-slate-100 font-bold">
+            <tr>
+              <th class="border border-slate-400 p-1.5 text-left">Kasus Nyata</th>
+              <th class="border border-slate-400 p-1.5 text-center">Variabel Input (x)</th>
+              <th class="border border-slate-400 p-1.5 text-center">Uji Masuk Akal?</th>
+              <th class="border border-slate-400 p-1.5 text-left">Alasan Logis & Notasi Domain Fisik</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="border border-slate-400 p-1.5 font-bold">1. Jarak Tempuh Ojek Online</td>
+              <td class="border border-slate-400 p-1.5 text-center font-mono">Jarak (km)</td>
+              <td class="border border-slate-400 p-1.5 text-center">
+                Apakah $x = -4$ km masuk akal?<br>
+                <strong>[ ] YA   [ ] MUSTAHIL</strong>
+              </td>
+              <td class="border border-slate-400 p-1.5">
+                Alasan: .....................................................................<br>
+                Domain: $D_f = \{x \in \mathbb{R} \mid x \ge \dots\dots\}$
+              </td>
+            </tr>
+            <tr>
+              <td class="border border-slate-400 p-1.5 font-bold">2. Persentase Baterai HP</td>
+              <td class="border border-slate-400 p-1.5 text-center font-mono">Waktu Pakai (jam)</td>
+              <td class="border border-slate-400 p-1.5 text-center">
+                Apakah output $y = 120\%$ mungkin?<br>
+                <strong>[ ] YA   [ ] MUSTAHIL</strong>
+              </td>
+              <td class="border border-slate-400 p-1.5">
+                Alasan: .....................................................................<br>
+                Range: $R_f = [\dots\dots\%, \dots\dots\%]$
+              </td>
+            </tr>
+            <tr>
+              <td class="border border-slate-400 p-1.5 font-bold">3. Muatan Lift Gedung (Maks 8 orang)</td>
+              <td class="border border-slate-400 p-1.5 text-center font-mono">Jumlah Orang</td>
+              <td class="border border-slate-400 p-1.5 text-center">
+                Apakah input $x = 3.5$ orang mungkin?<br>
+                <strong>[ ] YA   [ ] MUSTAHIL</strong>
+              </td>
+              <td class="border border-slate-400 p-1.5">
+                Alasan: .....................................................................<br>
+                Sifat: <strong>[ ] Diskrit (Bil. Bulat)   [ ] Kontinu</strong>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Bagian B1: Memahami Notasi Formal -->
+      <div class="mt-2 space-y-1">
+        <div class="flex items-center gap-1.5 bg-slate-200 px-2 py-0.5 rounded font-bold text-[9pt] uppercase tracking-wide">
+          <span>Bagian B1 · Menuliskan Notasi Himpunan Domain & Range</span>
+        </div>
+        <p class="text-[8.5pt] text-slate-700">Tuliskan lambang matematika yang tepat untuk masing-masing pernyataan selang:</p>
+        <div class="grid grid-cols-2 gap-2 text-[8.5pt]">
+          <div class="p-2 border border-slate-300 rounded">
+            a. Nilai $x$ mulai dari 0 hingga 10 (dua-duanya ikut):<br>
+            Notasi Kurung Siku: <strong>[ ..... , ..... ]</strong>
+          </div>
+          <div class="p-2 border border-slate-300 rounded">
+            b. Nilai $x$ lebih dari 0 tanpa batas atas (positif):<br>
+            Notasi Pertidaksamaan: <strong>$D_f = \{x \in \mathbb{R} \mid x \dots\dots\dots\dots\}$</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-t border-slate-400 pt-1 text-[8pt] text-slate-500 flex justify-between items-center">
+      <span>SuperMath MTK X · Modul Relasi & Fungsi</span>
+      <span>Balik ke Halaman 2 ➔</span>
+    </div>
+  </div>
+
+  <!-- LKS 2: HALAMAN 2 (BELAKANG) -->
+  <div class="a4-page lks-group lks2" id="lks2-p2">
+    <div>
+      <div class="border-b border-slate-900 pb-1 flex justify-between items-center text-[8.5pt]">
+        <span class="font-bold text-slate-800">LKPD 2 · Lembar Balik (Pemodelan $f(x) = ax + b$ & Grafik)</span>
+        <span class="font-mono text-slate-600">Hal. 2 dari 2</span>
+      </div>
+
+      <div class="mt-2 space-y-1.5">
+        <div class="flex items-center gap-1.5 bg-slate-200 px-2 py-0.5 rounded font-bold text-[9pt] uppercase tracking-wide">
+          <span>Bagian B2 · Kata-kata $\to$ Rumus $\to$ Grafik (Sinkron Slide 6)</span>
+        </div>
+        <p class="text-[9pt] text-slate-700">
+          <strong>Skenario Masalah:</strong> Sebuah jasa penyewaan kamera mirrorless menetapkan <strong>biaya dasar sewa (buka segel) sebesar Rp 20.000</strong>, ditambah <strong>biaya pemakaian sebesar Rp 10.000 per jam</strong>.
+        </p>
+
+        <!-- Pertanyaan Aljabar -->
+        <div class="solid-box p-2 bg-slate-50 text-[8.5pt] space-y-1">
+          <div>1. Tentukan variabel input $x$ = .............................................. dan output $y$ = ..............................................</div>
+          <div>2. Rumus fungsi matematika: <span class="font-mono font-bold text-sm">$f(x) = $ .............................. $x$ + ..............................</span></div>
+          <div>3. Komponen biaya tetap ($b$): Rp ......................... | Komponen tarif per jam / kemiringan ($a$): Rp .........................</div>
+        </div>
+
+        <!-- Tabel Nilai & Grid Kartesius Berdampingan -->
+        <div class="grid grid-cols-12 gap-3 items-start my-2">
+          <!-- Tabel Nilai -->
+          <div class="col-span-5">
+            <span class="text-[8pt] font-bold block mb-1">Tabel Perhitungan Nilai:</span>
+            <table class="w-full border-collapse border border-slate-400 text-[8pt] text-center">
+              <thead class="bg-slate-100 font-bold">
+                <tr>
+                  <th class="border border-slate-400 p-1">Durasi ($x$ jam)</th>
+                  <th class="border border-slate-400 p-1">Total Biaya ($y$ Rp)</th>
+                  <th class="border border-slate-400 p-1">Titik $(x, y)$</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td class="border border-slate-400 p-1 font-mono">0</td><td class="border border-slate-400 p-1">Rp 20.000</td><td class="border border-slate-400 p-1 font-mono">(0, 20k)</td></tr>
+                <tr><td class="border border-slate-400 p-1 font-mono">1</td><td class="border border-slate-400 p-1">Rp ............</td><td class="border border-slate-400 p-1 font-mono">(1, ...)</td></tr>
+                <tr><td class="border border-slate-400 p-1 font-mono">2</td><td class="border border-slate-400 p-1">Rp ............</td><td class="border border-slate-400 p-1 font-mono">(2, ...)</td></tr>
+                <tr><td class="border border-slate-400 p-1 font-mono">3</td><td class="border border-slate-400 p-1">Rp ............</td><td class="border border-slate-400 p-1 font-mono">(3, ...)</td></tr>
+                <tr><td class="border border-slate-400 p-1 font-mono">5</td><td class="border border-slate-400 p-1">Rp ............</td><td class="border border-slate-400 p-1 font-mono">(5, ...)</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Grid Koordinat SVG Monokrom -->
+          <div class="col-span-7 border border-slate-400 rounded p-1.5 bg-white text-center">
+            <span class="text-[8pt] font-bold block mb-0.5">Plot Titik & Tarik Garis Linear:</span>
+            <svg width="240" height="135" viewBox="0 0 240 135" class="mx-auto stroke-slate-800 fill-none text-[6.5pt]">
+              <!-- Grid Halus Milimeter -->
+              <defs>
+                <pattern id="grid-lks2" width="20" height="15" patternUnits="userSpaceOnUse">
+                  <path d="M 20 0 L 0 0 0 15" fill="none" stroke="#e2e8f0" stroke-width="0.8" />
+                </pattern>
+              </defs>
+              <rect x="35" y="10" width="195" height="105" fill="url(#grid-lks2)" stroke="#94a3b8" />
+              
+              <!-- Sumbu X & Y -->
+              <line x1="35" y1="115" x2="235" y2="115" stroke-width="1.5" stroke="#000" />
+              <line x1="35" y1="5" x2="35" y2="115" stroke-width="1.5" stroke="#000" />
+
+              <!-- Label Sumbu Y (Ribu Rp) -->
+              <text x="30" y="118" text-anchor="end" fill="#000" stroke="none">0</text>
+              <text x="30" y="90" text-anchor="end" fill="#000" stroke="none">20k</text>
+              <text x="30" y="65" text-anchor="end" fill="#000" stroke="none">40k</text>
+              <text x="30" y="40" text-anchor="end" fill="#000" stroke="none">60k</text>
+              <text x="30" y="15" text-anchor="end" fill="#000" stroke="none">80k</text>
+
+              <!-- Label Sumbu X (Jam) -->
+              <text x="35" y="128" text-anchor="middle" fill="#000" stroke="none">0</text>
+              <text x="74" y="128" text-anchor="middle" fill="#000" stroke="none">1</text>
+              <text x="113" y="128" text-anchor="middle" fill="#000" stroke="none">2</text>
+              <text x="152" y="128" text-anchor="middle" fill="#000" stroke="none">3</text>
+              <text x="191" y="128" text-anchor="middle" fill="#000" stroke="none">4</text>
+              <text x="230" y="128" text-anchor="middle" fill="#000" stroke="none">5</text>
+
+              <!-- Titik Potong b (0, 20k) bantuan awal -->
+              <circle cx="35" cy="89" r="3" fill="#000" />
+            </svg>
+            <span class="text-[7pt] text-slate-500 block">Hubungkan titik-titik dengan penggaris menjadi 1 garis lurus!</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bagian C: Refleksi & Rumusan Aturan Emas Siswa -->
+      <div class="mt-2 space-y-1.5">
+        <div class="flex items-center gap-1.5 bg-slate-900 text-white px-2 py-0.5 rounded font-bold text-[9pt] uppercase tracking-wide">
+          <span>Bagian C · Rumusan "Aturan Emas" Saya</span>
+        </div>
+        <div class="solid-box p-2.5 bg-slate-50 text-[8.5pt] space-y-1.5 leading-relaxed">
+          <p>
+            1. Pada fungsi linear $f(x) = ax + b$, nilai <strong>$b$</strong> disebut titik potong sumbu-Y (*intercept*), yang di dunia nyata merepresentasikan biaya .....................................................
+          </p>
+          <p>
+            2. Nilai <strong>$a$</strong> disebut kemiringan garis (*gradien*). Jika tarif per jam semakin mahal, maka kemiringan garis grafik akan semakin .................................... (tegak/landai).
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-t border-slate-900 pt-2 flex justify-between items-center text-[8pt]">
+      <div class="space-y-0.5">
+        <span class="font-bold">Catatan / Evaluasi Guru:</span>
+        <div class="w-96 border-b border-dotted border-slate-400"></div>
+      </div>
+      <div class="flex gap-4">
+        <div class="border border-slate-400 rounded px-4 py-1 text-center">
+          <span class="block text-[7pt] text-slate-500 font-bold uppercase">Paraf Guru</span>
+          <div class="h-6"></div>
+        </div>
+        <div class="border border-slate-400 rounded px-4 py-1 text-center">
+          <span class="block text-[7pt] text-slate-500 font-bold uppercase">Nilai Skor</span>
+          <span class="text-sm font-black text-slate-900">/ 100</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- LEMBAR KERJA 3 (PERTEMUAN 3: SLIDE 7 s.d. 9) -->
+  <!-- ========================================================================= -->
+
+  <!-- LKS 3: HALAMAN 1 (DEPAN) -->
+  <div class="a4-page lks-group lks3" id="lks3-p1">
+    <div>
+      <div class="border-b-2 border-slate-900 pb-2 flex justify-between items-start">
+        <div>
+          <span class="text-[9pt] font-mono uppercase font-bold tracking-wider text-slate-600 block">Kurikulum Merdeka · Matematika Fase E (Kelas X) · Bab 7</span>
+          <h2 class="text-base font-black tracking-tight text-slate-900 mt-0.5">LKPD 3: MENJINAKKAN FUNGSI SEPENGGAL (PIECEWISE)</h2>
+        </div>
+        <div class="text-right">
+          <span class="text-xs font-bold px-2 py-0.5 border border-slate-900 rounded font-mono">Pertemuan 3 (2 JP)</span>
+          <span class="block text-[8pt] text-slate-500 mt-0.5">Hal. 1 dari 2</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-4 gap-2 my-2.5 p-2 solid-box bg-slate-50 text-[9pt]">
+        <div><span class="font-bold text-slate-600 block text-[8pt]">Nama Lengkap:</span>.............................................</div>
+        <div><span class="font-bold text-slate-600 block text-[8pt]">Kelas / Fase:</span> X - ...... / Fase E</div>
+        <div><span class="font-bold text-slate-600 block text-[8pt]">No. Presensi:</span> ...........</div>
+        <div><span class="font-bold text-slate-600 block text-[8pt]">Tanggal:</span> ..... / ..... / 202...</div>
+      </div>
+
+      <!-- Bagian A: Ketika 1 Garis Lurus Gagal -->
+      <div class="mt-2 space-y-1.5">
+        <div class="flex items-center gap-1.5 bg-slate-200 px-2 py-0.5 rounded font-bold text-[9pt] uppercase tracking-wide">
+          <span>Bagian A · Ketika Satu Rumus Lurus Gagal (Sinkron Slide 7)</span>
+        </div>
+        <p class="text-[9pt] text-slate-700">
+          Sebuah mall memberlakukan kebijakan: <strong>Drop-off $\le 15$ menit gratis</strong>, jam pertama Rp 5.000, jam berikutnya +Rp 3.000, dan <strong>tarif maksimal harian Rp 35.000</strong>. Jika pengelola memaksakan 1 rumus linear kaku $f(x) = 3.000x + 5.000$, hitunglah keanehan yang terjadi:
+        </p>
+
+        <div class="grid grid-cols-2 gap-2 my-1.5">
+          <div class="p-2 border border-slate-300 rounded bg-white text-[8.5pt]">
+            <strong>Kondisi 1: Hanya Drop-off (6 Menit = 0.1 Jam)</strong><br>
+            Tagihan Rumus Kaku: $3000(0.1) + 5000 =$ <strong>Rp 5.300</strong>.<br>
+            <span class="text-slate-600 text-[8pt]">Mengapa pelanggan akan protes keras?:</span>
+            <div class="write-line"></div>
+          </div>
+          <div class="p-2 border border-slate-300 rounded bg-white text-[8.5pt]">
+            <strong>Kondisi 2: Parkir Menginap (24 Jam)</strong><br>
+            Tagihan Rumus Kaku: $3000(24) + 5000 =$ <strong>Rp 77.000</strong>.<br>
+            <span class="text-slate-600 text-[8pt]">Padahal aturan mall menetapkan batas maksimal flat:</span>
+            <strong>Rp 35.000</strong> (rumus kaku terlalu mahal).
+          </div>
+        </div>
+        <p class="text-[8.5pt] text-slate-800 font-semibold">
+          💡 Kesimpulan: Karena kondisi tarif berubah-ubah tergantung interval waktu, kita membutuhkan <strong>Fungsi Sepenggal (Piecewise Function)</strong>.
+        </p>
+      </div>
+
+      <!-- Bagian B1: Membedah Notasi Kurung Kurawal -->
+      <div class="mt-2 space-y-1.5">
+        <div class="flex items-center gap-1.5 bg-slate-200 px-2 py-0.5 rounded font-bold text-[9pt] uppercase tracking-wide">
+          <span>Bagian B1 · Membaca Notasi Kurung Kurawal $\{ $ (Sinkron Slide 8)</span>
+        </div>
+        <p class="text-[9pt] text-slate-700">
+          Diberikan fungsi piecewise 3 cabang berikut:
+        </p>
+        <div class="p-2 bg-slate-100 rounded-lg text-center font-mono text-[9pt] font-bold border border-slate-300">
+          $$f(x) = \begin{cases} 4, & \text{jika } 0 \le x \le 1 \quad \text{(Cabang 1)} \\ 2x + 2, & \text{jika } 1 < x \le 4 \quad \text{(Cabang 2)} \\ 10, & \text{jika } x > 4 \quad \text{(Cabang 3)} \end{cases}$$
+        </div>
+
+        <p class="text-[8.5pt] text-slate-700">
+          <strong>Tugas Detektif Cabang:</strong> Jangan menghitung semua rumus! Cek nilai $x$-mu masuk syarat yang mana terlebih dahulu, lalu hitung hasilnya:
+        </p>
+
+        <table class="w-full border-collapse border border-slate-400 text-[8pt] text-center my-1">
+          <thead class="bg-slate-100 font-bold">
+            <tr>
+              <th class="border border-slate-400 p-1">Nilai Input $x$</th>
+              <th class="border border-slate-400 p-1">Syarat yang Memenuhi</th>
+              <th class="border border-slate-400 p-1">Cabang Aktif</th>
+              <th class="border border-slate-400 p-1">Proses Perhitungan Output</th>
+              <th class="border border-slate-400 p-1">Nilai Akhir $f(x)$</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="border border-slate-400 p-1 font-mono font-bold">x = 0.5</td>
+              <td class="border border-slate-400 p-1 font-mono">$0 \le 0.5 \le 1$</td>
+              <td class="border border-slate-400 p-1">Cabang 1</td>
+              <td class="border border-slate-400 p-1 font-mono">f(0.5) = 4 (konstan)</td>
+              <td class="border border-slate-400 p-1 font-bold">4</td>
+            </tr>
+            <tr>
+              <td class="border border-slate-400 p-1 font-mono font-bold">x = 2</td>
+              <td class="border border-slate-400 p-1 font-mono">1 < 2 \le 4</td>
+              <td class="border border-slate-400 p-1">Cabang .....</td>
+              <td class="border border-slate-400 p-1 font-mono">f(2) = 2(...) + 2</td>
+              <td class="border border-slate-400 p-1 font-bold">.......</td>
+            </tr>
+            <tr>
+              <td class="border border-slate-400 p-1 font-mono font-bold">x = 3.5</td>
+              <td class="border border-slate-400 p-1 font-mono">....................</td>
+              <td class="border border-slate-400 p-1">Cabang .....</td>
+              <td class="border border-slate-400 p-1 font-mono">...................................</td>
+              <td class="border border-slate-400 p-1 font-bold">.......</td>
+            </tr>
+            <tr>
+              <td class="border border-slate-400 p-1 font-mono font-bold">x = 6</td>
+              <td class="border border-slate-400 p-1 font-mono">6 > 4</td>
+              <td class="border border-slate-400 p-1">Cabang .....</td>
+              <td class="border border-slate-400 p-1 font-mono">f(6) = 10 (konstan)</td>
+              <td class="border border-slate-400 p-1 font-bold">.......</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="border-t border-slate-400 pt-1 text-[8pt] text-slate-500 flex justify-between items-center">
+      <span>SuperMath MTK X · Modul Relasi & Fungsi</span>
+      <span>Balik ke Halaman 2 ➔</span>
+    </div>
+  </div>
+
+  <!-- LKS 3: HALAMAN 2 (BELAKANG) -->
+  <div class="a4-page lks-group lks3" id="lks3-p2">
+    <div>
+      <div class="border-b border-slate-900 pb-1 flex justify-between items-center text-[8.5pt]">
+        <span class="font-bold text-slate-800">LKPD 3 · Lembar Balik (Titik Penuh ● vs Kosong ○ & Grafik)</span>
+        <span class="font-mono text-slate-600">Hal. 2 dari 2</span>
+      </div>
+
+      <!-- Bagian B2: Titik Penuh vs Kosong -->
+      <div class="mt-2 space-y-1.5">
+        <div class="flex items-center gap-1.5 bg-slate-200 px-2 py-0.5 rounded font-bold text-[9pt] uppercase tracking-wide">
+          <span>Bagian B2 · Rahasia Titik Penuh (●) dan Titik Terbuka (○)</span>
+        </div>
+        <p class="text-[9pt] text-slate-700">
+          Dalam fungsi sepenggal, pertemuan antar garis cabang sering memiliki titik batas kritis.
+        </p>
+
+        <!-- Penjelasan Visual Titik -->
+        <div class="grid grid-cols-2 gap-3 p-2 border border-slate-300 rounded bg-slate-50 text-[8.5pt]">
+          <div class="flex items-center gap-2">
+            <svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7" fill="#000" /></svg>
+            <div>
+              <strong class="text-slate-900 block">Titik Penuh (●)</strong>
+              <span class="text-slate-600 text-[8pt]">Artinya nilai ikut masuk ($\le$ atau $\ge$)</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7" fill="#fff" stroke="#000" stroke-width="2" /></svg>
+            <div>
+              <strong class="text-slate-900 block">Titik Terbuka (○)</strong>
+              <span class="text-slate-600 text-[8pt]">Artinya nilai batas TIDAK ikut ($<$ atau $>$)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tantangan Menggambar Grafik Piecewise SVG -->
+        <div class="mt-2 border border-slate-400 rounded p-2 bg-white">
+          <span class="text-[8.5pt] font-bold block text-slate-800">Tantangan: Sketsa Grafik Fungsi Bertingkat:</span>
+          <p class="text-[8pt] text-slate-600 mb-1">
+            Gambarkan fungsi $g(x) = \begin{cases} 3, & 0 \le x \le 2 \\ x + 1, & 2 < x \le 5 \end{cases}$. Perhatikan titik di batas $x = 2$!
+          </p>
+
+          <svg width="240" height="135" viewBox="0 0 240 135" class="mx-auto stroke-slate-800 fill-none text-[6.5pt]">
+            <defs>
+              <pattern id="grid-lks3" width="20" height="15" patternUnits="userSpaceOnUse">
+                <path d="M 20 0 L 0 0 0 15" fill="none" stroke="#f1f5f9" stroke-width="0.8" />
+              </pattern>
+            </defs>
+            <rect x="35" y="10" width="190" height="105" fill="url(#grid-lks3)" stroke="#94a3b8" />
+            <line x1="35" y1="115" x2="230" y2="115" stroke-width="1.5" stroke="#000" />
+            <line x1="35" y1="5" x2="35" y2="115" stroke-width="1.5" stroke="#000" />
+
+            <!-- Labels -->
+            <text x="30" y="118" text-anchor="end" fill="#000" stroke="none">0</text>
+            <text x="30" y="90" text-anchor="end" fill="#000" stroke="none">2</text>
+            <text x="30" y="65" text-anchor="end" fill="#000" stroke="none">4</text>
+            <text x="30" y="40" text-anchor="end" fill="#000" stroke="none">6</text>
+            <text x="30" y="15" text-anchor="end" fill="#000" stroke="none">8</text>
+
+            <text x="35" y="127" text-anchor="middle" fill="#000" stroke="none">0</text>
+            <text x="73" y="127" text-anchor="middle" fill="#000" stroke="none">1</text>
+            <text x="111" y="127" text-anchor="middle" fill="#000" stroke="none">2</text>
+            <text x="149" y="127" text-anchor="middle" fill="#000" stroke="none">3</text>
+            <text x="187" y="127" text-anchor="middle" fill="#000" stroke="none">4</text>
+            <text x="225" y="127" text-anchor="middle" fill="#000" stroke="none">5</text>
+          </svg>
+          <div class="mt-1 text-[8pt] text-slate-700 text-center">
+            Di titik $x = 2$: Cabang 1 bernilai $3$ diberi tanda <strong>[ ● / ○ ]</strong>, Cabang 2 bernilai $3$ diberi tanda <strong>[ ● / ○ ]</strong>.
+          </div>
+        </div>
+      </div>
+
+      <!-- Bagian C: Refleksi & Rumusan Aturan Emas Siswa -->
+      <div class="mt-2 space-y-1.5">
+        <div class="flex items-center gap-1.5 bg-slate-900 text-white px-2 py-0.5 rounded font-bold text-[9pt] uppercase tracking-wide">
+          <span>Bagian C · Rumusan "Aturan Emas" Saya</span>
+        </div>
+        <div class="solid-box p-2.5 bg-slate-50 text-[8.5pt] space-y-1 leading-relaxed">
+          <p>
+            "Saat membaca rumus kurung kurawal $\{$, langkah nomor satu adalah <strong>melihat interval syarat nilai input $x$</strong>, BUKAN langsung menghitung semua rumus aljabarnya. Setelah tahu interval yang cocok, barulah mengeksekusi rumus pada baris tersebut."
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-t border-slate-900 pt-2 flex justify-between items-center text-[8pt]">
+      <div class="space-y-0.5">
+        <span class="font-bold">Catatan / Evaluasi Guru:</span>
+        <div class="w-96 border-b border-dotted border-slate-400"></div>
+      </div>
+      <div class="flex gap-4">
+        <div class="border border-slate-400 rounded px-4 py-1 text-center">
+          <span class="block text-[7pt] text-slate-500 font-bold uppercase">Paraf Guru</span>
+          <div class="h-6"></div>
+        </div>
+        <div class="border border-slate-400 rounded px-4 py-1 text-center">
+          <span class="block text-[7pt] text-slate-500 font-bold uppercase">Nilai Skor</span>
+          <span class="text-sm font-black text-slate-900">/ 100</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- LEMBAR KERJA 4 (PERTEMUAN 4: PROYEK AKHIR KATALOG FUNGSI) -->
+  <!-- ========================================================================= -->
+
+  <!-- LKS 4: HALAMAN 1 (DEPAN) -->
+  <div class="a4-page lks-group lks4" id="lks4-p1">
+    <div>
+      <div class="border-b-2 border-slate-900 pb-2 flex justify-between items-start">
+        <div>
+          <span class="text-[9pt] font-mono uppercase font-bold tracking-wider text-slate-600 block">Kurikulum Merdeka · Asesmen Sumatif Proyek (PjBL) · Bab 7</span>
+          <h2 class="text-base font-black tracking-tight text-slate-900 mt-0.5">LKPD 4: PROYEK KATALOG FUNGSI DUNIA NYATA</h2>
+        </div>
+        <div class="text-right">
+          <span class="text-xs font-bold px-2 py-0.5 border border-slate-900 rounded font-mono">Pertemuan 4 (2 JP)</span>
+          <span class="block text-[8pt] text-slate-500 mt-0.5">Hal. 1 dari 2</span>
+        </div>
+      </div>
+
+      <!-- Identitas Kelompok -->
+      <div class="p-2 solid-box bg-slate-50 text-[8.5pt] my-2">
+        <div class="grid grid-cols-2 gap-2 pb-1 border-b border-slate-300">
+          <div><span class="font-bold text-slate-600">Nama Kelompok:</span> ....................................................</div>
+          <div><span class="font-bold text-slate-600">Kelas / Fase:</span> X - ...... / Fase E</div>
+        </div>
+        <div class="mt-1">
+          <span class="font-bold text-slate-600">Anggota Kelompok (3-4 orang):</span>
+          <div class="grid grid-cols-2 gap-x-4 gap-y-0.5 mt-0.5 text-[8pt]">
+            <div>1. ........................................................ (No. .....)</div>
+            <div>2. ........................................................ (No. .....)</div>
+            <div>3. ........................................................ (No. .....)</div>
+            <div>4. ........................................................ (No. .....)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bagian 1: Pemilihan Topik Masalah -->
+      <div class="space-y-1">
+        <div class="flex items-center gap-1.5 bg-slate-200 px-2 py-0.5 rounded font-bold text-[9pt] uppercase tracking-wide">
+          <span>Bagian 1 · Pilihan Topik Studi Kasus Nyata</span>
+        </div>
+        <div class="grid grid-cols-2 gap-2 text-[8pt]">
+          <label class="p-1.5 border border-slate-300 rounded flex items-center gap-2 cursor-pointer">
+            <input type="radio" name="topik" />
+            <span><strong>A. Tarif Ojol Bertingkat</strong> (4 km pertama flat)</span>
+          </label>
+          <label class="p-1.5 border border-slate-300 rounded flex items-center gap-2 cursor-pointer">
+            <input type="radio" name="topik" />
+            <span><strong>B. Parkir Mall Progresif</strong> (Drop-off & Max)</span>
+          </label>
+          <label class="p-1.5 border border-slate-300 rounded flex items-center gap-2 cursor-pointer">
+            <input type="radio" name="topik" />
+            <span><strong>C. Pajak PPh 21</strong> (Lapisan 5% & 15%)</span>
+          </label>
+          <label class="p-1.5 border border-slate-300 rounded flex items-center gap-2 cursor-pointer">
+            <input type="radio" name="topik" />
+            <span><strong>D. Tarif Air PDAM / Kasus Bebas</strong></span>
+          </label>
+        </div>
+        <div class="dashed-box p-1.5 bg-white text-[8pt] text-slate-600">
+          <strong>Deskripsi Kasus & Aturan Cerita:</strong><br>
+          <div class="write-line"></div>
+          <div class="write-line"></div>
+        </div>
+      </div>
+
+      <!-- Bagian 2: Definisi Variabel & Batasan Fisik -->
+      <div class="mt-2 space-y-1">
+        <div class="flex items-center gap-1.5 bg-slate-200 px-2 py-0.5 rounded font-bold text-[9pt] uppercase tracking-wide">
+          <span>Bagian 2 · Batasan Fisik Domain & Range</span>
+        </div>
+        <div class="grid grid-cols-2 gap-2 text-[8.5pt]">
+          <div class="p-2 border border-slate-300 rounded bg-white">
+            <span class="font-bold block text-slate-800">Variabel Input ($x$):</span>
+            Besaran: ....................................... Satuan: ....................<br>
+            <strong>Daerah Asal (Domain):</strong><br>
+            $D_f = \{x \in \dots\dots \mid \dots\dots\dots\dots\dots\dots\}$
+          </div>
+          <div class="p-2 border border-slate-300 rounded bg-white">
+            <span class="font-bold block text-slate-800">Variabel Output ($y$):</span>
+            Besaran: ....................................... Satuan: ....................<br>
+            <strong>Daerah Hasil (Range):</strong><br>
+            $R_f = \{y \in \dots\dots \mid \dots\dots\dots\dots\dots\dots\}$
+          </div>
+        </div>
+      </div>
+
+      <!-- Bagian 3: Formula Piecewise Formal -->
+      <div class="mt-2 space-y-1">
+        <div class="flex items-center gap-1.5 bg-slate-200 px-2 py-0.5 rounded font-bold text-[9pt] uppercase tracking-wide">
+          <span>Bagian 3 · Perumusan Formula Piecewise $\{ $</span>
+        </div>
+        <p class="text-[8pt] text-slate-600">Tuliskan model aljabar kurung kurawal lengkap dengan syarat intervalnya:</p>
+        <div class="solid-box p-3 bg-slate-50 text-center font-mono text-[9pt]">
+          <div class="text-slate-800 font-bold mb-1">Formula Matematika Model Kelompok:</div>
+          $$f(x) = \begin{cases} \dots\dots\dots\dots\dots\dots\dots\dots\dots, & \text{jika } \dots\dots\dots\dots\dots\dots\dots\dots \\ \dots\dots\dots\dots\dots\dots\dots\dots\dots, & \text{jika } \dots\dots\dots\dots\dots\dots\dots\dots \\ \dots\dots\dots\dots\dots\dots\dots\dots\dots, & \text{jika } \dots\dots\dots\dots\dots\dots\dots\dots \end{cases}$$
+        </div>
+      </div>
+    </div>
+
+    <div class="border-t border-slate-400 pt-1 text-[8pt] text-slate-500 flex justify-between items-center">
+      <span>SuperMath MTK X · Proyek Katalog Fungsi</span>
+      <span>Balik ke Halaman 2 ➔</span>
+    </div>
+  </div>
+
+  <!-- LKS 4: HALAMAN 2 (BELAKANG) -->
+  <div class="a4-page lks-group lks4" id="lks4-p2">
+    <div>
+      <div class="border-b border-slate-900 pb-1 flex justify-between items-center text-[8.5pt]">
+        <span class="font-bold text-slate-800">LKPD 4 · Lembar Balik (Grafik Proyek, Uji Nilai & Rubrik)</span>
+        <span class="font-mono text-slate-600">Hal. 2 dari 2</span>
+      </div>
+
+      <!-- Bagian 4: Sketsa Grafik Kurva Proyek -->
+      <div class="mt-1.5 space-y-1">
+        <div class="flex items-center gap-1.5 bg-slate-200 px-2 py-0.5 rounded font-bold text-[9pt] uppercase tracking-wide">
+          <span>Bagian 4 · Grafik Kartesius Fungsi Sepenggal</span>
+        </div>
+        <div class="border border-slate-400 rounded p-1.5 bg-white text-center">
+          <svg width="340" height="130" viewBox="0 0 340 130" class="mx-auto stroke-slate-800 fill-none text-[6.5pt]">
+            <defs>
+              <pattern id="grid-lks4" width="15" height="12" patternUnits="userSpaceOnUse">
+                <path d="M 15 0 L 0 0 0 12" fill="none" stroke="#e2e8f0" stroke-width="0.7" />
+              </pattern>
+            </defs>
+            <rect x="40" y="8" width="290" height="105" fill="url(#grid-lks4)" stroke="#64748b" />
+            <line x1="40" y1="113" x2="335" y2="113" stroke-width="1.5" stroke="#000" />
+            <line x1="40" y1="5" x2="40" y2="113" stroke-width="1.5" stroke="#000" />
+            <text x="330" y="123" text-anchor="end" font-weight="bold" fill="#000" stroke="none">Sumbu X (Input)</text>
+            <text x="35" y="12" text-anchor="end" font-weight="bold" fill="#000" stroke="none">Sumbu Y (Output)</text>
+          </svg>
+          <span class="text-[7pt] text-slate-500 block">Beri label angka pada sumbu X & Y, gambarkan garis tiap segmen, dan tandai titik ● atau ○!</span>
+        </div>
+      </div>
+
+      <!-- Bagian 5: Simulasi 3 Kasus Uji Nyata -->
+      <div class="mt-1.5 space-y-1">
+        <div class="flex items-center gap-1.5 bg-slate-200 px-2 py-0.5 rounded font-bold text-[9pt] uppercase tracking-wide">
+          <span>Bagian 5 · Pengujian Tiga Skenario Angka Nyata</span>
+        </div>
+        <div class="grid grid-cols-3 gap-2 text-[8pt]">
+          <div class="p-1.5 border border-slate-300 rounded bg-slate-50">
+            <strong>Uji 1 (Kasus Rendah):</strong><br>
+            $x_1 = $ ....................<br>
+            Hitung: .......................................<br>
+            Output $y_1 =$ <strong>....................</strong>
+          </div>
+          <div class="p-1.5 border border-slate-300 rounded bg-slate-50">
+            <strong>Uji 2 (Kasus Sedang):</strong><br>
+            $x_2 = $ ....................<br>
+            Hitung: .......................................<br>
+            Output $y_2 =$ <strong>....................</strong>
+          </div>
+          <div class="p-1.5 border border-slate-300 rounded bg-slate-50">
+            <strong>Uji 3 (Kasus Tinggi):</strong><br>
+            $x_3 = $ ....................<br>
+            Hitung: .......................................<br>
+            Output $y_3 =$ <strong>....................</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bagian 6: Analisis Kebijakan Masyarakat -->
+      <div class="mt-1.5 space-y-1">
+        <div class="flex items-center gap-1.5 bg-slate-200 px-2 py-0.5 rounded font-bold text-[9pt] uppercase tracking-wide">
+          <span>Bagian 6 · Analisis Nilai Keadilan & Kebijakan Sosial</span>
+        </div>
+        <p class="text-[8pt] text-slate-700">
+          Mengapa aturan bertingkat (piecewise) ini lebih adil bagi masyarakat dibanding 1 tarif flat rata?
+        </p>
+        <div class="dashed-box p-1.5 bg-white text-[8pt]">
+          <div class="write-line"></div>
+          <div class="write-line"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rubrik Penilaian Proyek Autentik -->
+    <div class="border-t border-slate-900 pt-1.5 text-[7.5pt]">
+      <div class="font-bold text-slate-800 mb-0.5">Tabel Penilaian Guru (Rubrik Autentik PjBL):</div>
+      <table class="w-full border-collapse border border-slate-400 text-center">
+        <thead class="bg-slate-100">
+          <tr>
+            <th class="border border-slate-400 p-1">1. Batasan Fisik (25%)</th>
+            <th class="border border-slate-400 p-1">2. Formula Piecewise (35%)</th>
+            <th class="border border-slate-400 p-1">3. Akurasi Grafik (25%)</th>
+            <th class="border border-slate-400 p-1">4. Analisis Makna (15%)</th>
+            <th class="border border-slate-400 p-1 font-bold">TOTAL SKOR (100)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="border border-slate-400 p-1">Skor: ...... / 25</td>
+            <td class="border border-slate-400 p-1">Skor: ...... / 35</td>
+            <td class="border border-slate-400 p-1">Skor: ...... / 25</td>
+            <td class="border border-slate-400 p-1">Skor: ...... / 15</td>
+            <td class="border border-slate-400 p-1 font-black text-sm text-slate-900">........</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Footer Pratinjau Layar -->
+  <footer class="no-print text-center py-6 text-xs text-slate-400">
+    <p>SuperMath MTK X · Lembar Kerja Peserta Didik (LKPD) Relasi & Fungsi</p>
+    <p class="mt-1">Gunakan tombol <strong>Cetak Dokumen</strong> di kanan atas atau tekan <code>Ctrl + P</code> (Windows) / <code>Cmd + P</code> (Mac) untuk mencetak langsung ke printer atau PDF.</p>
+  </footer>
+
+  <!-- Script Interaktivitas Tab Pengalih LKS -->
+  <script>
+    function filterLKS(targetLKS) {
+      // Update styling tombol tab
+      const tabs = document.querySelectorAll('.lks-tab-btn');
+      tabs.forEach(btn => {
+        if (btn.getAttribute('data-tab') === targetLKS) {
+          btn.className = "lks-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-brand-600 text-white transition-all";
+        } else {
+          btn.className = "lks-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-900 border border-slate-700 text-slate-300 hover:text-white transition-all";
+        }
+      });
+
+      // Tampilkan atau sembunyikan lembar halaman
+      const allPages = document.querySelectorAll('.lks-group');
+      allPages.forEach(page => {
+        if (targetLKS === 'all') {
+          page.style.display = 'flex';
+        } else {
+          if (page.classList.contains(targetLKS)) {
+            page.style.display = 'flex';
+          } else {
+            page.style.display = 'none';
+          }
+        }
+      });
+    }
+
+    // Auto-detect URL parameter jika dibuka dari link spesifik (e.g. lks-siswa.html?lks=lks1)
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const lksParam = params.get('lks');
+      if (lksParam && ['lks1', 'lks2', 'lks3', 'lks4'].includes(lksParam)) {
+        filterLKS(lksParam);
+      }
+    });
+  </script>
+</body>
+</html>

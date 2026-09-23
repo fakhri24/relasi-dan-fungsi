@@ -4,7 +4,7 @@ Dokumen perencanaan dan pelacakan progres pengembangan media pembelajaran intera
 
 ---
 
-## 📌 Status Terkini: v1.2.0 (Panduan Guru 4 Pertemuan Ditambahkan ✅)
+## 📌 Status Terkini: v1.3.0 (Lembar Kerja Peserta Didik / LKPD Siswa 4 Pertemuan Ditambahkan ✅)
 - [x] Riset kurikulum SuperMath MTK X & modul Bab 7 (Relasi & Fungsi).
 - [x] Pemangkasan materi teoretis formal (Injektif/Surjektif/Bijektif, Fungsi Genap/Ganjil, manipulasi aljabar rumit SNBT).
 - [x] Inisialisasi arsitektur React 19 + TypeScript + Vite + Tailwind CSS + KaTeX.
@@ -16,14 +16,18 @@ Dokumen perencanaan dan pelacakan progres pengembangan media pembelajaran intera
 - [x] **Audit Layout 16:9 Zero-Scroll**: Mengunci kontainer pada `h-screen max-h-screen overflow-hidden`, membatasi `SlideContainer` pada `h-[calc(100vh-3.5rem)]`, dan mengompakkan proporsi SVG/card di semua slide agar pas 100% pada resolusi 1366×768 (WXGA proyektor) dan 1920×1080 tanpa scrollbar. (Skor: 9.8/10)
 - [x] **Dukungan Deep Linking URL**: Navigasi langsung slide via query parameter `?slide=1` s.d. `?slide=10`.
 - [x] **Panduan Modul Ajar Guru Standalone (`panduan-guru.html` & `public/panduan-guru.html`)**:
-  - Alur Rinci 4 Pertemuan (@ 2 JP = 8 JP total) sampai fase proyek:
-    * Pertemuan 1 (Slide 1–4): Fondasi Relasi vs Fungsi, Syarat Pemetaan & Vertical Line Test.
-    * Pertemuan 2 (Slide 5–6): Batasan Nyata Domain/Range & Representasi $f(x)=ax+b$.
-    * Pertemuan 3 (Slide 7–9): Kebutuhan Piecewise, Notasi Kurung Kurawal $\{$, Titik ● vs ○ & Sandbox Lab.
-    * Pertemuan 4 (Slide 10): Kick-off Proyek Katalog Fungsi Dunia Nyata & Pengerjaan Worksheet A4.
+  - Alur Rinci 4 Pertemuan (@ 2 JP = 8 JP total) sampai fase proyek.
   - Skenario menit demi menit, pemantik guru, klarifikasi miskonsepsi umum siswa.
   - Integrasi tab navigasi interaktif, print-ready stylesheet A4, dan Teacher Scratchpad dengan autosave `localStorage`.
-  - Tombol tautan langsung ke panduan guru di Header Navbar dan Drawer Modul `Navbar.tsx`.
+- [x] **Lembar Kerja Peserta Didik (LKPD) Standalone (`lks-siswa.html` & `public/lks-siswa.html`)**:
+  - Format modular 4 pertemuan: Masing-masing dikunci tepat **1 lembar kertas A4 fisik bolak-balik (2 halaman)** per pertemuan.
+  - Desain Monokrom Ramah Fotokopi (*Xerox / Risograph Optimized*): Garis SVG tegas, kontras tinggi, latar putih bersih, hemat toner.
+  - Pola Aktivitas 3 Bagian:
+    * **Bagian A: Prediksi & Amati** (sinkron dengan proyektor kelas sebelum tombol pembuktian dibuka guru).
+    * **Bagian B: Tantangan Mandiri & Penyelidikan** (menarik garis panah relasi, uji scanner vertikal pada 4 kurva, menghitung tabel tarif linear, memplot titik di grid milimeter SVG, menentukan titik ● vs ○ pada piecewise).
+    * **Bagian C: Refleksi & Rumusan "Aturan Emas"** (siswa merumuskan sendiri prinsip matematis agar konsep "nempel").
+  - Opsi Cetak Fleksibel: Filter tampilan `[LKS 1]` · `[LKS 2]` · `[LKS 3]` · `[LKS 4 (Proyek)]` · `[Cetak Semua (4-in-1)]`.
+  - Integrasi tombol pintasan langsung di Navbar aplikasi (`Navbar.tsx`) dan seluruh section pertemuan di `panduan-guru.html`.
 
 ---
 
@@ -37,6 +41,7 @@ Dokumen perencanaan dan pelacakan progres pengembangan media pembelajaran intera
 
 ### Fase 2: Peningkatan Interaktivitas & Fitur Presenter
 - [x] **Dokumen Panduan Modul Ajar Guru**: File panduan HTML komprehensif 4 pertemuan (`panduan-guru.html`).
+- [x] **Dokumen Lembar Kerja Siswa (LKPD 1–4)**: File HTML A4 bolak-balik monokrom (`lks-siswa.html`).
 - [ ] **Mode Presenter Dual-Screen**: Menambahkan catatan khusus guru (*teacher notes* / kunci jawaban / panduan pertanyaan pemantik) yang bisa di-toggle dengan shortcut `T` langsung di layar presentasi.
 - [ ] **Animasi Transisi Halus**: Integrasi transisi antar-slide yang lebih dinamis tanpa memberatkan beban komputasi laptop proyektor.
 - [ ] **Kalkulator Ekspor CSV/Image**: Kemampuan bagi siswa untuk mengekspor grafik hasil rancangan di Slide 9 (Sandbox) menjadi gambar PNG untuk disisipkan ke laporan tugas mereka.
@@ -50,5 +55,5 @@ Dokumen perencanaan dan pelacakan progres pengembangan media pembelajaran intera
    - Memastikan tidak ada penggabungan konsep secara terburu-buru sebelum siswa memahami bagian atomiknya (Mesin $\to$ Diagram Panah $\to$ Garis Vertikal $\to$ Domain/Range $\to$ Rumus/Grafik Linear $\to$ Batasan 1 Garis $\to$ Notasi Piecewise $\to$ Sandbox $\to$ Proyek Hub).
 2. **Penyusunan Rencana 4 Pertemuan (@ 2 JP)**:
    - Didesain proporsional agar siswa tidak mengalami cognitive overload saat transisi dari fungsi linear tunggal ke fungsi sepenggal (piecewise) yang sarat syarat interval.
-3. **Format Slide Layar Penuh vs Scroll**:
-   - Disepakati format Slide Deck Layar Penuh (16:9) dengan kontrol keyboard (`←`, `→`, `Spasi`, `F`) agar guru memiliki kendali penuh atas tempo kelas tanpa gangguan scrolling.
+3. **Standar LKPD 1 Lembar Fisik Bolak-Balik Monokrom**:
+   - Memastikan biaya fotokopi sekolah tetap efisien, lembar kerja tidak tercecer, dan siswa memiliki rekam jejak tertulis yang aktif di setiap sesi pembelajaran.
