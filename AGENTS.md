@@ -73,6 +73,10 @@ Setiap kali ada perubahan, penambahan fitur, atau perbaikan kode:
   - Alur pengerjaan wajib terkunci berurutan (*sequential progress gate*): Tab stepper di depan dilarang diklik maju (`disabled={step.id > currentStep}`), dan tombol "Lanjut" menjadi satu-satunya jalur melaju setelah syarat langkah terpenuhi.
   - Input jawaban siswa wajib dimulai dalam kondisi kosong (*clean slate*) dengan placeholder abu-abu pemandu tanpa membocorkan jawaban langsung.
   - Setiap kasus investigasi wajib menyertakan kartu narasi skenario cerita dunia nyata yang terstruktur sebelum kanvas diagram.
+- **Standar Evaluasi Uji Garis Vertikal (VLT / `Slide4VerticalLineTest`)**:
+  - Dilarang keras menetapkan status "Fungsi Sah" pada kurva bukan fungsi (Lingkaran, Parabola Horizontal) ketika garis scanner berada pada posisi 0 titik potong atau titik singgung ekstrem.
+  - Wajib memisahkan secara tegas antara **Status Kurva Global** (Fungsi vs Bukan Fungsi) dan **Hasil Deteksi Scanner Lokal** di posisi $x$ aktif (0 titik potong = Jomblo / di luar kurva tanpa pasangan; 1 titik = pasangan tunggal / batas; $\ge 2$ titik = Mendua).
+  - Garis scanner pada kondisi 0 titik potong wajib menggunakan warna Amber/Oranye (`#f59e0b`) putus-putus dengan label "0 Titik Potong", bukan garis hijau fungsi sah.
 - **Standar Tampilan 16:9 Proyektor (Zero-Scroll)**:
   - Kontainer aplikasi wajib `h-screen max-h-screen overflow-hidden`.
   - `SlideContainer` dibatasi tepat pada `h-[calc(100vh-3.5rem)]` dengan `overflow-hidden`.
