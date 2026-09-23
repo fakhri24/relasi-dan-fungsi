@@ -7,6 +7,7 @@ import {
   Menu,
   X,
   Compass,
+  BookOpen,
 } from 'lucide-react';
 import { SlideItem } from '../types/slides';
 
@@ -105,6 +106,17 @@ export const Navbar: React.FC<NavbarProps> = ({
               <ChevronRight className="w-5 h-5" />
             </button>
 
+            <a
+              href="./panduan-guru.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition-all ml-1 flex items-center gap-1.5 text-xs font-bold"
+              title="Buka Panduan Modul Ajar Guru"
+            >
+              <BookOpen className="w-4 h-4 text-brand-400" />
+              <span className="hidden xl:inline">Panduan Guru</span>
+            </a>
+
             <button
               onClick={toggleFullscreen}
               className="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 transition-all ml-1"
@@ -166,8 +178,18 @@ export const Navbar: React.FC<NavbarProps> = ({
               </div>
             </div>
 
-            <div className="pt-4 border-t border-slate-800 text-xs text-slate-500">
-              💡 Pintasan Keyboard: <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300 font-mono">←</kbd> Sebelumnya · <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300 font-mono">→</kbd> Berikutnya
+            <div className="pt-4 border-t border-slate-800 space-y-2.5">
+              <a
+                href="./panduan-guru.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full p-2.5 rounded-xl bg-brand-600/20 hover:bg-brand-600/30 border border-brand-500/40 text-brand-300 transition-all flex items-center justify-center gap-2 text-xs font-bold"
+              >
+                <BookOpen className="w-4 h-4" /> Buka Panduan Guru (4 Pertemuan) ↗
+              </a>
+              <div className="text-xs text-slate-500">
+                💡 Pintasan Keyboard: <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300 font-mono">←</kbd> Sebelumnya · <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300 font-mono">→</kbd> Berikutnya
+              </div>
             </div>
           </div>
           <div className="flex-1" onClick={() => setMenuOpen(false)} />

@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panduan Guru: Alur Pembelajaran Relasi & Fungsi (4 Pertemuan menuju Proyek)</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              200: '#c7d2fe',
+              300: '#a5b4fc',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              800: '#3730a3',
+              900: '#312e81',
+              950: '#1e1b4b',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+            mono: ['JetBrains Mono', 'Fira Code', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- KaTeX for crisp math formula rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+
+  <style>
+    @media print {
+      .no-print { display: none !important; }
+      body { background-color: #ffffff !important; color: #0f172a !important; font-size: 11pt; }
+      .print-card { border: 1px solid #cbd5e1 !important; background-color: #ffffff !important; color: #0f172a !important; break-inside: avoid; margin-bottom: 1.5rem; }
+      .print-header { color: #0f172a !important; }
+      .print-text-dark { color: #1e293b !important; }
+      .print-bg-light { background-color: #f8fafc !important; }
+      a { text-decoration: none !important; color: #0f172a !important; }
+      .page-break { page-break-before: always; }
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen antialiased selection:bg-brand-500 selection:text-white">
+
+  <!-- Header & Bar Aksi Guru -->
+  <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur-md sticky top-0 z-40 px-4 md:px-8 py-4">
+    <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-brand-600/30 border border-brand-500/50 flex items-center justify-center text-brand-400 font-bold text-xl shadow-lg">
+          📘
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg md:text-xl font-extrabold text-white tracking-tight">Panduan Modul Ajar Guru</h1>
+            <span class="px-2 py-0.5 text-xs rounded-full bg-brand-500/20 text-brand-300 font-semibold border border-brand-500/30">
+              SuperMath MTK X
+            </span>
+          </div>
+          <p class="text-xs text-slate-400">Rencana 4 Pertemuan · Alur Media Interaktif 10 Slide · Asesmen Proyek Nyata</p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-2 no-print">
+        <button onclick="window.print()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold flex items-center gap-2 transition-all">
+          <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+          <span>Cetak Dokumen (A4)</span>
+        </button>
+        <a href="./index.html" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-brand-600/30 transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+          <span>Buka Slide Presentasi</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Container Utama -->
+  <main class="max-w-6xl mx-auto px-4 md:px-8 py-8 space-y-8">
+
+    <!-- Card 1: Identitas & Rasional Kurikulum -->
+    <section class="bg-slate-900/90 border border-slate-800 p-6 md:p-8 rounded-3xl shadow-2xl print-card">
+      <div class="flex items-center gap-2.5 text-xs font-bold uppercase tracking-wider text-brand-400 mb-2">
+        <span>📋 Identitas Modul & Kerangka Kurikulum</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2 pb-4 border-b border-slate-800">
+        <div>
+          <span class="text-xs text-slate-500 font-semibold block uppercase">Mata Pelajaran & Fase</span>
+          <span class="text-base font-extrabold text-white">Matematika · Fase E (Kelas X SMA)</span>
+        </div>
+        <div>
+          <span class="text-xs text-slate-500 font-semibold block uppercase">Domain Materi Pokok</span>
+          <span class="text-base font-extrabold text-white">Bab 7: Relasi & Fungsi (Piecewise)</span>
+        </div>
+        <div>
+          <span class="text-xs text-slate-500 font-semibold block uppercase">Total Alokasi Waktu</span>
+          <span class="text-base font-extrabold text-emerald-400">4 Pertemuan × 2 JP (8 Jam Pelajaran)</span>
+        </div>
+      </div>
+
+      <div class="mt-5 space-y-3">
+        <h3 class="text-base font-bold text-white">Prinsip Didaktik & Rasional Pembelajaran:</h3>
+        <p class="text-sm text-slate-300 leading-relaxed">
+          Media interaktif ini dirancang khusus untuk memotong materi teoretis abstrak yang kerap membingungkan siswa (seperti hafalan injektif, surjektif, bijektif) dan mengarahkannya langsung ke <strong class="text-brand-300 font-semibold">pemodelan matematika di dunia nyata</strong>. Dengan filosofi <strong class="text-emerald-400">"Tebak Dulu, Baru Buktikan"</strong>, setiap slide menjadi instrumen penyelidikan interaktif di mana guru memancing prediksi siswa sebelum menekan tombol pembuktian visual.
+        </p>
+        <div class="flex flex-wrap gap-2 pt-2">
+          <span class="px-3 py-1 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-300">🎯 Profil Pelajar: Bernalar Kritis & Bergotong Royong</span>
+          <span class="px-3 py-1 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-300">💡 Pendekatan: Problem-Based Learning (PBL) & Project-Based (PjBL)</span>
+          <span class="px-3 py-1 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-300">🖥️ Media: 10 Slide Responsif 16:9 + Simulator Interaktif</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Navigasi Tab Interaktif -->
+    <div class="flex flex-wrap gap-2 no-print border-b border-slate-800 pb-3" id="tabNav">
+      <button onclick="switchTab('all')" class="tab-btn px-4 py-2 rounded-xl text-xs md:text-sm font-bold bg-brand-600 text-white shadow-lg transition-all" data-tab="all">
+        Semua Pertemuan (Ringkasan Lengkap)
+      </button>
+      <button onclick="switchTab('p1')" class="tab-btn px-4 py-2 rounded-xl text-xs md:text-sm font-bold bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition-all" data-tab="p1">
+        Pertemuan 1 (Slide 1–4)
+      </button>
+      <button onclick="switchTab('p2')" class="tab-btn px-4 py-2 rounded-xl text-xs md:text-sm font-bold bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition-all" data-tab="p2">
+        Pertemuan 2 (Slide 5–6)
+      </button>
+      <button onclick="switchTab('p3')" class="tab-btn px-4 py-2 rounded-xl text-xs md:text-sm font-bold bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition-all" data-tab="p3">
+        Pertemuan 3 (Slide 7–9)
+      </button>
+      <button onclick="switchTab('p4')" class="tab-btn px-4 py-2 rounded-xl text-xs md:text-sm font-bold bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition-all" data-tab="p4">
+        Pertemuan 4 (Slide 10 + Proyek)
+      </button>
+      <button onclick="switchTab('notes')" class="tab-btn px-4 py-2 rounded-xl text-xs md:text-sm font-bold bg-slate-900 border border-slate-800 text-amber-400 hover:text-amber-300 transition-all flex items-center gap-1.5" data-tab="notes">
+        <span>📝 Catatan Kelas Guru</span>
+      </button>
+    </div>
+
+    <!-- Peta Alur Diagram Ringkas -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 print-card">
+      <div class="p-4 rounded-2xl bg-slate-900/80 border border-indigo-500/30">
+        <div class="text-xs font-mono font-bold text-indigo-400 uppercase">Pertemuan 1 · 2 JP</div>
+        <h4 class="font-extrabold text-white text-base mt-1">Fondasi Relasi & Fungsi</h4>
+        <div class="text-xs text-slate-400 mt-1">Slide 1 s.d. 4</div>
+        <ul class="text-xs text-slate-300 mt-2.5 space-y-1 list-disc list-inside">
+          <li>Hook Vending Machine</li>
+          <li>Model Mesin Input-Output</li>
+          <li>Syarat Diagram Panah</li>
+          <li>Vertical Line Test</li>
+        </ul>
+      </div>
+      <div class="p-4 rounded-2xl bg-slate-900/80 border border-emerald-500/30">
+        <div class="text-xs font-mono font-bold text-emerald-400 uppercase">Pertemuan 2 · 2 JP</div>
+        <h4 class="font-extrabold text-white text-base mt-1">Batasan Fisik & Model Linear</h4>
+        <div class="text-xs text-slate-400 mt-1">Slide 5 & 6</div>
+        <ul class="text-xs text-slate-300 mt-2.5 space-y-1 list-disc list-inside">
+          <li>Domain & Range Nyata</li>
+          <li>Diskrit vs Kontinu</li>
+          <li>Persamaan $f(x)=ax+b$</li>
+          <li>Kemiringan & Buka Pintu</li>
+        </ul>
+      </div>
+      <div class="p-4 rounded-2xl bg-slate-900/80 border border-amber-500/30">
+        <div class="text-xs font-mono font-bold text-amber-400 uppercase">Pertemuan 3 · 2 JP</div>
+        <h4 class="font-extrabold text-white text-base mt-1">Fungsi Sepenggal (Piecewise)</h4>
+        <div class="text-xs text-slate-400 mt-1">Slide 7 s.d. 9</div>
+        <ul class="text-xs text-slate-300 mt-2.5 space-y-1 list-disc list-inside">
+          <li>Kelemahan 1 Garis Lurus</li>
+          <li>Notasi Kurung Kurawal $\{</li>
+          <li>Titik Penuh (●) vs Kosong (○)</li>
+          <li>Sandbox Merakit Aturan</li>
+        </ul>
+      </div>
+      <div class="p-4 rounded-2xl bg-slate-900/80 border border-purple-500/30">
+        <div class="text-xs font-mono font-bold text-purple-400 uppercase">Pertemuan 4 · 2 JP</div>
+        <h4 class="font-extrabold text-white text-base mt-1">Kick-off Proyek & LKS</h4>
+        <div class="text-xs text-slate-400 mt-1">Slide 10 + Worksheet A4</div>
+        <ul class="text-xs text-slate-300 mt-2.5 space-y-1 list-disc list-inside">
+          <li>Pilihan 4 Kasus Nyata</li>
+          <li>Eksplorasi Simulator Mini</li>
+          <li>Penjelasan Rubrik 4 Aspek</li>
+          <li>Pengerjaan Lembar Kerja A4</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- DETAIL PERTEMUAN 1 -->
+    <section id="section-p1" class="meeting-section bg-slate-900/90 border border-slate-800 p-6 md:p-8 rounded-3xl shadow-xl print-card space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-800">
+        <div>
+          <span class="px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-bold uppercase tracking-wider">
+            Pertemuan 1 · Alokasi 2 JP (90 Menit)
+          </span>
+          <h2 class="text-2xl font-extrabold text-white mt-1">Membongkar Logika Relasi & Fungsi</h2>
+          <p class="text-sm text-slate-400">Fokus Slide: <strong class="text-brand-300">Slide 1 s.d. Slide 4</strong></p>
+        </div>
+        <div class="flex items-center gap-2 no-print">
+          <a href="./index.html?slide=1" target="_blank" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-brand-300 text-xs font-bold border border-slate-700">
+            Buka Slide 1 ↗
+          </a>
+          <a href="./index.html?slide=3" target="_blank" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-brand-300 text-xs font-bold border border-slate-700">
+            Buka Slide 3 ↗
+          </a>
+        </div>
+      </div>
+
+      <!-- Tujuan & Indikator -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="p-4 bg-slate-950 rounded-2xl border border-slate-800">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">🎯 Tujuan Pembelajaran Khusus</h4>
+          <ul class="text-sm text-slate-200 space-y-1.5 list-disc list-inside">
+            <li>Siswa memahami fungsi sebagai relasi yang memiliki kepastian (deterministik).</li>
+            <li>Siswa mampu mengidentifikasi 2 syarat pemetaan: semua anggota asal berpasangan & tidak boleh mendua.</li>
+            <li>Siswa mampu memvalidasi relasi pada grafik menggunakan <em>Vertical Line Test</em>.</li>
+          </ul>
+        </div>
+        <div class="p-4 bg-slate-950 rounded-2xl border border-slate-800">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">💡 Pemantik Guru & Analog Kunci</h4>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            "Bayangkan kalian beli minuman di vending machine. Kalian pencet tombol Susu Cokelat, tapi mesin malah mengeluarkan Kopi, atau tidak keluar apa-apa padahal koin sudah masuk. Apakah kalian mau pakai mesin rusak itu? Mesin yang adil dan dapat dipercaya itulah <strong>Fungsi</strong>!"
+          </p>
+        </div>
+      </div>
+
+      <!-- Alur Skenario Menit per Menit -->
+      <div class="space-y-3">
+        <h4 class="text-sm font-bold uppercase tracking-wider text-white">⏱️ Rincian Aktivitas Menit per Menit:</h4>
+        <div class="space-y-2 text-sm">
+          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-850 flex items-start gap-3">
+            <span class="px-2 py-0.5 rounded bg-brand-500/20 text-brand-300 font-mono text-xs font-bold shrink-0">00 - 15'</span>
+            <div>
+              <strong class="text-white">Apersepsi & Hook Interaktif (Slide 1):</strong>
+              <p class="text-slate-400 text-xs mt-0.5">Buka Slide 1. Minta 1 siswa maju menekan tombol mesin rusak di layar. Diskusikan rasa frustrasi pengguna jika input menghasilkan output yang tidak pasti.</p>
+            </div>
+          </div>
+          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-850 flex items-start gap-3">
+            <span class="px-2 py-0.5 rounded bg-brand-500/20 text-brand-300 font-mono text-xs font-bold shrink-0">15 - 35'</span>
+            <div>
+              <strong class="text-white">Mental Model Mesin Matematika (Slide 2):</strong>
+              <p class="text-slate-400 text-xs mt-0.5">Ubah aturan dari $f(x)=2x+3$ ke $x^2-1$. Mintalah siswa menghitung cepat di kepala outputnya jika input $x=4$ sebelum tombol 'Jalankan Mesin' ditekan.</p>
+            </div>
+          </div>
+          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-850 flex items-start gap-3">
+            <span class="px-2 py-0.5 rounded bg-brand-500/20 text-brand-300 font-mono text-xs font-bold shrink-0">35 - 65'</span>
+            <div>
+              <strong class="text-white">Penyelidikan Diagram Panah "Tebak Dulu" (Slide 3):</strong>
+              <p class="text-slate-400 text-xs mt-0.5">Putar 4 preset kasus: Kasus 1 (Pesan Normal), Kasus 2 (Citra Jomblo), Kasus 3 (Budi Mendua), Kasus 4 (Semua Pesan Bakso). Wajibkan siswa mengangkat tangan voting "Fungsi atau Bukan?" sebelum tombol 'Buktikan Jawaban Kelas' dibuka.</p>
+            </div>
+          </div>
+          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-850 flex items-start gap-3">
+            <span class="px-2 py-0.5 rounded bg-brand-500/20 text-brand-300 font-mono text-xs font-bold shrink-0">65 - 80'</span>
+            <div>
+              <strong class="text-white">Uji Garis Vertikal / Vertical Line Test (Slide 4):</strong>
+              <p class="text-slate-400 text-xs mt-0.5">Beralih dari diagram panah ke grafik bidang Kartesius. Tunjukkan kurva lingkaran dan parabola tidur di mana scanner memotong 2 titik merah sekaligus (gagal fungsi).</p>
+            </div>
+          </div>
+          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-850 flex items-start gap-3">
+            <span class="px-2 py-0.5 rounded bg-brand-500/20 text-brand-300 font-mono text-xs font-bold shrink-0">80 - 90'</span>
+            <div>
+              <strong class="text-white">Penguatan Konsep & Refleksi:</strong>
+              <p class="text-slate-400 text-xs mt-0.5">Guru merangkum rumus hafalan cepat: <em>"Daerah Asal tidak boleh Jomblo dan tidak boleh Selingkuh!"</em>. Berikan tantangan kilat 2 soal di papan tulis untuk memastikan pemahaman.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kunci Pedagogi & Miskonsepsi Siswa -->
+      <div class="p-4 bg-amber-950/20 border border-amber-500/30 rounded-2xl text-xs space-y-2 text-amber-200">
+        <div class="font-bold flex items-center gap-1.5 text-amber-300 text-sm">
+          <span>⚠️ Antisipasi Miskonsepsi Umum Siswa:</span>
+        </div>
+        <p><strong>Miskonsepsi:</strong> Siswa sering mengira daerah kawan (Kodomain/Range) juga tidak boleh jomblo atau tidak boleh bercabang.</p>
+        <p><strong>Klarifikasi Guru:</strong> Tunjukkan Preset 4 (Semua Pesan Bakso). Semua anak memesan bakso, sedangkan mie ayam dan soto tidak ada yang beli. Apakah ini fungsi? <strong>YA, FUNGSI SAH!</strong> Yang wajib disiplin hanya daerah asal (pelanggan). Daerah kawan bebas menerima lebih dari satu panah atau bahkan nol panah.</p>
+      </div>
+    </section>
+
+    <!-- DETAIL PERTEMUAN 2 -->
+    <section id="section-p2" class="meeting-section bg-slate-900/90 border border-slate-800 p-6 md:p-8 rounded-3xl shadow-xl print-card space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-800">
+        <div>
+          <span class="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold uppercase tracking-wider">
+            Pertemuan 2 · Alokasi 2 JP (90 Menit)
+          </span>
+          <h2 class="text-2xl font-extrabold text-white mt-1">Batasan Dunia Nyata & Representasi Linear</h2>
+          <p class="text-sm text-slate-400">Fokus Slide: <strong class="text-emerald-300">Slide 5 & Slide 6</strong></p>
+        </div>
+        <div class="flex items-center gap-2 no-print">
+          <a href="./index.html?slide=5" target="_blank" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-300 text-xs font-bold border border-slate-700">
+            Buka Slide 5 ↗
+          </a>
+          <a href="./index.html?slide=6" target="_blank" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-300 text-xs font-bold border border-slate-700">
+            Buka Slide 6 ↗
+          </a>
+        </div>
+      </div>
+
+      <!-- Tujuan & Indikator -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="p-4 bg-slate-950 rounded-2xl border border-slate-800">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">🎯 Tujuan Pembelajaran Khusus</h4>
+          <ul class="text-sm text-slate-200 space-y-1.5 list-disc list-inside">
+            <li>Siswa mampu menentukan Domain dan Range berdasarkan realitas fisik (bukan sekadar simbol $\mathbb{R}$).</li>
+            <li>Siswa mampu membedakan variabel diskrit (bilangan cacah) dan kontinu (selang riil).</li>
+            <li>Siswa mengaitkan cerita kontekstual ke persamaan $f(x)=ax+b$ beserta interpretasi grafiknya.</li>
+          </ul>
+        </div>
+        <div class="p-4 bg-slate-950 rounded-2xl border border-slate-800">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">💡 Pemantik Guru & Analog Kunci</h4>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            "Dalam matematika murni, nilai $x$ bisa sejuta atau minus lima miliar. Tapi kalau kita bicara tentang kapasitas lift mall atau jarak tempuh ojek online, apakah mungkin jaraknya minus 4 km? Apakah mungkin jumlah orang di lift 3,5 orang? Inilah alasan mengapa Domain dan Range itu lahir!"
+          </p>
+        </div>
+      </div>
+
+      <!-- Alur Skenario Menit per Menit -->
+      <div class="space-y-3">
+        <h4 class="text-sm font-bold uppercase tracking-wider text-white">⏱️ Rincian Aktivitas Menit per Menit:</h4>
+        <div class="space-y-2 text-sm">
+          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-850 flex items-start gap-3">
+            <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono text-xs font-bold shrink-0">00 - 15'</span>
+            <div>
+              <strong class="text-white">Review Singkat Pertemuan 1:</strong>
+              <p class="text-slate-400 text-xs mt-0.5">Tanya jawab kilat mengenai syarat pemetaan dan uji garis vertikal. Memastikan semua siswa sudah tuntas konsep dasar fungsi.</p>
+            </div>
+          </div>
+          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-850 flex items-start gap-3">
+            <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono text-xs font-bold shrink-0">15 - 45'</span>
+            <div>
+              <strong class="text-white">Eksplorasi Domain & Range Fisik (Slide 5):</strong>
+              <p class="text-slate-400 text-xs mt-0.5">Uji 3 studi kasus di Slide 5: Jarak Ojol ($x \ge 0$), Baterai Smartphone ($x \in [0, 8]$ jam), dan Lift Gedung ($x \in \{0, 1, 2, \dots, 8\}$). Gunakan tombol tebak nilai: <em>"Bagaimana jika $x = -3$? Bagaimana jika $x = 3.5$ orang?"</em>.</p>
+            </div>
+          </div>
+          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-850 flex items-start gap-3">
+            <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono text-xs font-bold shrink-0">45 - 75'</span>
+            <div>
+              <strong class="text-white">Visualisasi Kata $\to$ Rumus $\to$ Grafik (Slide 6):</strong>
+              <p class="text-slate-400 text-xs mt-0.5">Gunakan slider di Slide 6 untuk mendemonstrasikan bagaimana parameter aljabar mengubah grafik:
+                <br>• Menggeser $a$ (kemiringan): tarif per km semakin mahal $\to$ garis semakin curam.
+                <br>• Menggeser $b$ (buka pintu): titik awal grafik di sumbu Y bergeser naik/turun.
+              </p>
+            </div>
+          </div>
+          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-850 flex items-start gap-3">
+            <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono text-xs font-bold shrink-0">75 - 90'</span>
+            <div>
+              <strong class="text-white">Latihan Berpasangan (Mini Challenge):</strong>
+              <p class="text-slate-400 text-xs mt-0.5">Siswa bekerja berpasangan selama 10 menit membuat 1 skenario fungsi linear di buku catatan (misal: tarif sewa lapangan futsal Rp 50.000 + Rp 75.000/jam). Tentukan rumus dan domainnya.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DETAIL PERTEMUAN 3 -->
+    <section id="section-p3" class="meeting-section bg-slate-900/90 border border-slate-800 p-6 md:p-8 rounded-3xl shadow-xl print-card space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-800">
+        <div>
+          <span class="px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold uppercase tracking-wider">
+            Pertemuan 3 · Alokasi 2 JP (90 Menit)
+          </span>
+          <h2 class="text-2xl font-extrabold text-white mt-1">Lompatan ke Fungsi Sepenggal (Piecewise Function)</h2>
+          <p class="text-sm text-slate-400">Fokus Slide: <strong class="text-amber-300">Slide 7 s.d. Slide 9</strong></p>
+        </div>
+        <div class="flex items-center gap-2 no-print">
+          <a href="./index.html?slide=7" target="_blank" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 text-xs font-bold border border-slate-700">
+            Buka Slide 7 ↗
+          </a>
+          <a href="./index.html?slide=9" target="_blank" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 text-xs font-bold border border-slate-700">
+            Buka Slide 9 ↗
+          </a>
+        </div>
+      </div>
+
+      <!-- Tujuan & Indikator -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="p-4 bg-slate-950 rounded-2xl border border-slate-800">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">🎯 Tujuan Pembelajaran Khusus</h4>
+          <ul class="text-sm text-slate-200 space-y-1.5 list-disc list-inside">
+            <li>Siswa mengidentifikasi keterbatasan fungsi 1 garis lurus dalam memodelkan kebijakan nyata.</li>
+            <li>Siswa mampu membaca notasi kurung kurawal besar $\{$, menentukan cabang aktif, dan memahami titik penuh vs kosong.</li>
+            <li>Siswa mampu menyusun fungsi piecewise sederhana melalui Sandbox interaktif.</li>
+          </ul>
+        </div>
+        <div class="p-4 bg-slate-950 rounded-2xl border border-slate-800">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">💡 Kunci Membaca Notasi Piecewise</h4>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            "Kalian jangan pusing melihat kurung kurawal besar yang bertumpuk rumus. Anggap kurung kurawal itu seperti pintu cabang di mall: <strong class="text-amber-300">Cek dulu nilai $x$-mu masuk di pintu/syarat yang mana</strong>. Begitu ketemu pintunya, cukup ambil rumus di baris itu saja, abaikan baris yang lain!"
+          </p>
+        </div>
+      </div>
+
+      <!-- Alur Skenario Menit per Menit -->
+      <div class="space-y-3">
+        <h4 class="text-sm font-bold uppercase tracking-wider text-white">⏱️ Rincian Aktivitas Menit per Menit:</h4>
+        <div class="space-y-2 text-sm">
+          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-850 flex items-start gap-3">
+            <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono text-xs font-bold shrink-0">00 - 20'</span>
+            <div>
+              <strong class="text-white">Tantangan Parkir Mall: Mengapa 1 Rumus Gagal? (Slide 7):</strong>
+              <p class="text-slate-400 text-xs mt-0.5">Tunjukkan simulasi parkir mall. Geser slider ke 6 menit (drop-off). Perlihatkan rumus linear menagih Rp 5.300 (pelanggan ngamuk!), sedangkan parkir 12 jam menagih Rp 41.000 (terlalu mahal tanpa batas harian). Simpulkan kebutuhan aturan bercabang.</p>
+            </div>
+          </div>
+          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-850 flex items-start gap-3">
+            <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono text-xs font-bold shrink-0">20 - 50'</span>
+            <div>
+              <strong class="text-white">Membedah Notasi KaTeX & Titik Grafik (Slide 8):</strong>
+              <p class="text-slate-400 text-xs mt-0.5">Demonstrasikan Slide 8 dengan menggeser nilai input $x$. Perhatikan bagaimana baris formula menyala (highlight) sesuai interval aktif. Jelaskan secara visual arti titik hitam penuh (● tanda $\le$) dan titik berlubang (○ tanda $<$).</p>
+            </div>
+          </div>
+          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-850 flex items-start gap-3">
+            <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono text-xs font-bold shrink-0">50 - 75'</span>
+            <div>
+              <strong class="text-white">Eksperimen Interaktif Sandbox Builder (Slide 9):</strong>
+              <p class="text-slate-400 text-xs mt-0.5">Panggil 2–3 perwakilan siswa maju ke depan kelas untuk menjadi "Manajer Bisnis". Minta mereka merancang tarif parkir baru dengan menggeser batas $t_1$, rate per jam, dan batas atas $t_2$. Amati bagaimana rumus KaTeX di bawah grafik berubah otomatis.</p>
+            </div>
+          </div>
+          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-850 flex items-start gap-3">
+            <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono text-xs font-bold shrink-0">75 - 90'</span>
+            <div>
+              <strong class="text-white">Briefing Awal Pembentukan Kelompok Proyek:</strong>
+              <p class="text-slate-400 text-xs mt-0.5">Umumkan bahwa pada pertemuan berikutnya, seluruh kelas akan melaksanakan Proyek Kolaboratif "Katalog Fungsi Dunia Nyata". Bentuk kelompok berisi 3–4 orang.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DETAIL PERTEMUAN 4 -->
+    <section id="section-p4" class="meeting-section bg-slate-900/90 border border-slate-800 p-6 md:p-8 rounded-3xl shadow-xl print-card space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-800">
+        <div>
+          <span class="px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-400 text-xs font-bold uppercase tracking-wider">
+            Pertemuan 4 · Alokasi 2 JP (90 Menit)
+          </span>
+          <h2 class="text-2xl font-extrabold text-white mt-1">Kick-off Proyek & Pengerjaan Lembar Kerja (Worksheet)</h2>
+          <p class="text-sm text-slate-400">Fokus Slide: <strong class="text-purple-300">Slide 10 & WorksheetPrint A4</strong></p>
+        </div>
+        <div class="flex items-center gap-2 no-print">
+          <a href="./index.html?slide=10" target="_blank" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-purple-300 text-xs font-bold border border-slate-700">
+            Buka Slide 10 ↗
+          </a>
+        </div>
+      </div>
+
+      <!-- 4 Pilihan Kasus Proyek -->
+      <div>
+        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">📦 4 Pilihan Kasus Nyata di Slide 10 (Project Hub):</h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
+            <span class="text-brand-400 font-bold uppercase text-[10px]">Kasus 1 · Transportasi</span>
+            <div class="text-sm font-bold text-white mt-0.5">Tarif Ojol Bertingkat</div>
+            <p class="text-slate-400 mt-1">4 km pertama Rp 10.000 flat, km berikutnya +Rp 3.000/km. Model piecewise 2 cabang linear.</p>
+          </div>
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
+            <span class="text-emerald-400 font-bold uppercase text-[10px]">Kasus 2 · Fasilitas Publik</span>
+            <div class="text-sm font-bold text-white mt-0.5">Parkir Mall Progresif</div>
+            <p class="text-slate-400 mt-1">Drop-off gratis $\le 15$ mnt, jam pertama Rp 5.000, jam berikutnya Rp 3.000, max harian Rp 40.000.</p>
+          </div>
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
+            <span class="text-amber-400 font-bold uppercase text-[10px]">Kasus 3 · Keuangan Negara</span>
+            <div class="text-sm font-bold text-white mt-0.5">Pajak Penghasilan (PPh 21)</div>
+            <p class="text-slate-400 mt-1">5% untuk PKP s.d. 60 juta, 15% untuk PKP 60–250 juta. Kasus tantangan keadilan sosial.</p>
+          </div>
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
+            <span class="text-purple-400 font-bold uppercase text-[10px]">Kasus 4 · Utilitas & Lingkungan</span>
+            <div class="text-sm font-bold text-white mt-0.5">Tarif Air Minum PDAM</div>
+            <p class="text-slate-400 mt-1">10 m³ pertama disubsidi Rp 2.000/m³, pemakaian di atas 10 m³ dikenakan tarif ganda Rp 4.000/m³.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rubrik Asesmen -->
+      <div class="p-4 bg-slate-950 rounded-2xl border border-slate-800 space-y-3">
+        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300">📊 Rubrik Penilaian Proyek Autentik (Skor Maksimal 100):</h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+          <div class="p-3 rounded-xl bg-slate-900 border border-amber-500/30">
+            <span class="text-amber-400 font-bold text-base">25 Poin</span>
+            <div class="font-bold text-white mt-0.5">1. Identifikasi & Batasan</div>
+            <p class="text-slate-400 text-[11px] mt-1">Ketepatan menentukan domain dan range fisis yang realistis sesuai cerita masalah.</p>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-900 border border-brand-500/30">
+            <span class="text-brand-400 font-bold text-base">35 Poin</span>
+            <div class="font-bold text-white mt-0.5">2. Formula Piecewise</div>
+            <p class="text-slate-400 text-[11px] mt-1">Ketepatan rumus aljabar tiap cabang dan interval pembatas syarat kurung kurawal $\{$.</p>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-900 border border-emerald-500/30">
+            <span class="text-emerald-400 font-bold text-base">25 Poin</span>
+            <div class="font-bold text-white mt-0.5">3. Akurasi Grafik</div>
+            <p class="text-slate-400 text-[11px] mt-1">Kerapian skala sumbu, kemiringan garis, serta ketepatan titik penuh (●) dan berlubang (○).</p>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-900 border border-purple-500/30">
+            <span class="text-purple-400 font-bold text-base">15 Poin</span>
+            <div class="font-bold text-white mt-0.5">4. Analisis Makna</div>
+            <p class="text-slate-400 text-[11px] mt-1">Penjelasan mengapa aturan tersebut adil dan 3 contoh pengujian kasus input numerik.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alur Skenario Menit per Menit -->
+      <div class="space-y-3">
+        <h4 class="text-sm font-bold uppercase tracking-wider text-white">⏱️ Rincian Aktivitas Pertemuan 4:</h4>
+        <div class="space-y-2 text-sm">
+          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-850 flex items-start gap-3">
+            <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 font-mono text-xs font-bold shrink-0">00 - 15'</span>
+            <div>
+              <strong class="text-white">Orientasi Masalah & Demonstrasi Simulator (Slide 10):</strong>
+              <p class="text-slate-400 text-xs mt-0.5">Buka Slide 10. Tunjukkan simulator uji input untuk membuktikan bagaimana rumus piecewise menghitung tagihan. Tekan tombol <strong>"Cetak Lembar Kerja"</strong> untuk membagikan Worksheet A4 cetak kepada masing-masing kelompok.</p>
+            </div>
+          </div>
+          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-850 flex items-start gap-3">
+            <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 font-mono text-xs font-bold shrink-0">15 - 75'</span>
+            <div>
+              <strong class="text-white">Pengerjaan Kolaboratif Kelompok (Worksheet A4):</strong>
+              <p class="text-slate-400 text-xs mt-0.5">Siswa berdiskusi dalam kelompok 3–4 orang:
+                <br>1. Menuliskan narasi aturan masalah yang dipilih (atau kasus kreasi mandiri).
+                <br>2. Menetapkan Domain ($D_f$) dan Range ($R_f$).
+                <br>3. Menuliskan formula piecewise lengkap dengan kurung kurawal.
+                <br>4. Menggambar grafik berkoordinat pada kisi milimeter blok.
+                <br>5. Menghitung 3 skenario uji nilai $x$.
+                <br><em>Guru berkeliling memberikan bimbingan fasilitatif dan memeriksa ketepatan rumus aljabar tiap kelompok.</em>
+              </p>
+            </div>
+          </div>
+          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-850 flex items-start gap-3">
+            <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 font-mono text-xs font-bold shrink-0">75 - 90'</span>
+            <div>
+              <strong class="text-white">Wrap-up & Rencana Pameran / Pengumpulan:</strong>
+              <p class="text-slate-400 text-xs mt-0.5">Setiap kelompok mengumpulkan draf lembar kerja atau memajangnya di dinding kelas untuk asesmen akhir / mini pameran karya.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION CATATAN GURU (SCRATCHPAD) -->
+    <section id="section-notes" class="bg-slate-900/90 border border-slate-800 p-6 md:p-8 rounded-3xl shadow-xl print-card space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div>
+          <h3 class="text-xl font-bold text-white flex items-center gap-2">
+            <span>📝 Catatan Kelas Guru (Tersimpan Otomatis)</span>
+          </h3>
+          <p class="text-xs text-slate-400">Gunakan kotak di bawah ini untuk mencatat nama kelompok, progres siswa, atau evaluasi kelas hari ini. Catatan tersimpan di browser Anda.</p>
+        </div>
+        <button onclick="clearNotes()" class="no-print text-xs text-rose-400 hover:text-rose-300 underline">
+          Hapus Catatan
+        </button>
+      </div>
+
+      <textarea id="teacherNotes" rows="6" placeholder="Ketik catatan di sini... (Misal: Kelompok 1 memilih kasus PDAM, Kelompok 3 perlu dibimbing kembali pada titik terbuka/tertutup...)" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-4 text-sm text-slate-200 focus:outline-none focus:border-brand-500 transition-all font-mono leading-relaxed"></textarea>
+      <div class="flex items-center justify-between text-xs text-slate-500">
+        <span>💾 Data tersimpan secara lokal di browser Anda (LocalStorage).</span>
+        <span id="saveStatus" class="text-emerald-400 font-semibold">Tersimpan</span>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer Panduan -->
+  <footer class="border-t border-slate-800 py-6 text-center text-xs text-slate-500 no-print">
+    <div class="max-w-6xl mx-auto px-4">
+      <p>SuperMath MTK X · Panduan Pembelajaran Relasi dan Fungsi · Modul Pendukung Guru</p>
+      <p class="mt-1">Dirancang untuk implementasi Kurikulum Merdeka Fase E tingkat SMA/MA.</p>
+    </div>
+  </footer>
+
+  <!-- Script Interaktivitas Tab & LocalStorage -->
+  <script>
+    function switchTab(tabId) {
+      const buttons = document.querySelectorAll('.tab-btn');
+      buttons.forEach(btn => {
+        if (btn.getAttribute('data-tab') === tabId) {
+          btn.className = "tab-btn px-4 py-2 rounded-xl text-xs md:text-sm font-bold bg-brand-600 text-white shadow-lg transition-all";
+        } else {
+          btn.className = "tab-btn px-4 py-2 rounded-xl text-xs md:text-sm font-bold bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition-all";
+        }
+      });
+
+      const sections = ['section-p1', 'section-p2', 'section-p3', 'section-p4', 'section-notes'];
+      if (tabId === 'all') {
+        sections.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.style.display = 'block';
+        });
+      } else if (tabId === 'notes') {
+        sections.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.style.display = (id === 'section-notes') ? 'block' : 'none';
+        });
+      } else {
+        const targetId = 'section-' + tabId;
+        sections.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.style.display = (id === targetId || id === 'section-notes') ? 'block' : 'none';
+        });
+      }
+    }
+
+    // Local Storage Note Keeper
+    const notesKey = 'supermath_relasi_guru_notes';
+    const textarea = document.getElementById('teacherNotes');
+    const saveStatus = document.getElementById('saveStatus');
+
+    if (textarea) {
+      const saved = localStorage.getItem(notesKey);
+      if (saved) textarea.value = saved;
+
+      textarea.addEventListener('input', () => {
+        localStorage.setItem(notesKey, textarea.value);
+        saveStatus.textContent = 'Menyimpan...';
+        setTimeout(() => {
+          saveStatus.textContent = 'Tersimpan';
+        }, 500);
+      });
+    }
+
+    function clearNotes() {
+      if (confirm('Yakin ingin menghapus seluruh catatan guru?')) {
+        textarea.value = '';
+        localStorage.removeItem(notesKey);
+        saveStatus.textContent = 'Dihapus';
+      }
+    }
+  </script>
+</body>
+</html>
