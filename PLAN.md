@@ -4,7 +4,13 @@ Dokumen perencanaan dan pelacakan progres pengembangan media pembelajaran intera
 
 ---
 
-## 📌 Status Terkini: v1.3.0 (Lembar Kerja Peserta Didik / LKPD Siswa 4 Pertemuan Ditambahkan ✅)
+## 📌 Status Terkini: v1.3.1 (Hook Slide 1 Diselaraskan ke Es Krim Cornetto Kasir Kantin ✅)
+- [x] **Revisi Hook Slide 1 (Apersepsi Kontekstual Kantin Sekolah)**:
+  - Mengubah analogi generic "Beli Susu Kotak" / vending machine menjadi **Scanner Kasir Kantin: Scan Barcode Es Krim Cornetto Cokelat**.
+  - Menambahkan simulator interaktif dengan tombol "Scan Ulang":
+    * *Mode Kasir Rusak (Bukan Fungsi)*: Barcode sama menghasilkan harga acak berganti-ganti (Rp 45.000, Rp 500, Sabun Colek, Rp 120.000).
+    * *Mode Kasir Normal (Fungsi)*: Barcode selalu menghasilkan tepat satu harga pasti ($f(\text{Cornetto}) = \text{Rp } 8.000$).
+  - Menyelaraskan teks pemantik di [panduan-guru.html](file:///Users/fakhri246/project/matematika/relasi-dan-fungsi/panduan-guru.html) dan pertanyaan Bagian A1 di [lks-siswa.html](file:///Users/fakhri246/project/matematika/relasi-dan-fungsi/lks-siswa.html) agar 100% konsisten.
 - [x] Riset kurikulum SuperMath MTK X & modul Bab 7 (Relasi & Fungsi).
 - [x] Pemangkasan materi teoretis formal (Injektif/Surjektif/Bijektif, Fungsi Genap/Ganjil, manipulasi aljabar rumit SNBT).
 - [x] Inisialisasi arsitektur React 19 + TypeScript + Vite + Tailwind CSS + KaTeX.
