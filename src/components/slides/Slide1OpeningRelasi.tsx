@@ -223,9 +223,9 @@ export const Slide1OpeningRelasi: React.FC<Slide1OpeningRelasiProps> = ({ onNext
                   <polygon points="0 1, 8 4, 0 7, 2 4" fill="#38bdf8" />
                 </marker>
 
-                {/* Glow Filter */}
-                <filter id="arrowGlow" x="-20%" y="-20%" width="140%" height="140%">
-                  <feDropShadow dx="0" dy="0" stdDeviation="2" floodColor="#38bdf8" floodOpacity="0.6" />
+                {/* Glow Filter with userSpaceOnUse to avoid zero-height bounding box clipping on horizontal arrows */}
+                <filter id="arrowGlow" filterUnits="userSpaceOnUse" x="0" y="0" width="520" height="230">
+                  <feDropShadow dx="0" dy="0" stdDeviation="2.5" floodColor="#38bdf8" floodOpacity="0.65" />
                 </filter>
               </defs>
 
@@ -316,20 +316,20 @@ export const Slide1OpeningRelasi: React.FC<Slide1OpeningRelasiProps> = ({ onNext
                 <g>
                   <rect
                     x="180"
-                    y="34"
+                    y="28"
                     width="160"
-                    height="20"
-                    rx="10"
+                    height="18"
+                    rx="9"
                     fill="#082f49"
                     stroke="#38bdf8"
                     strokeWidth="1"
                   />
                   <text
                     x="260"
-                    y="47"
+                    y="40.5"
                     textAnchor="middle"
                     fill="#38bdf8"
-                    fontSize="9.5"
+                    fontSize="9"
                     fontWeight="bold"
                   >
                     Pilih target di B ➔
@@ -338,7 +338,7 @@ export const Slide1OpeningRelasi: React.FC<Slide1OpeningRelasiProps> = ({ onNext
               ) : (
                 <text
                   x="260"
-                  y="46"
+                  y="40"
                   textAnchor="middle"
                   fill="#475569"
                   fontSize="9"
@@ -348,7 +348,7 @@ export const Slide1OpeningRelasi: React.FC<Slide1OpeningRelasiProps> = ({ onNext
                 </text>
               )}
 
-              {/* ===== DIRECTIONAL BEZIER ARROWS ===== */}
+              {/* ===== DIRECTIONAL BEZIER ARROWS WITH ADAPTIVE MULTI-ARROW SPREAD ===== */}
               {activeConnections.map(([fromId, toId], idx) => {
                 const fromIdx = currentPreset.setA.findIndex((item) => item.id === fromId);
                 const toIdx = currentPreset.setB.findIndex((item) => item.id === toId);
@@ -357,11 +357,33 @@ export const Slide1OpeningRelasi: React.FC<Slide1OpeningRelasiProps> = ({ onNext
                 const y1 = getItemY(fromIdx);
                 const y2 = getItemY(toIdx);
 
-                // Start from Noktah A (146) to edge of Noktah B (368)
+                // Hitung panah dari sumber yang sama untuk variasi lengkungan memencar
+                const sourceArrows = activeConnections.filter(([f]) => f === fromId);
+                const sourceArrowIdx = sourceArrows.findIndex(([, t]) => t === toId);
+                const isMultiSource = sourceArrows.length > 1;
+
+                // Koordinat awal (Noktah A di 146) & akhir (Noktah B di 368)
+                const startX = 146;
+                const endX = 368;
+
+                let pathD: string;
+                if (y1 === y2) {
+                  // Garis horizontal sejajar (misal Budi ke Game): berikan busur lengkung ke atas agar tampak dinamis
+                  const arcY = y1 - (isMultiSource ? 14 : 10);
+                  pathD = `M ${startX} ${y1} C ${startX + 70} ${arcY}, ${endX - 70} ${arcY}, ${endX} ${y2}`;
+                } else {
+                  // Garis melengkung antar tingkat berbeda
+                  // Jika multi-sumber, beri sedikit variasi kontrol awal agar garis memencar harmonis
+                  const spreadOffset = isMultiSource ? (sourceArrowIdx === 0 ? -6 : 6) : 0;
+                  const cp1Y = y1 + spreadOffset;
+                  const cp2Y = y2;
+                  pathD = `M ${startX} ${y1} C ${startX + 75} ${cp1Y}, ${endX - 75} ${cp2Y}, ${endX} ${y2}`;
+                }
+
                 return (
                   <path
                     key={`arrow-${fromId}-${toId}-${idx}`}
-                    d={`M 146 ${y1} C 230 ${y1}, 290 ${y2}, 368 ${y2}`}
+                    d={pathD}
                     fill="none"
                     stroke="url(#relasiGrad)"
                     strokeWidth="2.5"

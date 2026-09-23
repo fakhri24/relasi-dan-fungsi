@@ -412,7 +412,7 @@ export const InteractiveArrowCanvas = forwardRef<InteractiveArrowCanvasRef, Prop
               <stop offset="100%" stopColor="#38bdf8" />
             </linearGradient>
 
-            <filter id="glow-filter" x="-20%" y="-20%" width="140%" height="140%">
+            <filter id="glow-filter" filterUnits="userSpaceOnUse" x="0" y="0" width={width} height={height}>
               <feGaussianBlur stdDeviation="3" result="blur" />
               <feComposite in="SourceGraphic" in2="blur" operator="over" />
             </filter>
@@ -475,8 +475,21 @@ export const InteractiveArrowCanvas = forwardRef<InteractiveArrowCanvasRef, Prop
             const y1 = getYPosA(indexA, itemsA.length);
             const y2 = getYPosB(indexB, itemsB.length);
 
-            // Titik kontrol Bezier halus
-            const pathD = `M ${anchorDotAX} ${y1} C ${anchorDotAX + 60} ${y1}, ${anchorDotBX - 60} ${y2}, ${anchorDotBX} ${y2}`;
+            // Hitung panah dari sumber yang sama untuk variasi lengkungan
+            const sourceArrows = arrows.filter(a => a.from === rel.from);
+            const sourceArrowIdx = sourceArrows.findIndex(a => a.to === rel.to);
+            const isMultiSource = sourceArrows.length > 1;
+
+            // Titik kontrol Bezier cerdas (busur jika horizontal, spread jika multi-sumber)
+            let pathD: string;
+            if (y1 === y2) {
+              const arcY = y1 - (isMultiSource ? 16 : 12);
+              pathD = `M ${anchorDotAX} ${y1} C ${anchorDotAX + 55} ${arcY}, ${anchorDotBX - 55} ${arcY}, ${anchorDotBX} ${y2}`;
+            } else {
+              const spreadOffset = isMultiSource ? (sourceArrowIdx === 0 ? -5 : 5) : 0;
+              const cp1Y = y1 + spreadOffset;
+              pathD = `M ${anchorDotAX} ${y1} C ${anchorDotAX + 60} ${cp1Y}, ${anchorDotBX - 60} ${y2}, ${anchorDotBX} ${y2}`;
+            }
 
             return (
               <g key={`${rel.from}-${rel.to}-${idx}`} className="cursor-pointer group">

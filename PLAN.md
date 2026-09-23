@@ -4,7 +4,20 @@ Dokumen perencanaan dan pelacakan progres pengembangan media pembelajaran intera
 
 ---
 
-## 📌 Status Terkini: v2.1.0 (Audit & Optimasi Kontras Warna Mode Cerah / Light Mode > 9.6/10 WCAG AAA ✅)
+## 📌 Status Terkini: v2.1.1 (Perbaikan Bug Garis Relasi Ganda & Zero-Height SVG Filter Clipping ✅)
+- [x] **Penyelesaian Bug Garis Horizontal Hilang pada Multi-Relasi**:
+  - Mengatasi masalah garis panah dari anggota domain yang memiliki $\ge 2$ relasi (misal Budi hobi Game & Musik) di mana garis Budi $\to$ Game tidak ter-render di browser WebKit (Safari) dan Blink (Chrome).
+  - Mengubah atribut filter glow (`#arrowGlow`, `#glow-filter`, `#arrowGlow3`) pada [`Slide1OpeningRelasi.tsx`](file:///Users/fakhri246/project/matematika/relasi-dan-fungsi/src/components/slides/Slide1OpeningRelasi.tsx), [`Slide3ArrowDiagram.tsx`](file:///Users/fakhri246/project/matematika/relasi-dan-fungsi/src/components/slides/Slide3ArrowDiagram.tsx), dan [`InteractiveArrowCanvas.tsx`](file:///Users/fakhri246/project/matematika/relasi-dan-fungsi/src/components/lkpd/InteractiveArrowCanvas.tsx) menjadi `filterUnits="userSpaceOnUse"`. Ini mencegah pemotongan (*clipping*) wilayah efek filter menjadi $0\text{ px}$ saat garis panah horizontal sejajar ($y_1 = y_2$).
+- [x] **Kurva Bezier Adaptif untuk Multi-Panah (*Adaptive Spread Curves*)**:
+  - Mengimplementasikan fungsi pembentuk kurva Bezier cerdas:
+    * **Panah Sejajar Horizontal ($y_1 = y_2$)**: Diberikan kelengkungan busur halus ke atas ($y_1 - 14\text{ px}$) sehingga terlihat seperti busur panah matematis yang hidup dan dinamis.
+    * **Panah Bercabang dari 1 Sumber ($y_1 \ne y_2$)**: Diberikan offset kontrol awal ($\pm 6\text{ px}$) agar garis-garis yang keluar dari satu titik noktah memencar secara jelas dan tidak bertumpukan.
+  - Menyesuaikan posisi vertikal badge panduan *"Pilih target di B ➔"* ke $y = 28\text{ px}$ agar ruang di bawahnya sepenuhnya bebas untuk busur panah.
+- [x] **Build & Runtime Verification**:
+  - `npx tsc --noEmit` lolos 100% tanpa error tipe.
+  - `npm run build` (`tsc -b && vite build`) selesai dalam 2.62s tanpa error.
+
+## 📌 Arsip Status v2.1.0 (Audit & Optimasi Kontras Warna Mode Cerah / Light Mode > 9.6/10 WCAG AAA ✅)
 - [x] **Audit & Perbaikan Tipografi Kontras Tinggi Mode Cerah (Light Mode)**:
   - Mengatasi masalah teks pudar (*low contrast*) dan teks putih di atas latar putih (`text-white` pada background terang).
   - Memperbaiki selector CSS pada `src/index.css`: tombol solid (`bg-brand-600`, `bg-emerald-600`, dsb.) tetap mempertahankan teks putih murni (`#ffffff`), sementara seluruh teks non-tombol secara adaptif beralih ke `#0f172a` (kontras 16.5:1).

@@ -65,6 +65,9 @@ Setiap kali ada perubahan, penambahan fitur, atau perbaikan kode:
   - Wajib mengimpor stylesheet lokal `import 'katex/dist/katex.min.css';` di `src/main.tsx` (ter-bundle langsung oleh Vite, hindari CDN eksternal dengan hash integrity yang rentan gagal).
   - Wajib menetapkan `output: 'html'` pada opsi `katex.renderToString` di `MathFormula.tsx` agar tidak merender elemen MathML secara ganda.
   - Failsafe `.katex-mathml { display: none !important; }` di `src/index.css`.
+- **Standar Diagram Panah SVG & Anti-Clipping Filter**:
+  - Seluruh elemen filter SVG pada garis/panah (`feDropShadow`, `feGaussianBlur`) wajib menetapkan `filterUnits="userSpaceOnUse"` dengan wilayah viewport penuh (misal `x="0" y="0" width="..." height="..."`), bukan default `objectBoundingBox`, guna mencegah pemotongan (*clipping*) garis horizontal sejajar ($y_1 = y_2$, geometri height 0) oleh browser WebKit/Blink.
+  - Setiap jalur panah relasi wajib menerapkan kurva Bezier adaptif: memberikan lengkungan busur halus ke atas pada panah horizontal sejajar dan variasi offset titik kontrol awal ($\pm 6\text{ px}$) saat satu anggota domain memiliki multi-relasi agar panah memencar secara jelas dan estetis.
 - **Standar Tampilan 16:9 Proyektor (Zero-Scroll)**:
   - Kontainer aplikasi wajib `h-screen max-h-screen overflow-hidden`.
   - `SlideContainer` dibatasi tepat pada `h-[calc(100vh-3.5rem)]` dengan `overflow-hidden`.

@@ -107,7 +107,7 @@ export const Slide3ArrowDiagram: React.FC = () => {
                 <polygon points="0 1, 8 4, 0 7, 2 4" fill="#34d399" />
               </marker>
 
-              <filter id="arrowGlow3" x="-20%" y="-20%" width="140%" height="140%">
+              <filter id="arrowGlow3" filterUnits="userSpaceOnUse" x="0" y="0" width="460" height="260">
                 <feDropShadow dx="0" dy="0" stdDeviation="2" floodColor="#34d399" floodOpacity="0.5" />
               </filter>
             </defs>
