@@ -9,6 +9,8 @@ import {
   Compass,
   BookOpen,
   FileText,
+  Sun,
+  Moon,
 } from 'lucide-react';
 import { SlideItem } from '../types/slides';
 
@@ -18,6 +20,8 @@ interface NavbarProps {
   onSelectSlide: (index: number) => void;
   onNext: () => void;
   onPrev: () => void;
+  theme?: 'dark' | 'light';
+  onToggleTheme?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -26,6 +30,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   onSelectSlide,
   onNext,
   onPrev,
+  theme = 'dark',
+  onToggleTheme,
 }) => {
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
@@ -157,6 +163,26 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span className="hidden xl:inline">LKPD Siswa</span>
             </a>
 
+            {onToggleTheme && (
+              <button
+                onClick={onToggleTheme}
+                className="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-700 text-slate-300 hover:text-white transition-all ml-1 flex items-center gap-1.5 text-xs font-bold"
+                title={theme === 'dark' ? 'Beralih ke Mode Cerah (T)' : 'Beralih ke Mode Gelap (T)'}
+              >
+                {theme === 'dark' ? (
+                  <>
+                    <Sun className="w-4 h-4 text-amber-400" />
+                    <span className="hidden xl:inline">Cerah</span>
+                  </>
+                ) : (
+                  <>
+                    <Moon className="w-4 h-4 text-indigo-400" />
+                    <span className="hidden xl:inline">Gelap</span>
+                  </>
+                )}
+              </button>
+            )}
+
             <button
               onClick={toggleFullscreen}
               className="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 transition-all ml-1"
@@ -246,6 +272,25 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
 
             <div className="pt-4 border-t border-slate-800 space-y-2">
+              {onToggleTheme && (
+                <button
+                  onClick={onToggleTheme}
+                  className="w-full p-2.5 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-700/80 text-slate-200 transition-all flex items-center justify-between text-xs font-bold"
+                  title="Ganti Tema Tampilan (Pintasan: T)"
+                >
+                  <span className="flex items-center gap-2">
+                    {theme === 'dark' ? (
+                      <Sun className="w-4 h-4 text-amber-400" />
+                    ) : (
+                      <Moon className="w-4 h-4 text-indigo-400" />
+                    )}
+                    <span>Tema Layar</span>
+                  </span>
+                  <span className="px-2 py-0.5 rounded-lg bg-slate-800 border border-slate-700 text-[11px] font-mono text-slate-300">
+                    {theme === 'dark' ? '☀️ Mode Cerah' : '🌙 Mode Gelap'}
+                  </span>
+                </button>
+              )}
               <a
                 href="./panduan-guru.html"
                 target="_blank"
@@ -263,7 +308,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <FileText className="w-4 h-4" /> Cetak Lembar Kerja Siswa (LKPD 1-4) ↗
               </a>
               <div className="text-xs text-slate-500">
-                💡 Pintasan Keyboard: <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300 font-mono">←</kbd> Sebelumnya · <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300 font-mono">→</kbd> Berikutnya
+                💡 Pintasan: <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300 font-mono">←</kbd> <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300 font-mono">→</kbd> Navigasi · <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300 font-mono">T</kbd> Tema
               </div>
             </div>
           </div>

@@ -234,7 +234,7 @@ export const Slide10ProjectHub: React.FC = () => {
                 <span className="flex items-center gap-1 text-amber-400 text-xs">
                   <Calculator className="w-3.5 h-3.5" /> Uji {selectedCase.variableX}:
                 </span>
-                <span className="font-mono text-white text-xs font-bold">
+                <span className="font-mono text-slate-900 dark:text-white text-xs font-bold">
                   {testVal} {selectedCase.inputUnit}
                 </span>
               </div>

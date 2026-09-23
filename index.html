@@ -3,7 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark light" />
     <title>SuperMath MTK X · Relasi & Fungsi Interaktif</title>
+    <!-- Anti-FOUC Theme Script -->
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem('supermath_theme');
+          var theme = saved === 'light' ? 'light' : 'dark';
+          if (theme === 'light') {
+            document.documentElement.classList.add('light');
+            document.documentElement.classList.remove('dark');
+          } else {
+            document.documentElement.classList.add('dark');
+            document.documentElement.classList.remove('light');
+          }
+          var meta = document.querySelector('meta[name="color-scheme"]');
+          if (meta) meta.content = theme;
+        } catch (e) {}
+      })();
+    </script>
     <!-- Google Fonts for crisp sans typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

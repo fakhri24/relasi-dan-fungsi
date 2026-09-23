@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SlideItem } from './types/slides';
 import { Navbar } from './components/Navbar';
 import { SlideContainer } from './components/SlideContainer';
@@ -61,6 +61,49 @@ export const App: React.FC = () => {
 
   const [currentSlideIndex, setCurrentSlideIndex] = useState<number>(getInitialSlide);
 
+  // State Tema: 'dark' (Mode Gelap) atau 'light' (Mode Cerah)
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    try {
+      const saved = localStorage.getItem('supermath_theme');
+      if (saved === 'light' || saved === 'dark') return saved;
+    } catch {}
+    return 'dark';
+  });
+
+  const toggleTheme = () => {
+    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(nextTheme);
+    try {
+      localStorage.setItem('supermath_theme', nextTheme);
+    } catch {}
+    if (nextTheme === 'light') {
+      document.documentElement.classList.add('light');
+      document.documentElement.classList.remove('dark');
+    } else {
+      document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
+    }
+    try {
+      const meta = document.querySelector('meta[name="color-scheme"]');
+      if (meta) meta.setAttribute('content', nextTheme);
+    } catch {}
+  };
+
+  // Pintasan Keyboard T untuk beralih mode cepat
+  useEffect(() => {
+    const handleThemeKey = (e: KeyboardEvent) => {
+      if (['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)) {
+        return;
+      }
+      if (e.key === 't' || e.key === 'T') {
+        e.preventDefault();
+        toggleTheme();
+      }
+    };
+    window.addEventListener('keydown', handleThemeKey);
+    return () => window.removeEventListener('keydown', handleThemeKey);
+  }, [theme]);
+
   const updateSlide = (newIndex: number) => {
     setCurrentSlideIndex(newIndex);
     try {
@@ -120,7 +163,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="h-screen max-h-screen overflow-hidden bg-slate-950 flex flex-col justify-between font-sans">
+    <div className="h-screen max-h-screen overflow-hidden bg-slate-950 flex flex-col justify-between font-sans transition-colors duration-200">
       {/* Navbar & Slide Controller */}
       <Navbar
         slides={SLIDES}
@@ -128,6 +171,8 @@ export const App: React.FC = () => {
         onSelectSlide={updateSlide}
         onNext={handleNext}
         onPrev={handlePrev}
+        theme={theme}
+        onToggleTheme={toggleTheme}
       />
 
       {/* Slide Presentation Frame */}

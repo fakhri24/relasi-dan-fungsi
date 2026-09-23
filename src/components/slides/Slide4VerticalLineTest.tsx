@@ -151,16 +151,17 @@ export const Slide4VerticalLineTest: React.FC = () => {
             {/* Grid background */}
             <defs>
               <pattern id="grid" width="35" height="25" patternUnits="userSpaceOnUse">
-                <path d="M 35 0 L 0 0 0 25" fill="none" stroke="#1e293b" strokeWidth="1" />
+                <path d="M 35 0 L 0 0 0 25" fill="none" stroke="var(--theme-svg-grid, #1e293b)" strokeWidth="1" />
               </pattern>
             </defs>
+            <rect width="400" height="300" fill="var(--theme-svg-bg, #0b1120)" />
             <rect width="400" height="300" fill="url(#grid)" />
 
             {/* Sumbu X & Y */}
-            <line x1="0" y1="150" x2="400" y2="150" stroke="#475569" strokeWidth="2" />
-            <line x1="200" y1="0" x2="200" y2="300" stroke="#475569" strokeWidth="2" />
-            <text x="390" y="142" fill="#94a3b8" fontSize="12" fontWeight="bold">X</text>
-            <text x="210" y="15" fill="#94a3b8" fontSize="12" fontWeight="bold">Y</text>
+            <line x1="0" y1="150" x2="400" y2="150" stroke="var(--theme-svg-axis, #475569)" strokeWidth="2" />
+            <line x1="200" y1="0" x2="200" y2="300" stroke="var(--theme-svg-axis, #475569)" strokeWidth="2" />
+            <text x="390" y="142" fill="var(--theme-svg-text, #94a3b8)" fontSize="12" fontWeight="bold">X</text>
+            <text x="210" y="15" fill="var(--theme-svg-text, #94a3b8)" fontSize="12" fontWeight="bold">Y</text>
 
             {/* Kurva Grafik */}
             <path

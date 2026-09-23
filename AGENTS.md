@@ -50,7 +50,12 @@ Setiap kali ada perubahan, penambahan fitur, atau perbaikan kode:
 ## 🛠️ Standar Teknis & Arsitektur Kode
 
 - **Framework**: React 19 + TypeScript + Vite.
-- **Styling**: Tailwind CSS (tema gelap kontras tinggi `slate-950` dengan aksen `brand-500` dan glow proyektor).
+- **Styling & Arsitektur Tema Ganda (Mode Gelap & Mode Cerah)**:
+  - Menggunakan Tailwind CSS dengan `darkMode: 'class'` dan pemetaan palet `slate` dinamis berbasis CSS Variables (`rgb(var(--color-slate-*) / <alpha-value>)`).
+  - **Mode Gelap (Default Proyektor)**: Latar `slate-950` (#0b1120), kartu `slate-900`, aksen `brand-500`, dan glow neon proyektor.
+  - **Mode Cerah (Ruang Kelas Terang)**: Latar `slate-100` (#f1f5f9), kartu putih bersih `white` (#ffffff), border `slate-200`, dan tipografi kontras tinggi `slate-900` (#0f172a).
+  - **Persistensi & Anti-FOUC**: Preferensi tersimpan di `localStorage` (`supermath_theme`), disinkronkan langsung via inline script di `<head>` `index.html` dan `<meta name="color-scheme">`.
+  - **Kontrol Guru**: Tombol toggle di Navbar (ikon `Sun`/`Moon`), di Drawer Menu 4 Pertemuan, dan pintasan keyboard instan tombol `T`.
 - **Aturan KaTeX Anti-Double Render**:
   - Wajib mengimpor stylesheet lokal `import 'katex/dist/katex.min.css';` di `src/main.tsx` (ter-bundle langsung oleh Vite, hindari CDN eksternal dengan hash integrity yang rentan gagal).
   - Wajib menetapkan `output: 'html'` pada opsi `katex.renderToString` di `MathFormula.tsx` agar tidak merender elemen MathML secara ganda.

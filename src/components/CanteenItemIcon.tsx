@@ -512,7 +512,7 @@ export const CanteenItemIcon: React.FC<CanteenItemIconProps> = ({ name, classNam
               />
 
               {/* Lubang Tengah Donat */}
-              <ellipse cx="50" cy="50" rx="13" ry="12" fill="#020617" stroke="#92400e" strokeWidth="2" />
+              <ellipse cx="50" cy="50" rx="13" ry="12" fill="var(--donut-hole-bg, #0b1120)" stroke="#92400e" strokeWidth="2" />
 
               {/* Kilau Cahaya pada Glaze */}
               <path d="M30 26 C36 22 45 20 54 21" stroke="#fbcfe8" strokeWidth="2.5" strokeLinecap="round" fill="none" />

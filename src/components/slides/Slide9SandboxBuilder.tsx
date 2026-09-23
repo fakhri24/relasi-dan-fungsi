@@ -52,13 +52,14 @@ export const Slide9SandboxBuilder: React.FC = () => {
         {/* SVG Dynamic Graph */}
         <div className="md:col-span-7 flex flex-col justify-between bg-slate-950 p-4 rounded-2xl border border-slate-800/80">
           <svg className="w-full h-[250px]" viewBox="0 0 420 260">
+            <rect width="420" height="260" fill="var(--theme-svg-bg, #0b1120)" rx="16" />
             {/* Grid Sumbu Y */}
             {[0, 15000, 30000, 45000].map((val) => {
               const y = mapY(val);
               return (
                 <g key={val}>
-                  <line x1="50" y1={y} x2="390" y2={y} stroke="#1e293b" strokeDasharray="3 3" />
-                  <text x="42" y={y + 4} textAnchor="end" fill="#64748b" fontSize="10" className="font-mono">
+                  <line x1="50" y1={y} x2="390" y2={y} stroke="var(--theme-svg-grid, #1e293b)" strokeDasharray="3 3" />
+                  <text x="42" y={y + 4} textAnchor="end" fill="var(--theme-svg-text, #64748b)" fontSize="10" className="font-mono">
                     {val / 1000}k
                   </text>
                 </g>
@@ -68,16 +69,16 @@ export const Slide9SandboxBuilder: React.FC = () => {
             {/* Grid Sumbu X */}
             {[0, 2, 4, 6, 8].map((x) => (
               <g key={x}>
-                <line x1={mapX(x)} y1="30" x2={mapX(x)} y2="230" stroke="#1e293b" strokeDasharray="3 3" />
-                <text x={mapX(x)} y="248" textAnchor="middle" fill="#64748b" fontSize="10" className="font-mono">
+                <line x1={mapX(x)} y1="30" x2={mapX(x)} y2="230" stroke="var(--theme-svg-grid, #1e293b)" strokeDasharray="3 3" />
+                <text x={mapX(x)} y="248" textAnchor="middle" fill="var(--theme-svg-text, #64748b)" fontSize="10" className="font-mono">
                   {x} jam
                 </text>
               </g>
             ))}
 
             {/* Sumbu X & Y */}
-            <line x1="50" y1="230" x2="400" y2="230" stroke="#94a3b8" strokeWidth="2" />
-            <line x1="50" y1="20" x2="50" y2="230" stroke="#94a3b8" strokeWidth="2" />
+            <line x1="50" y1="230" x2="400" y2="230" stroke="var(--theme-svg-axis, #64748b)" strokeWidth="2" />
+            <line x1="50" y1="20" x2="50" y2="230" stroke="var(--theme-svg-axis, #64748b)" strokeWidth="2" />
 
             {/* Segmen 1: 0 <= x <= t1, y = flatT1 */}
             <line
@@ -149,7 +150,7 @@ export const Slide9SandboxBuilder: React.FC = () => {
             <div>
               <div className="flex justify-between text-xs font-bold text-slate-400 mb-1">
                 <span className="text-indigo-400">Batas Flat <MathFormula math="t_1" />:</span>
-                <span className="text-white font-mono">{t1} Jam</span>
+                <span className="text-slate-900 dark:text-white font-mono font-bold">{t1} Jam</span>
               </div>
               <input
                 type="range"
@@ -165,7 +166,7 @@ export const Slide9SandboxBuilder: React.FC = () => {
             <div>
               <div className="flex justify-between text-xs font-bold text-slate-400 mb-1">
                 <span className="text-emerald-400">Tarif Tambahan:</span>
-                <span className="text-white font-mono">Rp {rate.toLocaleString('id-ID')}/jam</span>
+                <span className="text-slate-900 dark:text-white font-mono font-bold">Rp {rate.toLocaleString('id-ID')}/jam</span>
               </div>
               <input
                 type="range"
@@ -181,7 +182,7 @@ export const Slide9SandboxBuilder: React.FC = () => {
             <div>
               <div className="flex justify-between text-xs font-bold text-slate-400 mb-1">
                 <span className="text-pink-400">Uji <MathFormula math="x" />:</span>
-                <span className="text-white font-mono">{testInput} Jam</span>
+                <span className="text-slate-900 dark:text-white font-mono font-bold">{testInput} Jam</span>
               </div>
               <input
                 type="range"
@@ -203,7 +204,7 @@ export const Slide9SandboxBuilder: React.FC = () => {
                 Tier {currentResult.tier}
               </span>
             </div>
-            <div className="text-2xl font-extrabold font-mono text-white mt-1">
+            <div className="text-2xl font-extrabold font-mono text-slate-900 dark:text-white mt-1">
               Rp {currentResult.cost.toLocaleString('id-ID')}
             </div>
             <p className="text-xs text-slate-400 mt-1">

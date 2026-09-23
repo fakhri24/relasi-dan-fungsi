@@ -4,7 +4,26 @@ Dokumen perencanaan dan pelacakan progres pengembangan media pembelajaran intera
 
 ---
 
-## 📌 Status Terkini: v1.8.0 (Redesain Diagram Panah Relasi: Oval Venn Diagram & Panah Presisi ✅)
+## 📌 Status Terkini: v1.9.0 (Fitur Toggle "Mode Cerah" & "Mode Gelap" Ramah Proyektor ✅)
+- [x] **Arsitektur Tailwind CSS Variable Palette Theme**:
+  - Mengonfigurasi `darkMode: 'class'` pada `tailwind.config.js` dengan pemetaan warna `slate` berbasis CSS Variable dinamis (`rgb(var(--color-slate-*) / <alpha-value>)`).
+  - Mendefinisikan token `:root` (Mode Gelap) dan `html.light` (Mode Cerah) di `src/index.css` untuk background, surface card putih bersih, border, dan hierarki teks kontras tinggi.
+  - Menambahkan aturan tipografi otomatis: heading `h1..h4` dan judul slide adaptif menjadi `#0f172a` pada Mode Cerah, sementara teks pada tombol berwarna (`bg-brand-600`, `bg-emerald-600`, dsb.) tetap mempertahankan `text-white` berkontras tinggi.
+  - Mengadaptasi efek glow proyektor (`glow-brand`, `glow-emerald`, `glow-rose`) menjadi bayangan halus (*ambient shadow*) pada Mode Cerah.
+- [x] **Mekanisme Persistensi & Anti-FOUC**:
+  - Menambahkan tag `<meta name="color-scheme" content="dark light">` dan inline script anti-FOUC di `<head>` `index.html` untuk memuat preferensi tema dari `localStorage` sebelum React render.
+  - Mengelola state tema reaktif (`theme: 'dark' | 'light'`) di `App.tsx` dengan sinkronisasi otomatis ke class `<html>` dan `localStorage`.
+- [x] **Kontrol Toggle Interaktif di Navbar, Drawer & Pintasan Keyboard**:
+  - Menambahkan tombol toggle di cluster kanan header `Navbar.tsx` (Ikon `Sun` warna amber untuk beralih ke Cerah, dan `Moon` warna indigo untuk beralih ke Gelap, lengkap dengan label responsif dan tooltip).
+  - Menambahkan kartu kontrol tema di bagian bawah Drawer Menu Navigasi 4 Pertemuan.
+  - Menambahkan pintasan keyboard guru: tekan tombol `T` pada keyboard kapan saja untuk beralih mode secara instan tanpa perlu mouse/clicker.
+- [x] **Penyelarasan Grafik SVG Matematika Adaptif di 14 Slide**:
+  - Mengadaptasi warna grid, sumbu koordinat, dan label teks SVG pada Slide 4 (*Vertical Line Test*), Slide 6 (*Model Linier*), Slide 8 (*Piecewise Intro*), Slide 9 (*Sandbox Builder*), dan Slide 10 (*Project Hub*) menggunakan token `var(--theme-svg-*)`.
+  - Menyesuaikan warna lubang donat dan titik terbuka (○) piecewise agar dinamis mengikuti latar kartu di kedua mode.
+- [x] **Build Verification & QA**:
+  - `npm run build` (`tsc -b && vite build`) lolos 100% tanpa error TypeScript maupun CSS.
+
+## 📌 Arsip Status v1.8.0 (Redesain Diagram Panah Relasi: Oval Venn Diagram & Panah Presisi ✅)
 - [x] **Redesain Diagram Panah Relasi Slide 1 (`Slide1OpeningRelasi.tsx`)**:
   - Mengganti layout tombol kotak mengambang dengan **Kapsul Oval / Elips Venn Diagram Matematis** untuk Himpunan A (Domain, aksen Indigo) dan Himpunan B (Kodomain, aksen Cyan).
   - Menambahkan **Titik Noktah (Anchor Dots •)** yang presisi di bibir tepi masing-masing elemen himpunan ($cx = 146$ untuk A dan $cx = 374$ untuk B).

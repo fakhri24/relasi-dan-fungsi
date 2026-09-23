@@ -121,15 +121,16 @@ export const Slide8PiecewiseIntro: React.FC = () => {
         <div className="md:col-span-6 flex flex-col justify-between space-y-3">
           <div className="bg-slate-950 p-3 rounded-2xl border border-slate-800/80">
             <svg className="w-full h-[190px]" viewBox="0 0 420 260">
+              <rect width="420" height="260" fill="var(--theme-svg-bg, #0b1120)" rx="16" />
               {/* Sumbu X & Y */}
-              <line x1="50" y1="240" x2="400" y2="240" stroke="#64748b" strokeWidth="2" />
-              <line x1="50" y1="20" x2="50" y2="240" stroke="#64748b" strokeWidth="2" />
+              <line x1="50" y1="240" x2="400" y2="240" stroke="var(--theme-svg-axis, #64748b)" strokeWidth="2" />
+              <line x1="50" y1="20" x2="50" y2="240" stroke="var(--theme-svg-axis, #64748b)" strokeWidth="2" />
 
               {/* Grid Label Sumbu X */}
               {[0, 1, 2, 3, 4, 5, 6].map((x) => (
                 <g key={x}>
-                  <line x1={mapX(x)} y1="236" x2={mapX(x)} y2="244" stroke="#94a3b8" />
-                  <text x={mapX(x)} y="255" textAnchor="middle" fill="#94a3b8" fontSize="11" className="font-mono">
+                  <line x1={mapX(x)} y1="236" x2={mapX(x)} y2="244" stroke="var(--theme-svg-axis, #94a3b8)" />
+                  <text x={mapX(x)} y="255" textAnchor="middle" fill="var(--theme-svg-text, #94a3b8)" fontSize="11" className="font-mono">
                     {x}
                   </text>
                 </g>
@@ -156,7 +157,7 @@ export const Slide8PiecewiseIntro: React.FC = () => {
                 stroke={currentBranch.branch === 2 ? '#818cf8' : '#475569'}
                 strokeWidth={currentBranch.branch === 2 ? '5' : '3'}
               />
-              <circle cx={mapX(1)} cy={mapY(4)} r="4" fill="#020617" stroke="#818cf8" strokeWidth="2" />
+              <circle cx={mapX(1)} cy={mapY(4)} r="4" fill="var(--theme-svg-bg, #0b1120)" stroke="#818cf8" strokeWidth="2" />
               <circle cx={mapX(4)} cy={mapY(10)} r="4" fill="#818cf8" stroke="#fff" />
 
               {/* Cabang 3: x > 4, y = 10 */}
@@ -168,7 +169,7 @@ export const Slide8PiecewiseIntro: React.FC = () => {
                 stroke={currentBranch.branch === 3 ? '#818cf8' : '#475569'}
                 strokeWidth={currentBranch.branch === 3 ? '5' : '3'}
               />
-              <circle cx={mapX(4)} cy={mapY(10)} r="4" fill="#020617" stroke="#818cf8" strokeWidth="2" />
+              <circle cx={mapX(4)} cy={mapY(10)} r="4" fill="var(--theme-svg-bg, #0b1120)" stroke="#818cf8" strokeWidth="2" />
 
               {/* Titik Tracker Aktif */}
               <circle

@@ -488,7 +488,7 @@ export const Slide1Hook: React.FC = () => {
                   placeholder="Misal: Cireng Bumbu, Cilok"
                   value={customName}
                   onChange={(e) => setCustomName(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs focus:outline-none focus:border-brand-500 font-medium"
+                  className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-slate-900 dark:text-white text-xs focus:outline-none focus:border-brand-500 font-medium"
                 />
               </div>
 
@@ -504,7 +504,7 @@ export const Slide1Hook: React.FC = () => {
                   placeholder="Misal: 4000"
                   value={customPrice}
                   onChange={(e) => setCustomPrice(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs focus:outline-none focus:border-brand-500 font-mono"
+                  className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-slate-900 dark:text-white text-xs focus:outline-none focus:border-brand-500 font-mono"
                 />
               </div>
 

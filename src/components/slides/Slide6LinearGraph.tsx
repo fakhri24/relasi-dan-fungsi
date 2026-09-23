@@ -39,13 +39,14 @@ export const Slide6LinearGraph: React.FC = () => {
         {/* SVG Graphic */}
         <div className="md:col-span-7 flex justify-center items-center bg-slate-950 p-3 rounded-2xl border border-slate-800/80">
           <svg className="w-full max-w-[390px] h-[230px]" viewBox="0 0 420 280">
+            <rect width="420" height="280" fill="var(--theme-svg-bg, #0b1120)" rx="16" />
             {/* Grid horizontal */}
             {[0, 10, 20, 30, 40].map((val) => {
               const y = mapY(val);
               return (
                 <g key={val}>
-                  <line x1="50" y1={y} x2="390" y2={y} stroke="#1e293b" strokeWidth="1" strokeDasharray="3 3" />
-                  <text x="42" y={y + 4} textAnchor="end" fill="#64748b" fontSize="10" className="font-mono">
+                  <line x1="50" y1={y} x2="390" y2={y} stroke="var(--theme-svg-grid, #1e293b)" strokeWidth="1" strokeDasharray="3 3" />
+                  <text x="42" y={y + 4} textAnchor="end" fill="var(--theme-svg-text, #64748b)" fontSize="10" className="font-mono">
                     {val}k
                   </text>
                 </g>
@@ -57,8 +58,8 @@ export const Slide6LinearGraph: React.FC = () => {
               const x = mapX(val);
               return (
                 <g key={val}>
-                  <line x1={x} y1="30" x2={x} y2="250" stroke="#1e293b" strokeWidth="1" strokeDasharray="3 3" />
-                  <text x={x} y="265" textAnchor="middle" fill="#64748b" fontSize="10" className="font-mono">
+                  <line x1={x} y1="30" x2={x} y2="250" stroke="var(--theme-svg-grid, #1e293b)" strokeWidth="1" strokeDasharray="3 3" />
+                  <text x={x} y="265" textAnchor="middle" fill="var(--theme-svg-text, #64748b)" fontSize="10" className="font-mono">
                     {val} km
                   </text>
                 </g>
@@ -66,8 +67,8 @@ export const Slide6LinearGraph: React.FC = () => {
             })}
 
             {/* Sumbu X & Y */}
-            <line x1="50" y1="250" x2="400" y2="250" stroke="#94a3b8" strokeWidth="2" />
-            <line x1="50" y1="20" x2="50" y2="250" stroke="#94a3b8" strokeWidth="2" />
+            <line x1="50" y1="250" x2="400" y2="250" stroke="var(--theme-svg-axis, #64748b)" strokeWidth="2" />
+            <line x1="50" y1="20" x2="50" y2="250" stroke="var(--theme-svg-axis, #64748b)" strokeWidth="2" />
 
             {/* Garis Fungsi Linear */}
             <line
@@ -115,7 +116,7 @@ export const Slide6LinearGraph: React.FC = () => {
                 <span className="flex items-center gap-1 text-indigo-400">
                   <TrendingUp className="w-3.5 h-3.5" /> Kemiringan a:
                 </span>
-                <span className="text-white font-mono">Rp {a * 1000}/km</span>
+                <span className="text-slate-900 dark:text-white font-mono font-bold">Rp {a * 1000}/km</span>
               </div>
               <input
                 type="range"
@@ -133,7 +134,7 @@ export const Slide6LinearGraph: React.FC = () => {
                 <span className="flex items-center gap-1 text-emerald-400">
                   <DollarSign className="w-3.5 h-3.5" /> Buka Pintu b:
                 </span>
-                <span className="text-white font-mono">Rp {b * 1000}</span>
+                <span className="text-slate-900 dark:text-white font-mono font-bold">Rp {b * 1000}</span>
               </div>
               <input
                 type="range"
@@ -151,7 +152,7 @@ export const Slide6LinearGraph: React.FC = () => {
                 <span className="flex items-center gap-1 text-amber-400">
                   <MapPin className="w-3.5 h-3.5" /> Jarak x:
                 </span>
-                <span className="text-white font-mono">{testKm} km</span>
+                <span className="text-slate-900 dark:text-white font-mono font-bold">{testKm} km</span>
               </div>
               <input
                 type="range"
@@ -165,8 +166,8 @@ export const Slide6LinearGraph: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-3 bg-amber-950/30 border border-amber-500/40 rounded-xl text-xs text-amber-200">
-            Tagihan: <span className="font-bold text-white">Rp {(totalCost * 1000).toLocaleString('id-ID')}</span>
+          <div className="p-3 bg-amber-500/10 border border-amber-500/40 rounded-xl text-xs text-amber-600 dark:text-amber-200">
+            Tagihan: <span className="font-bold text-slate-900 dark:text-white">Rp {(totalCost * 1000).toLocaleString('id-ID')}</span>
             <div className="text-slate-400 mt-0.5">
               Rincian: Rp {b * 1000} + ({testKm} km × Rp {a * 1000})
             </div>

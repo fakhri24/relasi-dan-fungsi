@@ -38,7 +38,7 @@ export const Slide7WhyPiecewise: React.FC = () => {
         <div className="flex flex-wrap items-center justify-between gap-4 pb-3 border-b border-slate-800">
           <div className="flex items-center gap-2.5">
             <Clock className="w-5 h-5 text-brand-400" />
-            <span className="text-base font-bold text-white">Durasi Parkir:</span>
+            <span className="text-base font-bold text-slate-900 dark:text-white">Durasi Parkir:</span>
           </div>
           <div className="text-xl font-extrabold font-mono text-brand-300 bg-slate-950 px-3.5 py-1 rounded-xl border border-slate-800">
             {durationHours < 1
