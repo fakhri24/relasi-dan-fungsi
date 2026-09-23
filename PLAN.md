@@ -4,16 +4,38 @@ Dokumen perencanaan dan pelacakan progres pengembangan media pembelajaran intera
 
 ---
 
-## 📌 Status Terkini: v1.5.0 (Mesin Kasir Slide 1: Progressive Reveal, Merk Samaran Kantin, Multi-Barang & Pembuktian Many-to-One ✅)
+## 📌 Status Terkini: v1.6.0 (Ilustrasi Vektor SVG Jajanan Kantin & Animasi Laser Kasir Slide 1 ✅)
+- [x] **Penggantian Total Emotikon Jajanan Kantin dengan Ilustrasi Vektor SVG (`CanteenItemIcon.tsx`)**:
+  - Mengembangkan komponen SVG kustom bergaya *Modern Flat-Vector Bergradien & Berkontras Tinggi* yang dioptimalkan untuk layar proyektor resolusi berapapun tanpa pecah dan zero loading latency.
+  - **4 Jajanan Default**:
+    1. **Nice Cone**: Es krim cone dengan tekstur waffle bergradien, swirl krim lembut vanila lezat, saus cokelat, meses, dan ceri merah di puncak.
+    2. **Teh Kubus**: Kotak minuman karton hijau isometrik 2.5D dengan grafis daun teh, sedotan bergaris menancap di atas, dan barcode mini samping.
+    3. **Le Kristal**: Botol air mineral berlekuk kristal transparan cyan-biru dengan tutup ulir, label pemandangan gunung, dan refleksi cahaya vertikal.
+    4. **SilverKing**: Cokelat batangan premium berbungkus merah marun dengan foil perak terkoyak menampakkan petak cokelat berkilau dan pita emas mahkota.
+  - **6 Preset Jajanan Kustom**:
+    1. **Dimsum / Siomay**: Tiga pangsit kukus berlipatan ruffle dengan wortel cincang di atas wadah kukusan bambu berasap wangi.
+    2. **Sate / Cilok**: Tusukan bambu berisi 3 bulatan daging/cilok panggang berbalur saus kacang gurih mengkilap dan irisan cabai.
+    3. **Donat Manis**: Donat bulat berlubang dengan adonan keemasan, glaze stroberi merah muda lezat, dan taburan meses pelangi.
+    4. **Es Boba Cup**: Gelas cup boba transparan dengan tutup dome, sedotan boba miring, gradient milk tea, es batu, dan butiran tapioka boba hitam.
+    5. **Popcorn Jagung**: Wadah kotak bergaris merah-putih bioskop melimpah dengan butiran popcorn mentega mekar keemasan.
+    6. **Roti Sandwich**: Sandwich lapis segitiga panggang dengan isian selada hijau segar, lelehan keju cheddar kuning, irisan tomat, dan beef slice.
+- [x] **Hero Showcase Dinamis Slide 1 (`Slide1Hook.tsx`)**:
+  - **Mode 1-Barang Fokus**: Ilustrasi SVG tampil besar (`w-24 h-24` s.d. `w-28 h-28` / ~96-112px) di atas meja scanner dengan efek kaca sensor dan informasi produk yang sangat jelas bagi siswa di baris belakang kelas.
+  - **Mode Multi-Barang**: Ilustrasi SVG tampil proporsional (`w-16 h-16` / ~64px), dilengkapi mini-thumbnail SVG pada tombol Quick Chips dan daftar riwayat scan (*receipt history*).
+  - **Modal Tambah Barang Kustom**: Pilihan ilustrasi SVG interaktif berbingkai rapi menggantikan seleksi emotikon lama.
+- [x] **Animasi Sinar Laser Scanner Kasir Merah**:
+  - Efek garis sinar laser merah berpijar (`animate-laser-sweep`) yang menyapu gambar SVG barang saat kasir melakukan uji scan, menghadirkan nuansa mesin kasir riil yang imersif bagi siswa.
+
+## 📌 Arsip Status v1.5.0 (Mesin Kasir Slide 1: Progressive Reveal, Merk Samaran Kantin, Multi-Barang & Pembuktian Many-to-One ✅)
 - [x] **Pembaruan Mesin Kasir Slide 1 (`Slide1Hook.tsx`)**:
   - **Progressive Reveal**:
     * Mode default `1 Barang Fokus` (Es Krim Nice Cone Rp 8.000) agar siswa tidak mengalami beban kognitif berlebih di awal.
     * Tab switcher `Multi-Barang Kantin` yang dapat dibuka sewaktu-waktu oleh guru untuk memperluas studi kasus.
   - **4 Preset Merk Samaran Kantin yang Relatable & Menghibur**:
-    1. 🍦 **Nice Cone** (Rp 8.000)
-    2. 🧃 **Teh Kubus** (Rp 4.000)
-    3. 💧 **Le Kristal** (Rp 4.000 — sengaja berharga sama dengan Teh Kubus untuk membedah miskonsepsi *many-to-one*)
-    4. 🍫 **SilverKing** (Rp 6.000)
+    1. Nice Cone (Rp 8.000)
+    2. Teh Kubus (Rp 4.000)
+    3. Le Kristal (Rp 4.000 — sengaja berharga sama dengan Teh Kubus untuk membedah miskonsepsi *many-to-one*)
+    4. SilverKing (Rp 6.000)
   - **Interaksi Quick Chips & Input Jajanan Kustom**:
     * Chip pilihan satu sentuhan ramah layar sentuh / pointer proyektor.
     * Tombol `+ Tambah` yang memunculkan modal ringkas untuk menambahkan jajanan lokal kelas (misal: "Cireng", "Rp 2.000").

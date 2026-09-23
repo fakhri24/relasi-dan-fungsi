@@ -84,6 +84,7 @@ relasi-dan-fungsi/
 │   ├── types/slides.ts            # Tipe TypeScript data slide dan topik proyek
 │   └── components/
 │       ├── MathFormula.tsx        # Komponen wrapper KaTeX yang aman
+│       ├── CanteenItemIcon.tsx    # Ilustrasi SVG vektor jajanan kantin proyektor
 │       ├── Navbar.tsx             # Navigasi atas, progress bar, fullscreen, drawer & link panduan guru / LKPD
 │       ├── SlideContainer.tsx     # Frame slide 16:9 + event listener keyboard (←, →, Spasi)
 │       ├── WorksheetPrint.tsx     # Lembar kerja siswa A4 print-only (Ctrl+P)

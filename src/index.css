@@ -26,3 +26,23 @@
 .glow-rose {
   box-shadow: 0 0 35px -5px rgba(244, 63, 94, 0.35);
 }
+
+/* Animasi Sinar Laser Scanner Kasir */
+@keyframes laser-sweep {
+  0% {
+    top: 5%;
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    top: 95%;
+    opacity: 0.2;
+  }
+}
+
+.animate-laser-sweep {
+  animation: laser-sweep 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+

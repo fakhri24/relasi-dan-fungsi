@@ -13,6 +13,7 @@ import {
   Tag,
 } from 'lucide-react';
 import { MathFormula } from '../MathFormula';
+import { CanteenItemIcon, CANTEEN_PRESET_ICONS } from '../CanteenItemIcon';
 
 interface CanteenItem {
   id: string;
@@ -24,10 +25,10 @@ interface CanteenItem {
 }
 
 const DEFAULT_ITEMS: CanteenItem[] = [
-  { id: 'nice-cone', name: 'Nice Cone', icon: '🍦', price: 8000, barcode: '899-NICE-01' },
-  { id: 'teh-kubus', name: 'Teh Kubus', icon: '🧃', price: 4000, barcode: '899-KUBUS-02' },
-  { id: 'le-kristal', name: 'Le Kristal', icon: '💧', price: 4000, barcode: '899-KRISTAL-03' },
-  { id: 'silver-king', name: 'SilverKing', icon: '🍫', price: 6000, barcode: '899-SILVER-04' },
+  { id: 'nice-cone', name: 'Nice Cone', icon: 'nice-cone', price: 8000, barcode: '899-NICE-01' },
+  { id: 'teh-kubus', name: 'Teh Kubus', icon: 'teh-kubus', price: 4000, barcode: '899-KUBUS-02' },
+  { id: 'le-kristal', name: 'Le Kristal', icon: 'le-kristal', price: 4000, barcode: '899-KRISTAL-03' },
+  { id: 'silver-king', name: 'SilverKing', icon: 'silver-king', price: 6000, barcode: '899-SILVER-04' },
 ];
 
 interface ScanLogEntry {
@@ -49,7 +50,7 @@ export const Slide1Hook: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [customName, setCustomName] = useState<string>('');
   const [customPrice, setCustomPrice] = useState<string>('5000');
-  const [customIcon, setCustomIcon] = useState<string>('🥟');
+  const [customIcon, setCustomIcon] = useState<string>('dimsum');
 
   const chaoticOutputs = ['Rp 45.000', 'Rp 500', 'Sabun Colek', 'Rp 120.000', 'Piring Pecah', 'Rp 99.000'];
   const currentChaotic = chaoticOutputs[scanCount % chaoticOutputs.length];
@@ -89,7 +90,7 @@ export const Slide1Hook: React.FC = () => {
     const newItem: CanteenItem = {
       id: cleanId,
       name: customName.trim(),
-      icon: customIcon || '🥪',
+      icon: customIcon || 'sandwich',
       price: priceNum,
       barcode: cleanCode,
       isCustom: true,
@@ -185,21 +186,21 @@ export const Slide1Hook: React.FC = () => {
 
             {/* Mode Multi-Barang: Quick Chips Selector */}
             {mode === 'multi' && (
-              <div className="mt-3">
-                <div className="flex flex-wrap gap-1.5 max-h-[88px] overflow-y-auto pr-1">
+              <div className="mt-2.5">
+                <div className="flex flex-wrap gap-1.5 max-h-[84px] overflow-y-auto pr-1">
                   {items.map((item) => {
                     const isSelected = selectedItem.id === item.id;
                     return (
                       <button
                         key={item.id}
                         onClick={() => handleSelectItem(item)}
-                        className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 border transition-all ${
+                        className={`px-2 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 border transition-all ${
                           isSelected
                             ? 'bg-brand-600 border-brand-400 text-white ring-2 ring-brand-400/40 shadow-sm'
                             : 'bg-slate-950/80 border-slate-800 text-slate-300 hover:border-slate-700 hover:text-white'
                         }`}
                       >
-                        <span className="text-sm">{item.icon}</span>
+                        <CanteenItemIcon name={item.icon} className="w-4 h-4 flex-shrink-0" />
                         <span>{item.name}</span>
                         <span className="text-[10px] font-mono px-1 py-0.5 rounded bg-slate-800/90 text-slate-300">
                           {formatRupiah(item.price)}
@@ -210,7 +211,7 @@ export const Slide1Hook: React.FC = () => {
 
                   <button
                     onClick={() => setIsModalOpen(true)}
-                    className="px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 border border-dashed border-slate-700 text-slate-400 hover:text-brand-300 hover:border-brand-500/60 bg-slate-950/40 transition-all"
+                    className="px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1 border border-dashed border-slate-700 text-slate-400 hover:text-brand-300 hover:border-brand-500/60 bg-slate-950/40 transition-all"
                   >
                     <Plus className="w-3.5 h-3.5" /> Tambah
                   </button>
@@ -218,37 +219,96 @@ export const Slide1Hook: React.FC = () => {
               </div>
             )}
 
-            {/* Kartu Barang Aktif di Meja Scan */}
-            <div className="mt-3 p-3.5 bg-slate-950/90 rounded-xl border border-slate-800 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-2xl shadow-inner">
-                  {selectedItem.icon}
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h4 className="text-base font-bold text-white">{selectedItem.name}</h4>
-                    {selectedItem.isCustom && (
-                      <span className="text-[10px] font-mono bg-indigo-500/20 text-indigo-300 px-1.5 py-0.5 rounded border border-indigo-500/30">
-                        Kustom
+            {/* Kartu Barang Aktif di Meja Scan: Hero Showcase Dinamis */}
+            {mode === 'single' ? (
+              /* Mode 1-Barang: Tampilan Hero Berukuran Besar & Sangat Jelas di Proyektor */
+              <div className="mt-3 p-3.5 bg-slate-950/90 rounded-2xl border border-slate-800 flex items-center justify-between relative overflow-hidden shadow-2xl">
+                {/* Animasi Garis Laser Kasir Merah */}
+                {testState !== 'idle' && (
+                  <div className="absolute inset-x-0 h-1 bg-rose-500 shadow-[0_0_16px_#f43f5e] animate-laser-sweep pointer-events-none z-10">
+                    <div className="w-full h-full bg-rose-200 opacity-90 blur-[0.5px]" />
+                  </div>
+                )}
+
+                <div className="flex items-center gap-3.5">
+                  <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-gradient-to-b from-slate-900 via-slate-900/90 to-slate-950 border border-slate-800/90 flex items-center justify-center p-2 shadow-2xl relative flex-shrink-0">
+                    <CanteenItemIcon name={selectedItem.icon} className="w-full h-full drop-shadow-xl" />
+                    <div className="absolute inset-0 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:8px_8px] opacity-15 pointer-events-none rounded-2xl" />
+                  </div>
+
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <h4 className="text-xl font-extrabold text-white tracking-tight">{selectedItem.name}</h4>
+                      {selectedItem.isCustom && (
+                        <span className="text-[10px] font-mono bg-indigo-500/20 text-indigo-300 px-1.5 py-0.5 rounded border border-indigo-500/30">
+                          Kustom
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2 text-xs font-mono text-emerald-400">
+                      <span className="flex items-center gap-1 font-semibold">
+                        <Scan className="w-3.5 h-3.5" /> 1 Input Barcode
                       </span>
-                    )}
-                  </div>
-                  <div className="mt-0.5 flex items-center gap-2 text-xs font-mono text-emerald-400">
-                    <span className="flex items-center gap-1">
-                      <Scan className="w-3.5 h-3.5" /> 1 Input Barcode
-                    </span>
-                    <span className="text-slate-600">•</span>
-                    <span className="text-slate-400">Asli: {formatRupiah(selectedItem.price)}</span>
+                      <span className="text-slate-600">•</span>
+                      <span className="text-slate-400">Asli: {formatRupiah(selectedItem.price)}</span>
+                    </div>
+                    <div className="text-[11px] font-mono text-slate-400 flex items-center gap-1 pt-0.5">
+                      <Tag className="w-3 h-3 text-brand-400" />
+                      <span>Barcode: <strong className="text-brand-300">{selectedItem.barcode}</strong></span>
+                    </div>
                   </div>
                 </div>
+
+                <div className="hidden sm:flex flex-col items-end pl-2">
+                  <span className="text-[10px] uppercase font-mono text-slate-500 tracking-wider">Harga Resmi</span>
+                  <span className="text-xl font-mono font-black text-emerald-400">
+                    {formatRupiah(selectedItem.price)}
+                  </span>
+                  <span className="text-[10px] text-slate-500 font-mono">1 Target Valid</span>
+                </div>
               </div>
-              <div className="hidden sm:flex flex-col items-end">
-                <span className="text-[10px] uppercase font-mono text-slate-500">Harga Resmi</span>
-                <span className="text-sm font-mono font-bold text-emerald-400">
-                  {formatRupiah(selectedItem.price)}
-                </span>
+            ) : (
+              /* Mode Multi-Barang: Tampilan Proporsional Kompak */
+              <div className="mt-2.5 p-2.5 bg-slate-950/90 rounded-xl border border-slate-800 flex items-center justify-between relative overflow-hidden shadow-lg">
+                {/* Animasi Garis Laser Kasir Merah */}
+                {testState !== 'idle' && (
+                  <div className="absolute inset-x-0 h-1 bg-rose-500 shadow-[0_0_12px_#f43f5e] animate-laser-sweep pointer-events-none z-10">
+                    <div className="w-full h-full bg-rose-200 opacity-90 blur-[0.5px]" />
+                  </div>
+                )}
+
+                <div className="flex items-center gap-3">
+                  <div className="w-16 h-16 rounded-xl bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-800 flex items-center justify-center p-1.5 shadow-inner flex-shrink-0 relative">
+                    <CanteenItemIcon name={selectedItem.icon} className="w-full h-full drop-shadow-md" />
+                    <div className="absolute inset-0 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:6px_6px] opacity-15 pointer-events-none rounded-xl" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h4 className="text-base font-bold text-white tracking-tight">{selectedItem.name}</h4>
+                      {selectedItem.isCustom && (
+                        <span className="text-[10px] font-mono bg-indigo-500/20 text-indigo-300 px-1.5 py-0.5 rounded border border-indigo-500/30">
+                          Kustom
+                        </span>
+                      )}
+                    </div>
+                    <div className="mt-0.5 flex items-center gap-2 text-xs font-mono text-emerald-400">
+                      <span className="flex items-center gap-1 font-semibold">
+                        <Scan className="w-3.5 h-3.5" /> 1 Input Barcode
+                      </span>
+                      <span className="text-slate-600">•</span>
+                      <span className="text-slate-400">Asli: {formatRupiah(selectedItem.price)}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="hidden sm:flex flex-col items-end">
+                  <span className="text-[10px] uppercase font-mono text-slate-500">Harga Resmi</span>
+                  <span className="text-sm font-mono font-bold text-emerald-400">
+                    {formatRupiah(selectedItem.price)}
+                  </span>
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Tombol Uji Kasir */}
@@ -361,13 +421,14 @@ export const Slide1Hook: React.FC = () => {
                       scanHistory.slice(0, 3).map((entry) => (
                         <span
                           key={entry.id}
-                          className={`px-1.5 py-0.5 rounded text-[10px] font-semibold border ${
+                          className={`px-1.5 py-0.5 rounded text-[10px] font-semibold border flex items-center gap-1 ${
                             entry.isDeterministic
                               ? 'bg-emerald-950/50 border-emerald-800 text-emerald-300'
                               : 'bg-rose-950/50 border-rose-800 text-rose-300'
                           }`}
                         >
-                          {entry.item.icon} {entry.item.name}: {entry.priceOutput}
+                          <CanteenItemIcon name={entry.item.icon} className="w-3.5 h-3.5 flex-shrink-0" />
+                          <span>{entry.item.name}: {entry.priceOutput}</span>
                         </span>
                       ))
                     )}
@@ -448,22 +509,25 @@ export const Slide1Hook: React.FC = () => {
               </div>
 
               <div>
-                <label className="text-[11px] font-semibold text-slate-300 uppercase tracking-wider block mb-1">
-                  Pilih Ikon
+                <label className="text-[11px] font-semibold text-slate-300 uppercase tracking-wider block mb-1.5">
+                  Pilih Ilustrasi Makanan / Minuman
                 </label>
-                <div className="flex gap-2">
-                  {['🥟', '🍢', '🍩', '🥤', '🍿', '🥪'].map((emoji) => (
+                <div className="grid grid-cols-2 gap-2">
+                  {CANTEEN_PRESET_ICONS.map((preset) => (
                     <button
-                      key={emoji}
+                      key={preset.id}
                       type="button"
-                      onClick={() => setCustomIcon(emoji)}
-                      className={`w-9 h-9 rounded-lg text-lg flex items-center justify-center border transition-all ${
-                        customIcon === emoji
-                          ? 'bg-brand-600/30 border-brand-400 scale-105'
+                      onClick={() => setCustomIcon(preset.id)}
+                      className={`p-2 rounded-xl flex items-center gap-2 border transition-all text-left ${
+                        customIcon === preset.id
+                          ? 'bg-brand-600/30 border-brand-400 scale-[1.02] shadow-md ring-2 ring-brand-400/30'
                           : 'bg-slate-950 border-slate-800 hover:border-slate-700'
                       }`}
                     >
-                      {emoji}
+                      <CanteenItemIcon name={preset.id} className="w-7 h-7 flex-shrink-0" />
+                      <span className="text-[11px] text-slate-200 font-medium leading-tight">
+                        {preset.label}
+                      </span>
                     </button>
                   ))}
                 </div>
