@@ -88,7 +88,7 @@ relasi-dan-fungsi/
 │       ├── SlideContainer.tsx     # Frame slide 16:9 + event listener keyboard (←, →, Spasi)
 │       ├── WorksheetPrint.tsx     # Lembar kerja siswa A4 print-only (Ctrl+P)
 │       └── slides/
-│           ├── Slide1Hook.tsx             # Slide 1: Mesin Kasir (Scanner Kasir Kantin)
+│           ├── Slide1Hook.tsx             # Slide 1: Mesin Kasir (Scanner Kasir Kantin & Multi-Barang Many-to-One)
 │           ├── Slide2Machine.tsx          # Slide 2: Mesin Fungsi (Model Mental Mesin)
 │           ├── Slide3ArrowDiagram.tsx     # Slide 3: Relasi & Fungsi (Diagram Panah)
 │           ├── Slide4VerticalLineTest.tsx # Slide 4: Uji Garis Vertikal (Vertical Line Test)

@@ -4,7 +4,24 @@ Dokumen perencanaan dan pelacakan progres pengembangan media pembelajaran intera
 
 ---
 
-## 📌 Status Terkini: v1.4.0 (Redesain Ekstrem Minimalis Slide: Judul Ringkas & Nol Paragraf Narasi ✅)
+## 📌 Status Terkini: v1.5.0 (Mesin Kasir Slide 1: Progressive Reveal, Merk Samaran Kantin, Multi-Barang & Pembuktian Many-to-One ✅)
+- [x] **Pembaruan Mesin Kasir Slide 1 (`Slide1Hook.tsx`)**:
+  - **Progressive Reveal**:
+    * Mode default `1 Barang Fokus` (Es Krim Nice Cone Rp 8.000) agar siswa tidak mengalami beban kognitif berlebih di awal.
+    * Tab switcher `Multi-Barang Kantin` yang dapat dibuka sewaktu-waktu oleh guru untuk memperluas studi kasus.
+  - **4 Preset Merk Samaran Kantin yang Relatable & Menghibur**:
+    1. 🍦 **Nice Cone** (Rp 8.000)
+    2. 🧃 **Teh Kubus** (Rp 4.000)
+    3. 💧 **Le Kristal** (Rp 4.000 — sengaja berharga sama dengan Teh Kubus untuk membedah miskonsepsi *many-to-one*)
+    4. 🍫 **SilverKing** (Rp 6.000)
+  - **Interaksi Quick Chips & Input Jajanan Kustom**:
+    * Chip pilihan satu sentuhan ramah layar sentuh / pointer proyektor.
+    * Tombol `+ Tambah` yang memunculkan modal ringkas untuk menambahkan jajanan lokal kelas (misal: "Cireng", "Rp 2.000").
+  - **Mini Log (Riwayat Scan) & Deteksi Cerdas Many-to-One**:
+    * Mencatat hasil scan barcode sebelumnya.
+    * Notifikasi otomatis ber-badge hijau: `✨ [Teh Kubus] & [Le Kristal] sama-sama Rp 4.000 = Tetap Fungsi Sah!`.
+  - **Sinkronisasi Total Modul Guru & LKPD**:
+    * Memperbarui narasi pemantik di [panduan-guru.html](file:///Users/fakhri246/project/matematika/relasi-dan-fungsi/panduan-guru.html), [public/panduan-guru.html](file:///Users/fakhri246/project/matematika/relasi-dan-fungsi/public/panduan-guru.html), [lks-siswa.html](file:///Users/fakhri246/project/matematika/relasi-dan-fungsi/lks-siswa.html), dan [public/lks-siswa.html](file:///Users/fakhri246/project/matematika/relasi-dan-fungsi/public/lks-siswa.html).
 - [x] **Redesain Minimalis Teks 10 Slide Proyektor**:
   - Menghapus total seluruh subjudul dan paragraf narasi di bawah judul pada 10 slide (`Slide1Hook` s.d. `Slide10ProjectHub`).
   - Menghapus kotak aktivitas guru di layar (`🗣️ Aktivitas Kelas: ...`) agar layar proyektor 100% bersih dan fokus pada visual interaktif.
@@ -22,12 +39,6 @@ Dokumen perencanaan dan pelacakan progres pengembangan media pembelajaran intera
   - Menyederhanakan feedback pembuktian menjadi status badge ringkas (misal: `✅ FUNGSI SAH`, `❌ BUKAN FUNGSI (Budi Mendua)`).
   - Mengubah narasi cerita kasus di Slide 10 menjadi parameter spesifikasi teknis ringkas.
   - Menyelaraskan navigasi drawer dan navbar di `src/App.tsx`.
-- [x] **Revisi Hook Slide 1 (Apersepsi Kontekstual Kantin Sekolah)**:
-  - Mengubah analogi generic "Beli Susu Kotak" / vending machine menjadi **Scanner Kasir Kantin: Scan Barcode Es Krim Cornetto Cokelat**.
-  - Menambahkan simulator interaktif dengan tombol "Scan Ulang":
-    * *Mode Kasir Rusak (Bukan Fungsi)*: Barcode sama menghasilkan harga acak berganti-ganti (Rp 45.000, Rp 500, Sabun Colek, Rp 120.000).
-    * *Mode Kasir Normal (Fungsi)*: Barcode selalu menghasilkan tepat satu harga pasti ($f(\text{Cornetto}) = \text{Rp } 8.000$).
-  - Menyelaraskan teks pemantik di [panduan-guru.html](file:///Users/fakhri246/project/matematika/relasi-dan-fungsi/panduan-guru.html) dan pertanyaan Bagian A1 di [lks-siswa.html](file:///Users/fakhri246/project/matematika/relasi-dan-fungsi/lks-siswa.html) agar 100% konsisten.
 - [x] Riset kurikulum SuperMath MTK X & modul Bab 7 (Relasi & Fungsi).
 - [x] Pemangkasan materi teoretis formal (Injektif/Surjektif/Bijektif, Fungsi Genap/Ganjil, manipulasi aljabar rumit SNBT).
 - [x] Inisialisasi arsitektur React 19 + TypeScript + Vite + Tailwind CSS + KaTeX.
