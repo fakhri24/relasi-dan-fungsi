@@ -63,8 +63,8 @@ export const InteractiveArrowCanvas = forwardRef<InteractiveArrowCanvasRef, Prop
   const height = 320;
   const leftX = 140; // Garis tengah himpunan A
   const rightX = 420; // Garis tengah himpunan B
-  const anchorDotAX = 205; // Bibir kanan himpunan A
-  const anchorDotBX = 355; // Bibir kiri himpunan B
+  const anchorDotAX = 206; // Bibir kanan kapsul himpunan A
+  const anchorDotBX = 354; // Bibir kiri kapsul himpunan B
 
   // Hitung posisi Y untuk tiap item di A
   const getYPosA = (index: number, total: number) => {
@@ -418,21 +418,22 @@ export const InteractiveArrowCanvas = forwardRef<InteractiveArrowCanvasRef, Prop
             </filter>
           </defs>
 
-          {/* Oval Venn Himpunan A (Domain) */}
-          <ellipse
-            cx={leftX}
-            cy={height / 2 + 15}
-            rx="75"
-            ry={height / 2 - 25}
+          {/* Stadium Kapsul Venn Himpunan A (Domain) */}
+          <rect
+            x={leftX - 70}
+            y="36"
+            width="140"
+            height={height - 52}
+            rx="42"
             fill="#1e1b4b"
-            fillOpacity="0.4"
+            fillOpacity="0.45"
             stroke="#6366f1"
             strokeWidth="2"
-            strokeDasharray="4 2"
+            strokeDasharray="5 3"
           />
           <text
             x={leftX}
-            y="26"
+            y="25"
             textAnchor="middle"
             fill="#a5b4fc"
             fontSize="13"
@@ -442,21 +443,22 @@ export const InteractiveArrowCanvas = forwardRef<InteractiveArrowCanvasRef, Prop
             {setAName} (A)
           </text>
 
-          {/* Oval Venn Himpunan B (Kodomain) */}
-          <ellipse
-            cx={rightX}
-            cy={height / 2 + 15}
-            rx="75"
-            ry={height / 2 - 25}
+          {/* Stadium Kapsul Venn Himpunan B (Kodomain) */}
+          <rect
+            x={rightX - 70}
+            y="36"
+            width="140"
+            height={height - 52}
+            rx="42"
             fill="#083344"
-            fillOpacity="0.4"
+            fillOpacity="0.45"
             stroke="#06b6d4"
             strokeWidth="2"
-            strokeDasharray="4 2"
+            strokeDasharray="5 3"
           />
           <text
             x={rightX}
-            y="26"
+            y="25"
             textAnchor="middle"
             fill="#67e8f9"
             fontSize="13"
@@ -532,13 +534,13 @@ export const InteractiveArrowCanvas = forwardRef<InteractiveArrowCanvasRef, Prop
                 onClick={() => handleItemAClick(item)}
                 className="cursor-pointer group"
               >
-                {/* Pill Background Item A */}
+                {/* Pill Background Item A - pas di dalam kapsul */}
                 <rect
-                  x={leftX - 60}
-                  y={y - 15}
-                  width="120"
-                  height="30"
-                  rx="15"
+                  x={leftX - 58}
+                  y={y - 14}
+                  width="112"
+                  height="28"
+                  rx="14"
                   fill={isSelected ? '#4338ca' : isMendua ? '#881337' : '#1e1b4b'}
                   stroke={isSelected ? '#a5b4fc' : isMendua ? '#f43f5e' : isJomblo ? '#6366f1' : '#10b981'}
                   strokeWidth={isSelected ? '2.5' : '1.5'}
@@ -546,7 +548,7 @@ export const InteractiveArrowCanvas = forwardRef<InteractiveArrowCanvasRef, Prop
                 />
                 {/* Teks Item A */}
                 <text
-                  x={leftX - 5}
+                  x={leftX - 6}
                   y={y + 4}
                   textAnchor="middle"
                   fill={isSelected ? '#ffffff' : '#e0e7ff'}
@@ -590,13 +592,13 @@ export const InteractiveArrowCanvas = forwardRef<InteractiveArrowCanvasRef, Prop
                   strokeWidth="1.5"
                   className="transition-transform group-hover:scale-125"
                 />
-                {/* Pill Background Item B */}
+                {/* Pill Background Item B - pas di dalam kapsul */}
                 <rect
-                  x={rightX - 60}
-                  y={y - 15}
-                  width="120"
-                  height="30"
-                  rx="15"
+                  x={rightX - 54}
+                  y={y - 14}
+                  width="112"
+                  height="28"
+                  rx="14"
                   fill="#083344"
                   stroke="#0891b2"
                   strokeWidth="1.5"
@@ -604,7 +606,7 @@ export const InteractiveArrowCanvas = forwardRef<InteractiveArrowCanvasRef, Prop
                 />
                 {/* Teks Item B */}
                 <text
-                  x={rightX}
+                  x={rightX + 2}
                   y={y + 4}
                   textAnchor="middle"
                   fill="#e0f2fe"

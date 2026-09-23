@@ -4,18 +4,26 @@ Dokumen perencanaan dan pelacakan progres pengembangan media pembelajaran intera
 
 ---
 
-## 📌 Status Terkini: v2.1.1 (Perbaikan Bug Garis Relasi Ganda & Zero-Height SVG Filter Clipping ✅)
-- [x] **Penyelesaian Bug Garis Horizontal Hilang pada Multi-Relasi**:
-  - Mengatasi masalah garis panah dari anggota domain yang memiliki $\ge 2$ relasi (misal Budi hobi Game & Musik) di mana garis Budi $\to$ Game tidak ter-render di browser WebKit (Safari) dan Blink (Chrome).
-  - Mengubah atribut filter glow (`#arrowGlow`, `#glow-filter`, `#arrowGlow3`) pada [`Slide1OpeningRelasi.tsx`](file:///Users/fakhri246/project/matematika/relasi-dan-fungsi/src/components/slides/Slide1OpeningRelasi.tsx), [`Slide3ArrowDiagram.tsx`](file:///Users/fakhri246/project/matematika/relasi-dan-fungsi/src/components/slides/Slide3ArrowDiagram.tsx), dan [`InteractiveArrowCanvas.tsx`](file:///Users/fakhri246/project/matematika/relasi-dan-fungsi/src/components/lkpd/InteractiveArrowCanvas.tsx) menjadi `filterUnits="userSpaceOnUse"`. Ini mencegah pemotongan (*clipping*) wilayah efek filter menjadi $0\text{ px}$ saat garis panah horizontal sejajar ($y_1 = y_2$).
-- [x] **Kurva Bezier Adaptif untuk Multi-Panah (*Adaptive Spread Curves*)**:
-  - Mengimplementasikan fungsi pembentuk kurva Bezier cerdas:
-    * **Panah Sejajar Horizontal ($y_1 = y_2$)**: Diberikan kelengkungan busur halus ke atas ($y_1 - 14\text{ px}$) sehingga terlihat seperti busur panah matematis yang hidup dan dinamis.
-    * **Panah Bercabang dari 1 Sumber ($y_1 \ne y_2$)**: Diberikan offset kontrol awal ($\pm 6\text{ px}$) agar garis-garis yang keluar dari satu titik noktah memencar secara jelas dan tidak bertumpukan.
-  - Menyesuaikan posisi vertikal badge panduan *"Pilih target di B ➔"* ke $y = 28\text{ px}$ agar ruang di bawahnya sepenuhnya bebas untuk busur panah.
-- [x] **Build & Runtime Verification**:
-  - `npx tsc --noEmit` lolos 100% tanpa error tipe.
-  - `npm run build` (`tsc -b && vite build`) selesai dalam 2.62s tanpa error.
+## 📌 Status Terkini: v2.1.2 (Penyempurnaan LKPD Digital: Geometri Kapsul Venn, Penguncian Stepper, & Narasi Kasus Kantin ✅)
+- [x] **Geometri Kapsul Stadium Venn Diagram (`InteractiveArrowCanvas.tsx`)**:
+  - Mengganti elips SVG sempit menjadi wadah **Stadium Rounded Rect (`rx="42"`, lebar `140px`)** sehingga lebar kapsul konstan secara vertikal dan tidak menabrak kotak elemen di kutub atas/bawah.
+  - Merampingkan lebar pill item anggota menjadi `112px` (tinggi `28px`, `rx="14"`) dengan margin internal aman ($12\text{ px} - 16\text{ px}$).
+  - Menyelaraskan titik noktah bibir luar kapsul ($cx = 206$ untuk Himpunan A dan $cx = 354$ untuk Himpunan B).
+- [x] **Penguncian Alur Stepper Tab & Gerbang Validasi (`LkpdDigitalModal.tsx`)**:
+  - Mengunci tab stepper atas: tombol tab di depan di-disable (`disabled={step.id > currentStep}`) dengan styling redup `opacity-40 cursor-not-allowed`. Siswa hanya bisa mengecek mundur ke langkah yang sudah selesai dikerjakan.
+  - Menjadikan tombol navigasi bawah sebagai **satu-satunya gerbang melaju**: Tombol "Lanjut ke Kasus 2", "Lanjut ke Kasus 3", "Lanjut ke VLT", dan "Kirim Jawaban ke Guru" terkunci rapat (`disabled`) sampai semua syarat wajib di langkah tersebut terpenuhi.
+  - Menambahkan teks peringatan/hint pemandu di samping tombol yang aktif saat form belum lengkap.
+- [x] **Kartu Skenario Cerita Dunia Nyata (Kasir Kantin)**:
+  - **Kasus 1**: Kartu skenario pesanan kantin terstruktur (Ali $\to$ Bakso, Budi $\to$ Mie, Citra $\to$ Bakso, Dewi $\to$ Soto) untuk menyelidiki relasi *many-to-one* (Fungsi Sah).
+  - **Kasus 2**: Kartu skenario kekacauan di kasir (Ali $\to$ Bakso, Budi pesan 2 menu sekaligus Mie & Soto, Citra $\to$ Bakso, Dewi antre tapi tidak memesan) untuk membuktikan pelanggaran mendua dan jomblo (Bukan Fungsi).
+  - **Kasus 3**: Kartu instruksi mandiri arsitek matematika dengan ide inspirasi sehari-hari.
+- [x] **Form Input Bersih (*Clean Slate*) & Ghost Placeholders**:
+  - Mereset seluruh input jawaban siswa (panah, radio/button status, textarea alasan, refleksi aturan emas) menjadi kondisi awal kosong `''` atau `[]`.
+  - Menggunakan placeholder abu-abu pemandu berpikir reflektif tanpa membocorkan jawaban langsung.
+- [x] **Build & Verification**:
+  - `npm run build` (`tsc -b && vite build`) lolos tanpa error dalam 2.61s.
+
+## 📌 Arsip Status v2.1.1 (Perbaikan Bug Garis Relasi Ganda & Zero-Height SVG Filter Clipping ✅)
 
 ## 📌 Arsip Status v2.1.0 (Audit & Optimasi Kontras Warna Mode Cerah / Light Mode > 9.6/10 WCAG AAA ✅)
 - [x] **Audit & Perbaikan Tipografi Kontras Tinggi Mode Cerah (Light Mode)**:

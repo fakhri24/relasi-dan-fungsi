@@ -56,56 +56,47 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
   const case2Ref = useRef<InteractiveArrowCanvasRef>(null);
   const case3Ref = useRef<InteractiveArrowCanvasRef>(null);
 
-  // State Jawaban Kasus 1 (Pesanan Kantin Many-to-One)
-  const [case1Arrows, setCase1Arrows] = useState<ArrowRelation[]>([
-    { from: 'Ali', to: 'Bakso' },
-    { from: 'Budi', to: 'Mie' },
-    { from: 'Citra', to: 'Bakso' },
-    { from: 'Dewi', to: 'Soto' }
-  ]);
-  const [case1Status, setCase1Status] = useState<'Fungsi' | 'Bukan'>('Fungsi');
-  const [case1Reason, setCase1Reason] = useState('Semua siswa (A) memesan tepat satu menu, meskipun Ali dan Citra sama-sama memilih Bakso.');
+  // State Jawaban Kasus 1 (Pesanan Kantin Many-to-One) - Bersih / Kosong
+  const [case1Arrows, setCase1Arrows] = useState<ArrowRelation[]>([]);
+  const [case1Status, setCase1Status] = useState<'Fungsi' | 'Bukan' | ''>('');
+  const [case1Reason, setCase1Reason] = useState('');
 
-  // State Jawaban Kasus 2 (Uji Pelanggaran)
-  const [case2Arrows, setCase2Arrows] = useState<ArrowRelation[]>([
-    { from: 'Ali', to: 'Bakso' },
-    { from: 'Budi', to: 'Mie' },
-    { from: 'Budi', to: 'Soto' }, // Budi mendua
-    { from: 'Citra', to: 'Bakso' }
-    // Dewi jomblo (tidak pesan)
-  ]);
-  const [case2Status, setCase2Status] = useState<'Fungsi' | 'Bukan'>('Bukan');
-  const [case2Violator, setCase2Violator] = useState('Budi (memesan 2 menu) dan Dewi (tidak memesan makanan)');
-  const [case2Reason, setCase2Reason] = useState('Budi bercabang (mendua) dan Dewi tidak memiliki pasangan di Kodomain.');
+  // State Jawaban Kasus 2 (Uji Pelanggaran) - Bersih / Kosong
+  const [case2Arrows, setCase2Arrows] = useState<ArrowRelation[]>([]);
+  const [case2Status, setCase2Status] = useState<'Fungsi' | 'Bukan' | ''>('');
+  const [case2Violator, setCase2Violator] = useState('');
+  const [case2Reason, setCase2Reason] = useState('');
 
-  // State Jawaban Kasus 3 (Kreasi Mandiri Siswa)
-  const [case3SetAName, setCase3SetAName] = useState('Nama Siswa');
-  const [case3SetBName, setCase3SetBName] = useState('Ukuran Sepatu');
-  const [case3ItemsA, setCase3ItemsA] = useState<string[]>(['Fauzi', 'Kirana', 'Bagus', 'Dewi']);
-  const [case3ItemsB, setCase3ItemsB] = useState<string[]>(['38', '39', '40', '41']);
-  const [case3Arrows, setCase3Arrows] = useState<ArrowRelation[]>([
-    { from: 'Fauzi', to: '40' },
-    { from: 'Kirana', to: '38' },
-    { from: 'Bagus', to: '41' },
-    { from: 'Dewi', to: '39' }
-  ]);
-  const [case3Status, setCase3Status] = useState<'Fungsi' | 'Bukan'>('Fungsi');
-  const [case3Reason, setCase3Reason] = useState('Setiap siswa pasti memiliki tepat 1 ukuran sepatu yang pas di kakinya.');
+  // State Jawaban Kasus 3 (Kreasi Mandiri Siswa) - Bersih / Kosong
+  const [case3SetAName, setCase3SetAName] = useState('');
+  const [case3SetBName, setCase3SetBName] = useState('');
+  const [case3ItemsA, setCase3ItemsA] = useState<string[]>(['Teman 1', 'Teman 2', 'Teman 3']);
+  const [case3ItemsB, setCase3ItemsB] = useState<string[]>(['Pilihan A', 'Pilihan B', 'Pilihan C']);
+  const [case3Arrows, setCase3Arrows] = useState<ArrowRelation[]>([]);
+  const [case3Status, setCase3Status] = useState<'Fungsi' | 'Bukan' | ''>('');
+  const [case3Reason, setCase3Reason] = useState('');
 
-  // State Uji Garis Vertikal (VLT)
-  const [vlt1, setVlt1] = useState<'Fungsi' | 'Bukan' | ''>('Fungsi');
-  const [vlt2, setVlt2] = useState<'Fungsi' | 'Bukan' | ''>('Bukan');
-  const [vlt3, setVlt3] = useState<'Fungsi' | 'Bukan' | ''>('Bukan');
-  const [vlt4, setVlt4] = useState<'Fungsi' | 'Bukan' | ''>('Fungsi');
+  // State Uji Garis Vertikal (VLT) - Bersih / Kosong
+  const [vlt1, setVlt1] = useState<'Fungsi' | 'Bukan' | ''>('');
+  const [vlt2, setVlt2] = useState<'Fungsi' | 'Bukan' | ''>('');
+  const [vlt3, setVlt3] = useState<'Fungsi' | 'Bukan' | ''>('');
+  const [vlt4, setVlt4] = useState<'Fungsi' | 'Bukan' | ''>('');
 
-  // State Refleksi Aturan Emas
-  const [goldenSingle, setGoldenSingle] = useState('Semua anggota himpunan asal (domain) wajib memiliki pasangan, tidak boleh kosong.');
-  const [goldenAffair, setGoldenAffair] = useState('Setiap anggota himpunan asal hanya boleh memilih satu tujuan, tidak boleh bercabang.');
+  // State Refleksi Aturan Emas - Bersih / Kosong
+  const [goldenSingle, setGoldenSingle] = useState('');
+  const [goldenAffair, setGoldenAffair] = useState('');
 
   // State Submission
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedSubmissionId, setSubmittedSubmissionId] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
+
+  // Validasi Ketat untuk setiap langkah
+  const canProceedStep0 = !!selectedStudentName.trim();
+  const canProceedStep1 = case1Arrows.length >= 1 && case1Status !== '' && case1Reason.trim().length >= 5;
+  const canProceedStep2 = case2Arrows.length >= 1 && case2Status !== '' && case2Violator.trim().length >= 3 && case2Reason.trim().length >= 5;
+  const canProceedStep3 = case3SetAName.trim().length > 0 && case3SetBName.trim().length > 0 && case3Arrows.length >= 1 && case3Status !== '' && case3Reason.trim().length >= 5;
+  const canProceedStep4 = vlt1 !== '' && vlt2 !== '' && vlt3 !== '' && vlt4 !== '' && goldenSingle.trim().length >= 5 && goldenAffair.trim().length >= 5;
 
   // Load daftar kelas dari Firestore jika ada
   useEffect(() => {
@@ -260,29 +251,35 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
               { id: 3, label: '4. Kasus 3 (Kreasi)' },
               { id: 4, label: '5. VLT & Refleksi' },
               { id: 5, label: '6. Kirim' },
-            ].map(step => (
-              <button
-                key={step.id}
-                onClick={() => {
-                  if (submittedSubmissionId && step.id !== 5) return;
-                  if (step.id > 0 && !selectedStudentName) {
-                    alert('Silakan pilih nama siswa terlebih dahulu!');
-                    return;
-                  }
-                  setCurrentStep(step.id);
-                }}
-                className={`px-2.5 py-1 rounded-full whitespace-nowrap transition-all flex items-center gap-1.5 ${
-                  currentStep === step.id
-                    ? 'bg-brand-600 text-white font-bold shadow-md shadow-brand-600/30'
-                    : currentStep > step.id
-                    ? 'bg-emerald-950/60 text-emerald-400 border border-emerald-800/60'
-                    : 'text-slate-500 hover:text-slate-300'
-                }`}
-              >
-                {currentStep > step.id && <Check className="w-3 h-3 text-emerald-400" />}
-                <span>{step.label}</span>
-              </button>
-            ))}
+            ].map(step => {
+              const isLocked = step.id > currentStep;
+              const isCurrent = step.id === currentStep;
+              const isPassed = step.id < currentStep;
+
+              return (
+                <button
+                  key={step.id}
+                  type="button"
+                  disabled={isLocked || (!!submittedSubmissionId && step.id !== 5)}
+                  onClick={() => {
+                    if (!isLocked) {
+                      setCurrentStep(step.id);
+                    }
+                  }}
+                  title={isLocked ? 'Selesaikan langkah saat ini untuk membuka' : `Buka ${step.label}`}
+                  className={`px-2.5 py-1 rounded-full whitespace-nowrap transition-all flex items-center gap-1.5 ${
+                    isCurrent
+                      ? 'bg-brand-600 text-white font-bold shadow-md shadow-brand-600/30'
+                      : isPassed
+                      ? 'bg-emerald-950/60 text-emerald-400 border border-emerald-800/60 hover:bg-emerald-900/60 cursor-pointer'
+                      : 'text-slate-600 border border-slate-800/40 opacity-40 cursor-not-allowed'
+                  }`}
+                >
+                  {isPassed && <Check className="w-3 h-3 text-emerald-400" />}
+                  <span>{step.label}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -356,9 +353,13 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
               <div className="flex justify-end">
                 <button
                   type="button"
-                  disabled={!selectedStudentName}
+                  disabled={!canProceedStep0}
                   onClick={() => setCurrentStep(1)}
-                  className="w-full sm:w-auto px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-500 disabled:opacity-50 text-white font-bold text-sm shadow-lg shadow-brand-600/30 flex items-center justify-center gap-2 transition-all"
+                  className={`w-full sm:w-auto px-6 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all ${
+                    canProceedStep0
+                      ? 'bg-brand-600 hover:bg-brand-500 text-white shadow-lg shadow-brand-600/30 cursor-pointer'
+                      : 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700/50'
+                  }`}
                 >
                   <span>Mulai Kerjakan Kasus 1</span>
                   <ChevronRight className="w-4 h-4" />
@@ -372,10 +373,68 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
           {/* ============================================================ */}
           {currentStep === 1 && (
             <div className="space-y-4">
+              {/* Kartu Narasi Cerita Kasus 1 */}
+              <div className="bg-slate-950/90 border border-brand-500/30 rounded-2xl p-3.5 sm:p-4 space-y-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-brand-500/20 text-brand-400 flex items-center justify-center font-bold text-xs shrink-0">
+                    #1
+                  </div>
+                  <div>
+                    <h4 className="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
+                      Skenario Kasir Kantin: Pesanan Standar (Many-to-One)
+                    </h4>
+                    <p className="text-[11px] text-slate-400">
+                      Baca skenario pesanan di bawah ini, lalu tarik garis panah penghubung pada diagram!
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs pt-1">
+                  <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3 space-y-1.5">
+                    <span className="text-indigo-400 text-[10px] font-bold uppercase tracking-wider block">
+                      📋 Daftar Pesanan Siswa:
+                    </span>
+                    <ul className="space-y-1 text-slate-200 text-[11px]">
+                      <li className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 shrink-0" />
+                        <span><strong>Ali</strong> memesan <strong>Bakso</strong></span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 shrink-0" />
+                        <span><strong>Budi</strong> memesan <strong>Mie</strong></span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 shrink-0" />
+                        <span><strong>Citra</strong> memesan <strong>Bakso</strong> (sama seperti Ali)</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 shrink-0" />
+                        <span><strong>Dewi</strong> memesan <strong>Soto</strong></span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3 space-y-1.5 flex flex-col justify-between">
+                    <div>
+                      <span className="text-amber-400 text-[10px] font-bold uppercase tracking-wider block">
+                        🔍 Fokus Penyelidikan:
+                      </span>
+                      <p className="text-slate-300 text-[11px] leading-relaxed">
+                        Ali dan Citra memesan makanan yang sama (Bakso). Panah dari Himpunan A bertemu di satu tujuan di Himpunan B.
+                      </p>
+                    </div>
+                    <p className="text-brand-300 font-semibold text-[11px] pt-1 border-t border-slate-800/80">
+                      Tugasmu: Tarik panah sesuai pesanan di atas, lalu tentukan apakah relasi kasir ini sah sebagai FUNGSI!
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Kanvas Interaktif Kasus 1 */}
               <InteractiveArrowCanvas
                 ref={case1Ref}
-                title="Kasus 1: Pesanan Standar Kantin (Many-to-One)"
-                subtitle="Ali, Budi, Citra, dan Dewi memesan jajanan di kantin. Hubungkan panah relasi sesuai pesanan mereka!"
+                title="Diagram Relasi: Siswa ke Menu Makanan"
+                subtitle="Klik 1 nama pemesan di kiri, lalu klik menu makanannya di kanan untuk menarik panah!"
                 setAName="Siswa Pemesan"
                 setBName="Menu Makanan"
                 itemsA={['Ali', 'Budi', 'Citra', 'Dewi']}
@@ -396,8 +455,8 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
                       onClick={() => setCase1Status('Fungsi')}
                       className={`flex-1 py-1.5 px-3 rounded-lg font-bold border transition-all ${
                         case1Status === 'Fungsi'
-                          ? 'bg-emerald-600 text-white border-emerald-500'
-                          : 'bg-slate-900 text-slate-400 border-slate-700'
+                          ? 'bg-emerald-600 text-white border-emerald-500 shadow-md shadow-emerald-600/30'
+                          : 'bg-slate-900 text-slate-400 border-slate-700 hover:border-slate-600'
                       }`}
                     >
                       ✓ FUNGSI SAH
@@ -407,8 +466,8 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
                       onClick={() => setCase1Status('Bukan')}
                       className={`flex-1 py-1.5 px-3 rounded-lg font-bold border transition-all ${
                         case1Status === 'Bukan'
-                          ? 'bg-rose-600 text-white border-rose-500'
-                          : 'bg-slate-900 text-slate-400 border-slate-700'
+                          ? 'bg-rose-600 text-white border-rose-500 shadow-md shadow-rose-600/30'
+                          : 'bg-slate-900 text-slate-400 border-slate-700 hover:border-slate-600'
                       }`}
                     >
                       ✗ BUKAN FUNGSI
@@ -424,8 +483,8 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
                     rows={2}
                     value={case1Reason}
                     onChange={e => setCase1Reason(e.target.value)}
-                    placeholder="Jelaskan mengapa kondisi di atas sah/tidak sah sebagai fungsi..."
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-brand-500"
+                    placeholder="Tuliskan analisismu dengan bahasamu sendiri (apakah semua siswa memesan? apakah ada yang memesan ganda?)..."
+                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-brand-500 placeholder:text-slate-500"
                   />
                 </div>
               </div>
@@ -435,17 +494,31 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
                 <button
                   type="button"
                   onClick={() => setCurrentStep(0)}
-                  className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold flex items-center gap-1.5"
+                  className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold flex items-center gap-1.5 transition-all"
                 >
                   <ChevronLeft className="w-4 h-4" /> Kembali
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setCurrentStep(2)}
-                  className="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-md shadow-brand-600/30"
-                >
-                  Lanjut ke Kasus 2 <ChevronRight className="w-4 h-4" />
-                </button>
+
+                <div className="flex items-center gap-3">
+                  {!canProceedStep1 && (
+                    <span className="text-[11px] text-amber-400/90 hidden sm:inline-flex items-center gap-1">
+                      <AlertCircle className="w-3.5 h-3.5" /> Tarik panah relasi, pilih status Fungsi/Bukan, & isi alasan
+                    </span>
+                  )}
+                  <button
+                    type="button"
+                    disabled={!canProceedStep1}
+                    onClick={() => setCurrentStep(2)}
+                    className={`px-5 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${
+                      canProceedStep1
+                        ? 'bg-brand-600 hover:bg-brand-500 text-white shadow-md shadow-brand-600/30 cursor-pointer'
+                        : 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700/50'
+                    }`}
+                  >
+                    <span>Lanjut ke Kasus 2</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -455,10 +528,68 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
           {/* ============================================================ */}
           {currentStep === 2 && (
             <div className="space-y-4">
+              {/* Kartu Narasi Cerita Kasus 2 */}
+              <div className="bg-slate-950/90 border border-rose-500/30 rounded-2xl p-3.5 sm:p-4 space-y-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-rose-500/20 text-rose-400 flex items-center justify-center font-bold text-xs shrink-0">
+                    #2
+                  </div>
+                  <div>
+                    <h4 className="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
+                      Skenario Kasir Kantin: Kekacauan Pesanan (Uji Pelanggaran)
+                    </h4>
+                    <p className="text-[11px] text-slate-400">
+                      Keesokan harinya terjadi kejadian kacau di meja kasir. Hubungkan panah sesuai skenario berikut!
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs pt-1">
+                  <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3 space-y-1.5">
+                    <span className="text-rose-400 text-[10px] font-bold uppercase tracking-wider block">
+                      ⚠️ Catatan Kejadian di Kasir:
+                    </span>
+                    <ul className="space-y-1 text-slate-200 text-[11px]">
+                      <li className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0" />
+                        <span><strong>Ali</strong> memesan <strong>Bakso</strong></span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse shrink-0" />
+                        <span><strong>Budi</strong> memesan <strong>2 menu</strong> (<strong>Mie</strong> DAN <strong>Soto</strong>)</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0" />
+                        <span><strong>Citra</strong> memesan <strong>Bakso</strong></span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
+                        <span><strong>Dewi</strong> hanya berdiri antre & <strong>TIDAK memesan apa pun</strong></span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3 space-y-1.5 flex flex-col justify-between">
+                    <div>
+                      <span className="text-amber-400 text-[10px] font-bold uppercase tracking-wider block">
+                        🔍 Fokus Penyelidikan:
+                      </span>
+                      <p className="text-slate-300 text-[11px] leading-relaxed">
+                        Perhatikan cabang panah dari <strong>Budi</strong> (memesan 2) dan titik pada <strong>Dewi</strong> (tidak memesan makanan).
+                      </p>
+                    </div>
+                    <p className="text-rose-300 font-semibold text-[11px] pt-1 border-t border-slate-800/80">
+                      Tugasmu: Tarik panah kekacauan ini, lalu identifikasi siapa yang melanggar aturan fungsi dan mengapa!
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Kanvas Interaktif Kasus 2 */}
               <InteractiveArrowCanvas
                 ref={case2Ref}
-                title="Kasus 2: Skenario Pelanggaran Aturan Fungsi"
-                subtitle="Coba buat skenario di mana seorang siswa memesan 2 menu makanan (mendua) atau ada yang tidak memesan (jomblo)!"
+                title="Diagram Relasi: Uji Pelanggaran Aturan Fungsi"
+                subtitle="Tarik 2 panah dari Budi (Mie & Soto), panah Ali ke Bakso, Citra ke Bakso, dan biarkan Dewi tanpa panah!"
                 setAName="Siswa Pemesan"
                 setBName="Menu Makanan"
                 itemsA={['Ali', 'Budi', 'Citra', 'Dewi']}
@@ -479,8 +610,8 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
                       onClick={() => setCase2Status('Fungsi')}
                       className={`flex-1 py-1.5 px-3 rounded-lg font-bold border transition-all ${
                         case2Status === 'Fungsi'
-                          ? 'bg-emerald-600 text-white border-emerald-500'
-                          : 'bg-slate-900 text-slate-400 border-slate-700'
+                          ? 'bg-emerald-600 text-white border-emerald-500 shadow-md shadow-emerald-600/30'
+                          : 'bg-slate-900 text-slate-400 border-slate-700 hover:border-slate-600'
                       }`}
                     >
                       ✓ FUNGSI SAH
@@ -490,8 +621,8 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
                       onClick={() => setCase2Status('Bukan')}
                       className={`flex-1 py-1.5 px-3 rounded-lg font-bold border transition-all ${
                         case2Status === 'Bukan'
-                          ? 'bg-rose-600 text-white border-rose-500'
-                          : 'bg-slate-900 text-slate-400 border-slate-700'
+                          ? 'bg-rose-600 text-white border-rose-500 shadow-md shadow-rose-600/30'
+                          : 'bg-slate-900 text-slate-400 border-slate-700 hover:border-slate-600'
                       }`}
                     >
                       ✗ BUKAN FUNGSI
@@ -507,8 +638,8 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
                     type="text"
                     value={case2Violator}
                     onChange={e => setCase2Violator(e.target.value)}
-                    placeholder="Contoh: Budi karena pesan 2 kali..."
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-brand-500"
+                    placeholder="Sebutkan nama siswa yang membuat aturan terlanggar..."
+                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-brand-500 placeholder:text-slate-500"
                   />
                 </div>
 
@@ -520,8 +651,8 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
                     type="text"
                     value={case2Reason}
                     onChange={e => setCase2Reason(e.target.value)}
-                    placeholder="Alasan matematis..."
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-brand-500"
+                    placeholder="Jelaskan jenis pelanggarannya (mendua / jomblo)..."
+                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-brand-500 placeholder:text-slate-500"
                   />
                 </div>
               </div>
@@ -531,17 +662,31 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
                 <button
                   type="button"
                   onClick={() => setCurrentStep(1)}
-                  className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold flex items-center gap-1.5"
+                  className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold flex items-center gap-1.5 transition-all"
                 >
                   <ChevronLeft className="w-4 h-4" /> Kembali ke Kasus 1
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setCurrentStep(3)}
-                  className="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-md shadow-brand-600/30"
-                >
-                  Lanjut ke Kasus 3 (Kreasi Sendiri) <ChevronRight className="w-4 h-4" />
-                </button>
+
+                <div className="flex items-center gap-3">
+                  {!canProceedStep2 && (
+                    <span className="text-[11px] text-amber-400/90 hidden sm:inline-flex items-center gap-1">
+                      <AlertCircle className="w-3.5 h-3.5" /> Tarik panah pelanggaran, pilih status, dan isi siapa & alasan
+                    </span>
+                  )}
+                  <button
+                    type="button"
+                    disabled={!canProceedStep2}
+                    onClick={() => setCurrentStep(3)}
+                    className={`px-5 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${
+                      canProceedStep2
+                        ? 'bg-brand-600 hover:bg-brand-500 text-white shadow-md shadow-brand-600/30 cursor-pointer'
+                        : 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700/50'
+                    }`}
+                  >
+                    <span>Lanjut ke Kasus 3 (Kreasi)</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -551,10 +696,29 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
           {/* ============================================================ */}
           {currentStep === 3 && (
             <div className="space-y-4">
-              <div className="bg-brand-950/40 border border-brand-800/80 rounded-xl p-3 text-xs flex items-center gap-2 text-brand-200">
-                <Sparkles className="w-5 h-5 text-brand-400 shrink-0" />
-                <div>
-                  <span className="font-bold">Misi Arsitek Matematika:</span> Buatlah satu contoh relasi dari kehidupan nyata di sekitarmu! Tentukan nama Himpunan A & B, masukkan anggotanya, dan tentukan apakah relasi ciptaanmu adalah Fungsi atau Bukan Fungsi!
+              {/* Kartu Narasi Kasus 3 */}
+              <div className="bg-slate-950/90 border border-brand-500/30 rounded-2xl p-3.5 sm:p-4 space-y-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-brand-500/20 text-brand-400 flex items-center justify-center font-bold text-xs shrink-0">
+                    #3
+                  </div>
+                  <div>
+                    <h4 className="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
+                      Misi Kreator Mandiri: Rancang Studi Kasus Dunia Nyata Buatanmu
+                    </h4>
+                    <p className="text-[11px] text-slate-400">
+                      Tentukan 2 himpunan dari kehidupan sehari-hari di sekitarmu, buat anggotanya, lalu tarik relasinya!
+                    </p>
+                  </div>
+                </div>
+
+                <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-300 space-y-1">
+                  <span className="text-amber-400 text-[10px] font-bold uppercase tracking-wider block">
+                    💡 Ide Inspirasi Kasus Nyata:
+                  </span>
+                  <p className="text-[11px] text-slate-300">
+                    Contoh: <strong>Siswa ➔ Ukuran Sepatu</strong> (Fungsi), <strong>Siswa ➔ Makanan Favorit</strong> (Bisa bukan fungsi jika suka &gt; 1 menu), <strong>Negara ➔ Ibu Kota</strong>, dll.
+                  </p>
                 </div>
               </div>
 
@@ -587,8 +751,8 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
                       onClick={() => setCase3Status('Fungsi')}
                       className={`flex-1 py-1.5 px-3 rounded-lg font-bold border transition-all ${
                         case3Status === 'Fungsi'
-                          ? 'bg-emerald-600 text-white border-emerald-500'
-                          : 'bg-slate-900 text-slate-400 border-slate-700'
+                          ? 'bg-emerald-600 text-white border-emerald-500 shadow-md shadow-emerald-600/30'
+                          : 'bg-slate-900 text-slate-400 border-slate-700 hover:border-slate-600'
                       }`}
                     >
                       ✓ FUNGSI SAH
@@ -598,8 +762,8 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
                       onClick={() => setCase3Status('Bukan')}
                       className={`flex-1 py-1.5 px-3 rounded-lg font-bold border transition-all ${
                         case3Status === 'Bukan'
-                          ? 'bg-rose-600 text-white border-rose-500'
-                          : 'bg-slate-900 text-slate-400 border-slate-700'
+                          ? 'bg-rose-600 text-white border-rose-500 shadow-md shadow-rose-600/30'
+                          : 'bg-slate-900 text-slate-400 border-slate-700 hover:border-slate-600'
                       }`}
                     >
                       ✗ BUKAN FUNGSI
@@ -615,8 +779,8 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
                     rows={2}
                     value={case3Reason}
                     onChange={e => setCase3Reason(e.target.value)}
-                    placeholder="Contoh: Setiap orang pasti hanya punya 1 tanggal lahir..."
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-brand-500"
+                    placeholder="Tuliskan analisismu secara mandiri (misal: apakah setiap anggota asal berpasangan tepat satu?)..."
+                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-brand-500 placeholder:text-slate-500"
                   />
                 </div>
               </div>
@@ -626,17 +790,31 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
                 <button
                   type="button"
                   onClick={() => setCurrentStep(2)}
-                  className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold flex items-center gap-1.5"
+                  className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold flex items-center gap-1.5 transition-all"
                 >
                   <ChevronLeft className="w-4 h-4" /> Kembali ke Kasus 2
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setCurrentStep(4)}
-                  className="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-md shadow-brand-600/30"
-                >
-                  Lanjut ke VLT & Refleksi <ChevronRight className="w-4 h-4" />
-                </button>
+
+                <div className="flex items-center gap-3">
+                  {!canProceedStep3 && (
+                    <span className="text-[11px] text-amber-400/90 hidden sm:inline-flex items-center gap-1">
+                      <AlertCircle className="w-3.5 h-3.5" /> Beri nama kedua himpunan, tarik panah relasi, pilih status, & tulis alasan
+                    </span>
+                  )}
+                  <button
+                    type="button"
+                    disabled={!canProceedStep3}
+                    onClick={() => setCurrentStep(4)}
+                    className={`px-5 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${
+                      canProceedStep3
+                        ? 'bg-brand-600 hover:bg-brand-500 text-white shadow-md shadow-brand-600/30 cursor-pointer'
+                        : 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700/50'
+                    }`}
+                  >
+                    <span>Lanjut ke VLT & Refleksi</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -669,14 +847,14 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
                       <button
                         type="button"
                         onClick={() => setVlt1('Fungsi')}
-                        className={`flex-1 py-1 rounded font-bold ${vlt1 === 'Fungsi' ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-400'}`}
+                        className={`flex-1 py-1 rounded font-bold transition-all ${vlt1 === 'Fungsi' ? 'bg-emerald-600 text-white shadow-sm' : 'bg-slate-800 text-slate-400 hover:text-slate-200'}`}
                       >
                         Fungsi
                       </button>
                       <button
                         type="button"
                         onClick={() => setVlt1('Bukan')}
-                        className={`flex-1 py-1 rounded font-bold ${vlt1 === 'Bukan' ? 'bg-rose-600 text-white' : 'bg-slate-800 text-slate-400'}`}
+                        className={`flex-1 py-1 rounded font-bold transition-all ${vlt1 === 'Bukan' ? 'bg-rose-600 text-white shadow-sm' : 'bg-slate-800 text-slate-400 hover:text-slate-200'}`}
                       >
                         Bukan
                       </button>
@@ -695,14 +873,14 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
                       <button
                         type="button"
                         onClick={() => setVlt2('Fungsi')}
-                        className={`flex-1 py-1 rounded font-bold ${vlt2 === 'Fungsi' ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-400'}`}
+                        className={`flex-1 py-1 rounded font-bold transition-all ${vlt2 === 'Fungsi' ? 'bg-emerald-600 text-white shadow-sm' : 'bg-slate-800 text-slate-400 hover:text-slate-200'}`}
                       >
                         Fungsi
                       </button>
                       <button
                         type="button"
                         onClick={() => setVlt2('Bukan')}
-                        className={`flex-1 py-1 rounded font-bold ${vlt2 === 'Bukan' ? 'bg-rose-600 text-white' : 'bg-slate-800 text-slate-400'}`}
+                        className={`flex-1 py-1 rounded font-bold transition-all ${vlt2 === 'Bukan' ? 'bg-rose-600 text-white shadow-sm' : 'bg-slate-800 text-slate-400 hover:text-slate-200'}`}
                       >
                         Bukan
                       </button>
@@ -721,14 +899,14 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
                       <button
                         type="button"
                         onClick={() => setVlt3('Fungsi')}
-                        className={`flex-1 py-1 rounded font-bold ${vlt3 === 'Fungsi' ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-400'}`}
+                        className={`flex-1 py-1 rounded font-bold transition-all ${vlt3 === 'Fungsi' ? 'bg-emerald-600 text-white shadow-sm' : 'bg-slate-800 text-slate-400 hover:text-slate-200'}`}
                       >
                         Fungsi
                       </button>
                       <button
                         type="button"
                         onClick={() => setVlt3('Bukan')}
-                        className={`flex-1 py-1 rounded font-bold ${vlt3 === 'Bukan' ? 'bg-rose-600 text-white' : 'bg-slate-800 text-slate-400'}`}
+                        className={`flex-1 py-1 rounded font-bold transition-all ${vlt3 === 'Bukan' ? 'bg-rose-600 text-white shadow-sm' : 'bg-slate-800 text-slate-400 hover:text-slate-200'}`}
                       >
                         Bukan
                       </button>
@@ -747,14 +925,14 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
                       <button
                         type="button"
                         onClick={() => setVlt4('Fungsi')}
-                        className={`flex-1 py-1 rounded font-bold ${vlt4 === 'Fungsi' ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-400'}`}
+                        className={`flex-1 py-1 rounded font-bold transition-all ${vlt4 === 'Fungsi' ? 'bg-emerald-600 text-white shadow-sm' : 'bg-slate-800 text-slate-400 hover:text-slate-200'}`}
                       >
                         Fungsi
                       </button>
                       <button
                         type="button"
                         onClick={() => setVlt4('Bukan')}
-                        className={`flex-1 py-1 rounded font-bold ${vlt4 === 'Bukan' ? 'bg-rose-600 text-white' : 'bg-slate-800 text-slate-400'}`}
+                        className={`flex-1 py-1 rounded font-bold transition-all ${vlt4 === 'Bukan' ? 'bg-rose-600 text-white shadow-sm' : 'bg-slate-800 text-slate-400 hover:text-slate-200'}`}
                       >
                         Bukan
                       </button>
@@ -779,8 +957,8 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
                       type="text"
                       value={goldenSingle}
                       onChange={e => setGoldenSingle(e.target.value)}
-                      placeholder="Jelaskan dengan bahasamu..."
-                      className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-brand-500"
+                      placeholder="Jelaskan artinya menurut pemahamanmu (apakah semua anggota himpunan asal wajib punya kawan?)..."
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-brand-500 placeholder:text-slate-500"
                     />
                   </div>
 
@@ -792,8 +970,8 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
                       type="text"
                       value={goldenAffair}
                       onChange={e => setGoldenAffair(e.target.value)}
-                      placeholder="Jelaskan dengan bahasamu..."
-                      className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-brand-500"
+                      placeholder="Jelaskan artinya menurut pemahamanmu (apakah anggota himpunan asal boleh memiliki lebih dari satu kawan?)..."
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-brand-500 placeholder:text-slate-500"
                     />
                   </div>
                 </div>
@@ -804,28 +982,40 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
                 <button
                   type="button"
                   onClick={() => setCurrentStep(3)}
-                  className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold flex items-center gap-1.5"
+                  className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold flex items-center gap-1.5 transition-all"
                 >
                   <ChevronLeft className="w-4 h-4" /> Kembali ke Kasus 3
                 </button>
-                <button
-                  type="button"
-                  disabled={isSubmitting}
-                  onClick={handleSubmitLkpd}
-                  className="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-emerald-600/30 transition-all"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      <span>Mengirim ke Server...</span>
-                    </>
-                  ) : (
-                    <>
-                      <span>Kirim Jawaban ke Guru</span>
-                      <Send className="w-4 h-4" />
-                    </>
+
+                <div className="flex items-center gap-3">
+                  {!canProceedStep4 && (
+                    <span className="text-[11px] text-amber-400/90 hidden sm:inline-flex items-center gap-1">
+                      <AlertCircle className="w-3.5 h-3.5" /> Jawab ke-4 kurva VLT & lengkapi kedua refleksi syarat fungsi
+                    </span>
                   )}
-                </button>
+                  <button
+                    type="button"
+                    disabled={!canProceedStep4 || isSubmitting}
+                    onClick={handleSubmitLkpd}
+                    className={`px-6 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 transition-all ${
+                      canProceedStep4 && !isSubmitting
+                        ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/30 cursor-pointer'
+                        : 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700/50'
+                    }`}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        <span>Mengirim ke Server...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Kirim Jawaban ke Guru</span>
+                        <Send className="w-4 h-4" />
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
 
               {submitError && (

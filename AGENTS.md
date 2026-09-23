@@ -68,6 +68,11 @@ Setiap kali ada perubahan, penambahan fitur, atau perbaikan kode:
 - **Standar Diagram Panah SVG & Anti-Clipping Filter**:
   - Seluruh elemen filter SVG pada garis/panah (`feDropShadow`, `feGaussianBlur`) wajib menetapkan `filterUnits="userSpaceOnUse"` dengan wilayah viewport penuh (misal `x="0" y="0" width="..." height="..."`), bukan default `objectBoundingBox`, guna mencegah pemotongan (*clipping*) garis horizontal sejajar ($y_1 = y_2$, geometri height 0) oleh browser WebKit/Blink.
   - Setiap jalur panah relasi wajib menerapkan kurva Bezier adaptif: memberikan lengkungan busur halus ke atas pada panah horizontal sejajar dan variasi offset titik kontrol awal ($\pm 6\text{ px}$) saat satu anggota domain memiliki multi-relasi agar panah memencar secara jelas dan estetis.
+- **Standar LKPD Digital Siswa Interaktif (`InteractiveArrowCanvas` & `LkpdDigitalModal`)**:
+  - Wadah diagram himpunan menggunakan **Stadium Rounded Rect (`rx="42"`, lebar `140px`)** agar lebar vertikal konsisten dan tidak menabrak pill item anggota di kutub atas/bawah.
+  - Alur pengerjaan wajib terkunci berurutan (*sequential progress gate*): Tab stepper di depan dilarang diklik maju (`disabled={step.id > currentStep}`), dan tombol "Lanjut" menjadi satu-satunya jalur melaju setelah syarat langkah terpenuhi.
+  - Input jawaban siswa wajib dimulai dalam kondisi kosong (*clean slate*) dengan placeholder abu-abu pemandu tanpa membocorkan jawaban langsung.
+  - Setiap kasus investigasi wajib menyertakan kartu narasi skenario cerita dunia nyata yang terstruktur sebelum kanvas diagram.
 - **Standar Tampilan 16:9 Proyektor (Zero-Scroll)**:
   - Kontainer aplikasi wajib `h-screen max-h-screen overflow-hidden`.
   - `SlideContainer` dibatasi tepat pada `h-[calc(100vh-3.5rem)]` dengan `overflow-hidden`.
