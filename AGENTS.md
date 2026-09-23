@@ -35,6 +35,7 @@ Setiap kali ada perubahan, penambahan fitur, atau perbaikan kode:
 2. **Minimalisir Teks di Layar (Ekstrem Minimalis Proyektor)**:
    - Website dirancang sebagai media visual proyektor kelas, bukan e-book bacaan mandiri.
    - Nol paragraf narasi di bawah judul, judul super ringkas (1–2 kata), kotak aktivitas kelas di layar dihapus, dan hasil pembuktian berupa status badge padat. Penjelasan narasi 100% disuarakan oleh guru di depan kelas.
+   - **Termasuk pada slide pembuka pertemuan & panel Target Belajar**: Dilarang mencantumkan paragraf deskripsi/penjelasan kurikulum. Format target belajar wajib berupa judul misi ringkas (2–3 kata) + 1 pill badge kata kunci / rumus KaTeX singkat tanpa paragraf narasi tambahan.
 3. **Didaktik "Tebak Dulu, Baru Buktikan" (Interactive Reveal)**:
    - Setiap slide wajib memiliki skenario tebakan untuk kelas sebelum tombol pembuktian/animasi diaktifkan.
    - Umpan balik visual jelas: Hijau/Emerald (Lolos/Fungsi Sah) vs Merah/Rose (Gagal/Bukan Fungsi).

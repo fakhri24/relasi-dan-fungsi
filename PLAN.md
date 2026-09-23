@@ -4,7 +4,16 @@ Dokumen perencanaan dan pelacakan progres pengembangan media pembelajaran intera
 
 ---
 
-## 📌 Status Terkini: v1.7.0 (Arsitektur 14 Slide Modular 4 Pertemuan, Pembuka "Relasi", dan Target Belajar di Setiap Sesi ✅)
+## 📌 Status Terkini: v1.7.1 (Pembersihan Ekstrem Minimalis Proyektor pada 4 Slide Pembuka Pertemuan ✅)
+- [x] **Pembersihan Total Teks Penjelasan pada 4 Slide Pembuka (`Slide1OpeningRelasi`, `Slide6OpeningDomain`, `Slide9OpeningPiecewise`, `Slide13OpeningProject`)**:
+  - Menghapus 100% paragraf narasi di bawah judul konsep utama dan di bawah header Target Belajar.
+  - Menghapus seluruh paragraf deskripsi kurikulum yang panjang pada setiap kartu misi target belajar.
+  - Mengubah kartu target menjadi format **Ultra-Minimalis Badges/Chips**: Ikon + Judul Ringkas (2-3 kata) + 1 Badge Pill Kata Kunci / Formula KaTeX.
+  - Mempersingkat teks tombol aksi investigasi antarslide menjadi ringkas dan padat.
+  - Mempertahankan tata letak Split Screen 50:50 yang seimbang dan 100% Zero-Scroll.
+- [x] **Penguatan Aturan di `AGENTS.md`**: Menambahkan klausul eksplisit bahwa slide pembuka dan panel Target Belajar wajib tunduk pada aturan minimalis tanpa narasi kurikulum.
+
+## 📌 Arsip Status v1.7.0 (Arsitektur 14 Slide Modular 4 Pertemuan, Pembuka "Relasi", dan Target Belajar di Setiap Sesi ✅)
 - [x] **Pemisahan Slide Tematik & Penambahan Slide Pembuka per Pertemuan (Total 14 Slide)**:
   - Mengembangkan sistem slide pembuka (*Session Opening Deck*) dengan tata letak **Split Screen 50:50** ramah proyektor 16:9 Zero-Scroll.
   - **Pertemuan 1 (Slide 1–5 · Fondasi Relasi & Fungsi)**:

@@ -152,9 +152,6 @@ export const Slide1OpeningRelasi: React.FC<Slide1OpeningRelasiProps> = ({ onNext
             <h1 className="text-4xl md:text-5xl xl:text-6xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-brand-300 to-cyan-300 mt-1">
               RELASI
             </h1>
-            <p className="text-xs md:text-sm text-slate-300 mt-1">
-              Hubungan / pemasangan sembarang antara dua himpunan di kehidupan nyata.
-            </p>
           </div>
 
           {/* Preset Buttons */}
@@ -332,7 +329,7 @@ export const Slide1OpeningRelasi: React.FC<Slide1OpeningRelasiProps> = ({ onNext
                 onClick={onNext}
                 className="w-full py-2 px-4 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white text-xs md:text-sm font-bold flex items-center justify-center gap-2 shadow-lg shadow-brand-600/30 transition-all border border-brand-400/40 group"
               >
-                <span>Kapan Relasi Menjadi <strong>FUNGSI</strong>? Investigasi Sekarang</span>
+                <span>Investigasi: Relasi → <strong>Fungsi</strong></span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             )}
@@ -348,92 +345,71 @@ export const Slide1OpeningRelasi: React.FC<Slide1OpeningRelasiProps> = ({ onNext
                 <div className="w-8 h-8 rounded-xl bg-brand-500/20 border border-brand-500/40 flex items-center justify-center text-brand-300">
                   <Target className="w-4 h-4" />
                 </div>
-                <div>
-                  <h2 className="text-base md:text-lg font-extrabold text-white">
-                    Target Belajar Hari Ini
-                  </h2>
-                  <span className="text-[11px] text-slate-400">
-                    Capaian kompetensi yang dituntaskan dalam pertemuan ini
-                  </span>
-                </div>
+                <h2 className="text-base md:text-lg font-extrabold text-white">
+                  Target Belajar
+                </h2>
               </div>
               <span className="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 text-xs font-mono font-bold text-brand-400">
-                3 Misi Inti
+                3 Misi
               </span>
             </div>
           </div>
 
-          {/* 3 Kartu Target Belajar Kompak & Kontras Tinggi */}
-          <div className="space-y-2.5 my-auto py-2">
+          {/* 3 Kartu Target Belajar Ultra-Minimalis */}
+          <div className="space-y-3 my-auto py-2">
             {/* Target 1 */}
-            <div className="p-3 rounded-xl bg-slate-950/80 border border-indigo-500/30 hover:border-indigo-500/50 transition-all flex items-start gap-3">
-              <div className="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 flex items-center justify-center shrink-0 mt-0.5">
-                <GitFork className="w-4 h-4" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-xs md:text-sm font-bold text-white">
-                    1. Kenali Hubungan Bebas (Relasi)
-                  </h3>
-                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300">
-                    Fondasi
-                  </span>
+            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-indigo-500/30 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 flex items-center justify-center shrink-0">
+                  <GitFork className="w-4 h-4" />
                 </div>
-                <p className="text-[11px] md:text-xs text-slate-300 mt-0.5 leading-relaxed">
-                  Menemukan relasi sebagai hubungan sembarang dua himpunan (hobi, pesanan kantin) tanpa larangan mendua atau jomblo.
-                </p>
+                <h3 className="text-sm md:text-base font-bold text-white">
+                  1. Hubungan Bebas
+                </h3>
               </div>
+              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 shrink-0">
+                Bebas Aturan
+              </span>
             </div>
 
             {/* Target 2 */}
-            <div className="p-3 rounded-xl bg-slate-950/80 border border-emerald-500/30 hover:border-emerald-500/50 transition-all flex items-start gap-3">
-              <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center justify-center shrink-0 mt-0.5">
-                <CheckCircle2 className="w-4 h-4" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-xs md:text-sm font-bold text-white">
-                    2. Uji Kepastian Mutlak (Fungsi)
-                  </h3>
-                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300">
-                    Syarat Emas
-                  </span>
+            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-emerald-500/30 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center justify-center shrink-0">
+                  <CheckCircle2 className="w-4 h-4" />
                 </div>
-                <p className="text-[11px] md:text-xs text-slate-300 mt-0.5 leading-relaxed">
-                  Menyelidiki analogi kasir & diagram panah: anggota daerah asal <strong>wajib berpasangan</strong> dan <strong>tidak boleh mendua</strong>.
-                </p>
+                <h3 className="text-sm md:text-base font-bold text-white">
+                  2. Syarat Fungsi
+                </h3>
               </div>
+              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shrink-0">
+                Wajib 1 Pasangan
+              </span>
             </div>
 
             {/* Target 3 */}
-            <div className="p-3 rounded-xl bg-slate-950/80 border border-cyan-500/30 hover:border-cyan-500/50 transition-all flex items-start gap-3">
-              <div className="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 flex items-center justify-center shrink-0 mt-0.5">
-                <ScanLine className="w-4 h-4" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-xs md:text-sm font-bold text-white">
-                    3. Deteksi Grafik (Vertical Line Test)
-                  </h3>
-                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300">
-                    Uji Garis
-                  </span>
+            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-cyan-500/30 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 flex items-center justify-center shrink-0">
+                  <ScanLine className="w-4 h-4" />
                 </div>
-                <p className="text-[11px] md:text-xs text-slate-300 mt-0.5 leading-relaxed">
-                  Memvalidasi grafik fungsi Kartesius secara instan menggunakan scanner garis vertikal (maksimal memotong 1 titik).
-                </p>
+                <h3 className="text-sm md:text-base font-bold text-white">
+                  3. Uji Garis Vertikal
+                </h3>
               </div>
+              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 shrink-0">
+                Maks. 1 Titik Potong
+              </span>
             </div>
           </div>
 
           {/* Footer Card: Metode & Alur Belajar */}
           <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
-            <div className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-400" />
-              <span className="text-[11px]">Prinsip: <strong>Tebak Dulu, Baru Buktikan</strong></span>
-            </div>
-            <span className="text-[11px] font-mono text-slate-400">
-              Slide 1 s.d. 5 · Pertemuan 1
+            <span className="text-[11px] font-medium text-slate-400">
+              Prinsip: <strong className="text-emerald-400">Tebak Dulu, Baru Buktikan</strong>
+            </span>
+            <span className="text-[11px] font-mono text-slate-500">
+              Slide 1–5
             </span>
           </div>
         </div>

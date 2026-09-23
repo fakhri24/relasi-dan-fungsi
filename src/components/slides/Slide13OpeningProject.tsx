@@ -100,9 +100,6 @@ export const Slide13OpeningProject: React.FC<Slide13OpeningProjectProps> = ({ on
             <h1 className="text-3xl md:text-4xl xl:text-5xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-fuchsia-300 to-indigo-300 mt-1">
               PROYEK NYATA
             </h1>
-            <p className="text-xs md:text-sm text-slate-300 mt-1">
-              Menerapkan fungsi piecewise untuk memodelkan sistem tarif dan regulasi masyarakat nyata.
-            </p>
           </div>
 
           {/* Quick Case Chips */}
@@ -155,7 +152,7 @@ export const Slide13OpeningProject: React.FC<Slide13OpeningProjectProps> = ({ on
                 onClick={onNext}
                 className="w-full py-2 px-4 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs md:text-sm font-bold flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 transition-all border border-purple-400/40 group"
               >
-                <span>Buka Simulator Proyek & Rubrik Penilaian</span>
+                <span>Buka Katalog Proyek & Simulator Tarif</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             )}
@@ -171,92 +168,71 @@ export const Slide13OpeningProject: React.FC<Slide13OpeningProjectProps> = ({ on
                 <div className="w-8 h-8 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-300">
                   <Target className="w-4 h-4" />
                 </div>
-                <div>
-                  <h2 className="text-base md:text-lg font-extrabold text-white">
-                    Target Belajar Hari Ini
-                  </h2>
-                  <span className="text-[11px] text-slate-400">
-                    Capaian proyek otentik Pertemuan 4 (Penyusunan Model & Asesmen)
-                  </span>
-                </div>
+                <h2 className="text-base md:text-lg font-extrabold text-white">
+                  Target Belajar
+                </h2>
               </div>
               <span className="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 text-xs font-mono font-bold text-purple-400">
-                3 Misi Inti
+                3 Misi
               </span>
             </div>
           </div>
 
-          {/* 3 Kartu Target Belajar Kompak */}
-          <div className="space-y-2.5 my-auto py-2">
+          {/* 3 Kartu Target Belajar Ultra-Minimalis */}
+          <div className="space-y-3 my-auto py-2">
             {/* Target 1 */}
-            <div className="p-3 rounded-xl bg-slate-950/80 border border-purple-500/30 hover:border-purple-500/50 transition-all flex items-start gap-3">
-              <div className="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/40 flex items-center justify-center shrink-0 mt-0.5">
-                <FileSpreadsheet className="w-4 h-4" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-xs md:text-sm font-bold text-white">
-                    1. Analisis Kasus & Ekstraksi Data
-                  </h3>
-                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300">
-                    Eksplorasi
-                  </span>
+            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-purple-500/30 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/40 flex items-center justify-center shrink-0">
+                  <FileSpreadsheet className="w-4 h-4" />
                 </div>
-                <p className="text-[11px] md:text-xs text-slate-300 mt-0.5 leading-relaxed">
-                  Membedah kebijakan tarif dari salah satu skenario nyata (Parkir, KRL, Listrik, Bagasi) menjadi variabel input dan batas interval domain.
-                </p>
+                <h3 className="text-sm md:text-base font-bold text-white">
+                  1. Analisis Kasus
+                </h3>
               </div>
+              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 shrink-0">
+                Ekstraksi Syarat
+              </span>
             </div>
 
             {/* Target 2 */}
-            <div className="p-3 rounded-xl bg-slate-950/80 border border-fuchsia-500/30 hover:border-fuchsia-500/50 transition-all flex items-start gap-3">
-              <div className="w-8 h-8 rounded-lg bg-fuchsia-500/20 text-fuchsia-300 border border-fuchsia-500/40 flex items-center justify-center shrink-0 mt-0.5">
-                <Calculator className="w-4 h-4" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-xs md:text-sm font-bold text-white">
-                    2. Merumuskan Persamaan Sepenggal
-                  </h3>
-                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-fuchsia-500/20 text-fuchsia-300">
-                    Formulasi
-                  </span>
+            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-fuchsia-500/30 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-fuchsia-500/20 text-fuchsia-300 border border-fuchsia-500/40 flex items-center justify-center shrink-0">
+                  <Calculator className="w-4 h-4" />
                 </div>
-                <p className="text-[11px] md:text-xs text-slate-300 mt-0.5 leading-relaxed">
-                  Menyusun persamaan matematika formal $f(x)$ dengan notasi kurung kurawal lengkap dan menentukan titik batas yang konsisten.
-                </p>
+                <h3 className="text-sm md:text-base font-bold text-white">
+                  2. Rancang Piecewise
+                </h3>
               </div>
+              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-fuchsia-500/20 text-fuchsia-300 border border-fuchsia-500/30 shrink-0">
+                Rumus & Interval
+              </span>
             </div>
 
             {/* Target 3 */}
-            <div className="p-3 rounded-xl bg-slate-950/80 border border-indigo-500/30 hover:border-indigo-500/50 transition-all flex items-start gap-3">
-              <div className="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 flex items-center justify-center shrink-0 mt-0.5">
-                <Award className="w-4 h-4" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-xs md:text-sm font-bold text-white">
-                    3. Simulasi & Pengisian Laporan Proyek
-                  </h3>
-                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300">
-                    Asesmen
-                  </span>
+            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-indigo-500/30 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 flex items-center justify-center shrink-0">
+                  <Award className="w-4 h-4" />
                 </div>
-                <p className="text-[11px] md:text-xs text-slate-300 mt-0.5 leading-relaxed">
-                  Memvalidasi perhitungan tarif pada simulator dan mendokumentasikan hasil analisis ke Lembar Kerja Siswa (LKPD 4 A4 siap cetak).
-                </p>
+                <h3 className="text-sm md:text-base font-bold text-white">
+                  3. Lembar Kerja Proyek
+                </h3>
               </div>
+              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 shrink-0">
+                Katalog & LKPD 4
+              </span>
             </div>
           </div>
 
           {/* Footer Card: Metode & Alur Belajar */}
           <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
-            <div className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-purple-400" />
-              <span className="text-[11px]">Luaran: <strong>Laporan Proyek A4 & Presentasi Kelompok</strong></span>
-            </div>
-            <span className="text-[11px] font-mono text-slate-400">
-              Slide 13 & 14 · Pertemuan 4
+            <span className="text-[11px] font-medium text-slate-400">
+              Luaran: <strong className="text-purple-400">Laporan Proyek A4 & Presentasi</strong>
+            </span>
+            <span className="text-[11px] font-mono text-slate-500">
+              Slide 13–14
             </span>
           </div>
         </div>

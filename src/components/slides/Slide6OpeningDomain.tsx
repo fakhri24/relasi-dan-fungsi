@@ -105,9 +105,6 @@ export const Slide6OpeningDomain: React.FC<Slide6OpeningDomainProps> = ({ onNext
             <h1 className="text-3xl md:text-4xl xl:text-5xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-teal-300 to-cyan-300 mt-1">
               BATASAN NYATA
             </h1>
-            <p className="text-xs md:text-sm text-slate-300 mt-1">
-              Di matematika murni nilai x bebas tak hingga, namun di alam nyata selalu ada batas fisik logis.
-            </p>
           </div>
 
           {/* Preset Buttons Studi Kasus */}
@@ -186,7 +183,7 @@ export const Slide6OpeningDomain: React.FC<Slide6OpeningDomainProps> = ({ onNext
                 onClick={onNext}
                 className="w-full py-2 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs md:text-sm font-bold flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 transition-all border border-emerald-400/40 group"
               >
-                <span>Mulai Eksplorasi Domain & Range Fisik</span>
+                <span>Mulai Eksplorasi: Batasan Nyata</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             )}
@@ -202,92 +199,71 @@ export const Slide6OpeningDomain: React.FC<Slide6OpeningDomainProps> = ({ onNext
                 <div className="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-300">
                   <Target className="w-4 h-4" />
                 </div>
-                <div>
-                  <h2 className="text-base md:text-lg font-extrabold text-white">
-                    Target Belajar Hari Ini
-                  </h2>
-                  <span className="text-[11px] text-slate-400">
-                    Capaian kompetensi Pertemuan 2 (Batasan & Model Linear)
-                  </span>
-                </div>
+                <h2 className="text-base md:text-lg font-extrabold text-white">
+                  Target Belajar
+                </h2>
               </div>
               <span className="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 text-xs font-mono font-bold text-emerald-400">
-                3 Misi Inti
+                3 Misi
               </span>
             </div>
           </div>
 
-          {/* 3 Kartu Target Belajar Kompak */}
-          <div className="space-y-2.5 my-auto py-2">
+          {/* 3 Kartu Target Belajar Ultra-Minimalis */}
+          <div className="space-y-3 my-auto py-2">
             {/* Target 1 */}
-            <div className="p-3 rounded-xl bg-slate-950/80 border border-emerald-500/30 hover:border-emerald-500/50 transition-all flex items-start gap-3">
-              <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center justify-center shrink-0 mt-0.5">
-                <MapPin className="w-4 h-4" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-xs md:text-sm font-bold text-white">
-                    1. Domain & Range di Dunia Nyata
-                  </h3>
-                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300">
-                    Batasan Fisik
-                  </span>
+            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-emerald-500/30 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center justify-center shrink-0">
+                  <MapPin className="w-4 h-4" />
                 </div>
-                <p className="text-[11px] md:text-xs text-slate-300 mt-0.5 leading-relaxed">
-                  Menentukan batas input (<MathFormula math="x" />) dan output (<MathFormula math="y" />) berdasarkan hukum alam dan logika fenomena fisik, bukan sekadar simbol formal bilangan riil <MathFormula math="\mathbb{R}" />.
-                </p>
+                <h3 className="text-sm md:text-base font-bold text-white">
+                  1. Domain & Range Fisik
+                </h3>
               </div>
+              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shrink-0">
+                Batasan Nyata
+              </span>
             </div>
 
             {/* Target 2 */}
-            <div className="p-3 rounded-xl bg-slate-950/80 border border-teal-500/30 hover:border-teal-500/50 transition-all flex items-start gap-3">
-              <div className="w-8 h-8 rounded-lg bg-teal-500/20 text-teal-300 border border-teal-500/40 flex items-center justify-center shrink-0 mt-0.5">
-                <Users className="w-4 h-4" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-xs md:text-sm font-bold text-white">
-                    2. Variabel Diskrit vs Kontinu
-                  </h3>
-                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-teal-500/20 text-teal-300">
-                    Sifat Nilai
-                  </span>
+            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-teal-500/30 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-teal-500/20 text-teal-300 border border-teal-500/40 flex items-center justify-center shrink-0">
+                  <Users className="w-4 h-4" />
                 </div>
-                <p className="text-[11px] md:text-xs text-slate-300 mt-0.5 leading-relaxed">
-                  Membedakan variabel bilangan cacah lepas (banyak orang, karcis) dengan besaran kontinu yang terukur halus (jarak km, waktu, volume).
-                </p>
+                <h3 className="text-sm md:text-base font-bold text-white">
+                  2. Diskrit vs Kontinu
+                </h3>
               </div>
+              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/30 shrink-0">
+                Cacah vs Riil
+              </span>
             </div>
 
             {/* Target 3 */}
-            <div className="p-3 rounded-xl bg-slate-950/80 border border-cyan-500/30 hover:border-cyan-500/50 transition-all flex items-start gap-3">
-              <div className="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 flex items-center justify-center shrink-0 mt-0.5">
-                <TrendingUp className="w-4 h-4" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-xs md:text-sm font-bold text-white">
-                    3. Model Linear $f(x) = ax + b$
-                  </h3>
-                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300">
-                    Gradien & Konstanta
-                  </span>
+            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-cyan-500/30 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 flex items-center justify-center shrink-0">
+                  <TrendingUp className="w-4 h-4" />
                 </div>
-                <p className="text-[11px] md:text-xs text-slate-300 mt-0.5 leading-relaxed">
-                  Menginterpretasikan nilai kemiringan tarif ($a$) sebagai laju perubahan dan konstanta ($b$) sebagai biaya dasar atau tarif buka pintu.
-                </p>
+                <h3 className="text-sm md:text-base font-bold text-white">
+                  3. Model Linear
+                </h3>
               </div>
+              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 shrink-0">
+                f(x) = ax + b
+              </span>
             </div>
           </div>
 
           {/* Footer Card: Metode & Alur Belajar */}
           <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
-            <div className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-400" />
-              <span className="text-[11px]">Metode: <strong>Simulasi Batasan & Grafik Interaktif</strong></span>
-            </div>
-            <span className="text-[11px] font-mono text-slate-400">
-              Slide 6 s.d. 8 · Pertemuan 2
+            <span className="text-[11px] font-medium text-slate-400">
+              Media: <strong className="text-emerald-400">Simulasi Batasan & Grafik</strong>
+            </span>
+            <span className="text-[11px] font-mono text-slate-500">
+              Slide 6–8
             </span>
           </div>
         </div>

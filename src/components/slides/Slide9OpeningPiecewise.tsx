@@ -55,9 +55,6 @@ export const Slide9OpeningPiecewise: React.FC<Slide9OpeningPiecewiseProps> = ({ 
             <h1 className="text-4xl md:text-5xl xl:text-6xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-orange-300 to-rose-300 mt-1">
               PIECEWISE
             </h1>
-            <p className="text-xs md:text-sm text-slate-300 mt-1">
-              Fungsi sepenggal: membagi domain menjadi beberapa interval dengan aturan rumus yang berbeda.
-            </p>
           </div>
 
           {/* Interactive SVG: Visual Kurung Kurawal & Titik ● vs ○ */}
@@ -166,7 +163,7 @@ export const Slide9OpeningPiecewise: React.FC<Slide9OpeningPiecewiseProps> = ({ 
                 onClick={onNext}
                 className="w-full py-2 px-4 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white text-xs md:text-sm font-bold flex items-center justify-center gap-2 shadow-lg shadow-amber-600/30 transition-all border border-amber-400/40 group"
               >
-                <span>Mengapa 1 Garis Lurus Tidak Cukup? Uji Dilema Tarif</span>
+                <span>Uji Kasus: Mengapa 1 Garis Tidak Cukup?</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             )}
@@ -182,92 +179,71 @@ export const Slide9OpeningPiecewise: React.FC<Slide9OpeningPiecewiseProps> = ({ 
                 <div className="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-300">
                   <Target className="w-4 h-4" />
                 </div>
-                <div>
-                  <h2 className="text-base md:text-lg font-extrabold text-white">
-                    Target Belajar Hari Ini
-                  </h2>
-                  <span className="text-[11px] text-slate-400">
-                    Capaian kompetensi Pertemuan 3 (Fungsi Sepenggal / Piecewise)
-                  </span>
-                </div>
+                <h2 className="text-base md:text-lg font-extrabold text-white">
+                  Target Belajar
+                </h2>
               </div>
               <span className="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 text-xs font-mono font-bold text-amber-400">
-                3 Misi Inti
+                3 Misi
               </span>
             </div>
           </div>
 
-          {/* 3 Kartu Target Belajar Kompak */}
-          <div className="space-y-2.5 my-auto py-2">
+          {/* 3 Kartu Target Belajar Ultra-Minimalis */}
+          <div className="space-y-3 my-auto py-2">
             {/* Target 1 */}
-            <div className="p-3 rounded-xl bg-slate-950/80 border border-amber-500/30 hover:border-amber-500/50 transition-all flex items-start gap-3">
-              <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center justify-center shrink-0 mt-0.5">
-                <AlertTriangle className="w-4 h-4" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-xs md:text-sm font-bold text-white">
-                    1. Mengapa Butuh Aturan Bercabang?
-                  </h3>
-                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">
-                    Dilema Garis
-                  </span>
+            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-amber-500/30 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center justify-center shrink-0">
+                  <AlertTriangle className="w-4 h-4" />
                 </div>
-                <p className="text-[11px] md:text-xs text-slate-300 mt-0.5 leading-relaxed">
-                  Menemukan kelemahan model 1 garis lurus tunggal yang tidak bisa memodelkan tarif parkir batas atas, tarif progresif listrik, atau promo belanja.
-                </p>
+                <h3 className="text-sm md:text-base font-bold text-white">
+                  1. Kebutuhan Cabang
+                </h3>
               </div>
+              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 shrink-0">
+                Dilema 1 Garis
+              </span>
             </div>
 
             {/* Target 2 */}
-            <div className="p-3 rounded-xl bg-slate-950/80 border border-orange-500/30 hover:border-orange-500/50 transition-all flex items-start gap-3">
-              <div className="w-8 h-8 rounded-lg bg-orange-500/20 text-orange-300 border border-orange-500/40 flex items-center justify-center shrink-0 mt-0.5">
-                <Split className="w-4 h-4" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-xs md:text-sm font-bold text-white">
-                    2. Menulis Notasi Kurung Kurawal
-                  </h3>
-                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-orange-500/20 text-orange-300">
-                    Notasi Formal
-                  </span>
+            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-orange-500/30 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-orange-500/20 text-orange-300 border border-orange-500/40 flex items-center justify-center shrink-0">
+                  <Split className="w-4 h-4" />
                 </div>
-                <p className="text-[11px] md:text-xs text-slate-300 mt-0.5 leading-relaxed">
-                  Menyusun persamaan piecewise secara formal dengan format kurung kurawal {'\\{'}, memisahkan rumus fungsi di kiri dan syarat interval domain di kanan.
-                </p>
+                <h3 className="text-sm md:text-base font-bold text-white">
+                  2. Notasi Kurawal
+                </h3>
               </div>
+              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-orange-500/20 text-orange-300 border border-orange-500/30 shrink-0">
+                f(x) = &#123; ... &#125;
+              </span>
             </div>
 
             {/* Target 3 */}
-            <div className="p-3 rounded-xl bg-slate-950/80 border border-rose-500/30 hover:border-rose-500/50 transition-all flex items-start gap-3">
-              <div className="w-8 h-8 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/40 flex items-center justify-center shrink-0 mt-0.5">
-                <CheckCircle2 className="w-4 h-4" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-xs md:text-sm font-bold text-white">
-                    3. Menjaga Titik Sambungan (● vs ○)
-                  </h3>
-                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300">
-                    Batas Domain
-                  </span>
+            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-rose-500/30 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/40 flex items-center justify-center shrink-0">
+                  <CheckCircle2 className="w-4 h-4" />
                 </div>
-                <p className="text-[11px] md:text-xs text-slate-300 mt-0.5 leading-relaxed">
-                  Membedakan titik terisi (● untuk &le; atau &ge;) dan titik kosong (○ untuk &lt; atau &gt;) agar tidak terjadi tabrakan output pada batas interval.
-                </p>
+                <h3 className="text-sm md:text-base font-bold text-white">
+                  3. Titik Sambungan
+                </h3>
               </div>
+              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 shrink-0">
+                Solid ● vs Lubang ○
+              </span>
             </div>
           </div>
 
           {/* Footer Card: Metode & Alur Belajar */}
           <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
-            <div className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-amber-400" />
-              <span className="text-[11px]">Media: <strong>Sandbox Perancang Fungsi Bercabang</strong></span>
-            </div>
-            <span className="text-[11px] font-mono text-slate-400">
-              Slide 9 s.d. 12 · Pertemuan 3
+            <span className="text-[11px] font-medium text-slate-400">
+              Media: <strong className="text-amber-400">Sandbox Perancang Fungsi</strong>
+            </span>
+            <span className="text-[11px] font-mono text-slate-500">
+              Slide 9–12
             </span>
           </div>
         </div>
