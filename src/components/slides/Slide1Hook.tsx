@@ -130,7 +130,7 @@ export const Slide1Hook: React.FC = () => {
       <div className="flex items-center justify-between pb-1 border-b border-slate-800/60">
         <div className="space-y-0.5">
           <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-xs font-mono font-bold tracking-wider uppercase">
-            <Sparkles className="w-3.5 h-3.5" /> 01 · PEMANTIK
+            <Sparkles className="w-3.5 h-3.5" /> 02 · PEMANTIK
           </div>
           <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
             Mesin Kasir

@@ -3,6 +3,9 @@ export interface SlideItem {
   title: string;
   subtitle: string;
   tag: string;
+  meetingNumber: number;
+  meetingTitle: string;
+  meetingJP: string;
 }
 
 export interface ProjectTopic {

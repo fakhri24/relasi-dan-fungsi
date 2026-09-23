@@ -113,7 +113,7 @@ export const Slide4VerticalLineTest: React.FC = () => {
       {/* Header */}
       <div className="space-y-1">
         <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-xs font-mono font-bold tracking-wider uppercase">
-          <Scan className="w-3.5 h-3.5" /> 04 · UJI GRAFIK
+          <Scan className="w-3.5 h-3.5" /> 05 · UJI GRAFIK
         </div>
         <h1 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
           Uji Garis Vertikal

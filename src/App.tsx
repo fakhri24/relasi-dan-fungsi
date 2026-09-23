@@ -4,29 +4,44 @@ import { Navbar } from './components/Navbar';
 import { SlideContainer } from './components/SlideContainer';
 import { WorksheetPrint } from './components/WorksheetPrint';
 
-// 10 Slides
+// 14 Slides Across 4 Meetings
+import { Slide1OpeningRelasi } from './components/slides/Slide1OpeningRelasi';
 import { Slide1Hook } from './components/slides/Slide1Hook';
 import { Slide2Machine } from './components/slides/Slide2Machine';
 import { Slide3ArrowDiagram } from './components/slides/Slide3ArrowDiagram';
 import { Slide4VerticalLineTest } from './components/slides/Slide4VerticalLineTest';
+import { Slide6OpeningDomain } from './components/slides/Slide6OpeningDomain';
 import { Slide5DomainRange } from './components/slides/Slide5DomainRange';
 import { Slide6LinearGraph } from './components/slides/Slide6LinearGraph';
+import { Slide9OpeningPiecewise } from './components/slides/Slide9OpeningPiecewise';
 import { Slide7WhyPiecewise } from './components/slides/Slide7WhyPiecewise';
 import { Slide8PiecewiseIntro } from './components/slides/Slide8PiecewiseIntro';
 import { Slide9SandboxBuilder } from './components/slides/Slide9SandboxBuilder';
+import { Slide13OpeningProject } from './components/slides/Slide13OpeningProject';
 import { Slide10ProjectHub } from './components/slides/Slide10ProjectHub';
 
 const SLIDES: SlideItem[] = [
-  { id: 1, title: 'Mesin Kasir', subtitle: 'Kasir Rusak', tag: '01 · PEMANTIK' },
-  { id: 2, title: 'Mesin Fungsi', subtitle: 'Input & Output', tag: '02 · MESIN' },
-  { id: 3, title: 'Relasi & Fungsi', subtitle: 'Diagram Panah', tag: '03 · RELASI' },
-  { id: 4, title: 'Uji Garis Vertikal', subtitle: 'Scanner Garis', tag: '04 · UJI GRAFIK' },
-  { id: 5, title: 'Domain & Range', subtitle: 'Batasan Nyata', tag: '05 · DOMAIN' },
-  { id: 6, title: 'Model Linier', subtitle: 'f(x) = ax + b', tag: '06 · MODEL' },
-  { id: 7, title: 'Batasan 1 Garis', subtitle: 'Dilema Tarif', tag: '07 · MASALAH' },
-  { id: 8, title: 'Fungsi Bercabang', subtitle: 'Piecewise & Titik', tag: '08 · PIECEWISE' },
-  { id: 9, title: 'Rancang Fungsi', subtitle: 'Sandbox Builder', tag: '09 · SANDBOX' },
-  { id: 10, title: 'Katalog Proyek', subtitle: 'Kasus & Rubrik', tag: '10 · PROYEK' },
+  // Pertemuan 1 (Slide 1–5)
+  { id: 1, meetingNumber: 1, meetingTitle: 'Fondasi Relasi & Fungsi', meetingJP: '2 JP', title: 'Relasi & Target', subtitle: 'Hubungan Bebas', tag: '01 · PEMBUKA' },
+  { id: 2, meetingNumber: 1, meetingTitle: 'Fondasi Relasi & Fungsi', meetingJP: '2 JP', title: 'Mesin Kasir', subtitle: 'Kasir Rusak', tag: '02 · PEMANTIK' },
+  { id: 3, meetingNumber: 1, meetingTitle: 'Fondasi Relasi & Fungsi', meetingJP: '2 JP', title: 'Mesin Fungsi', subtitle: 'Input & Output', tag: '03 · MESIN' },
+  { id: 4, meetingNumber: 1, meetingTitle: 'Fondasi Relasi & Fungsi', meetingJP: '2 JP', title: 'Relasi & Fungsi', subtitle: 'Diagram Panah', tag: '04 · DIAGRAM' },
+  { id: 5, meetingNumber: 1, meetingTitle: 'Fondasi Relasi & Fungsi', meetingJP: '2 JP', title: 'Uji Garis Vertikal', subtitle: 'Scanner Garis', tag: '05 · UJI GRAFIK' },
+
+  // Pertemuan 2 (Slide 6–8)
+  { id: 6, meetingNumber: 2, meetingTitle: 'Batasan Nyata & Linear', meetingJP: '2 JP', title: 'Batasan Nyata', subtitle: 'Target Belajar P2', tag: '06 · PEMBUKA' },
+  { id: 7, meetingNumber: 2, meetingTitle: 'Batasan Nyata & Linear', meetingJP: '2 JP', title: 'Domain & Range', subtitle: 'Batasan Nyata', tag: '07 · DOMAIN' },
+  { id: 8, meetingNumber: 2, meetingTitle: 'Batasan Nyata & Linear', meetingJP: '2 JP', title: 'Model Linier', subtitle: 'f(x) = ax + b', tag: '08 · MODEL' },
+
+  // Pertemuan 3 (Slide 9–12)
+  { id: 9, meetingNumber: 3, meetingTitle: 'Fungsi Sepenggal (Piecewise)', meetingJP: '2 JP', title: 'Piecewise', subtitle: 'Target Belajar P3', tag: '09 · PEMBUKA' },
+  { id: 10, meetingNumber: 3, meetingTitle: 'Fungsi Sepenggal (Piecewise)', meetingJP: '2 JP', title: 'Batasan 1 Garis', subtitle: 'Dilema Tarif', tag: '10 · MASALAH' },
+  { id: 11, meetingNumber: 3, meetingTitle: 'Fungsi Sepenggal (Piecewise)', meetingJP: '2 JP', title: 'Fungsi Bercabang', subtitle: 'Piecewise & Titik', tag: '11 · PIECEWISE' },
+  { id: 12, meetingNumber: 3, meetingTitle: 'Fungsi Sepenggal (Piecewise)', meetingJP: '2 JP', title: 'Rancang Fungsi', subtitle: 'Sandbox Builder', tag: '12 · SANDBOX' },
+
+  // Pertemuan 4 (Slide 13–14)
+  { id: 13, meetingNumber: 4, meetingTitle: 'Proyek Nyata & Asesmen', meetingJP: '2 JP', title: 'Proyek Nyata', subtitle: 'Target Belajar P4', tag: '13 · PEMBUKA' },
+  { id: 14, meetingNumber: 4, meetingTitle: 'Proyek Nyata & Asesmen', meetingJP: '2 JP', title: 'Katalog Proyek', subtitle: 'Kasus & Rubrik', tag: '14 · PROYEK' },
 ];
 
 export const App: React.FC = () => {
@@ -72,27 +87,35 @@ export const App: React.FC = () => {
   const renderSlideContent = () => {
     switch (currentSlideIndex) {
       case 0:
-        return <Slide1Hook />;
+        return <Slide1OpeningRelasi onNext={handleNext} />;
       case 1:
-        return <Slide2Machine />;
+        return <Slide1Hook />;
       case 2:
-        return <Slide3ArrowDiagram />;
+        return <Slide2Machine />;
       case 3:
-        return <Slide4VerticalLineTest />;
+        return <Slide3ArrowDiagram />;
       case 4:
-        return <Slide5DomainRange />;
+        return <Slide4VerticalLineTest />;
       case 5:
-        return <Slide6LinearGraph />;
+        return <Slide6OpeningDomain onNext={handleNext} />;
       case 6:
-        return <Slide7WhyPiecewise />;
+        return <Slide5DomainRange />;
       case 7:
-        return <Slide8PiecewiseIntro />;
+        return <Slide6LinearGraph />;
       case 8:
-        return <Slide9SandboxBuilder />;
+        return <Slide9OpeningPiecewise onNext={handleNext} />;
       case 9:
+        return <Slide7WhyPiecewise />;
+      case 10:
+        return <Slide8PiecewiseIntro />;
+      case 11:
+        return <Slide9SandboxBuilder />;
+      case 12:
+        return <Slide13OpeningProject onNext={handleNext} />;
+      case 13:
         return <Slide10ProjectHub />;
       default:
-        return <Slide1Hook />;
+        return <Slide1OpeningRelasi onNext={handleNext} />;
     }
   };
 

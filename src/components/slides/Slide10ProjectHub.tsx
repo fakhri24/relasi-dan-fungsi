@@ -126,7 +126,7 @@ export const Slide10ProjectHub: React.FC = () => {
       {/* Header */}
       <div className="space-y-1">
         <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-bold tracking-wider uppercase">
-          <Briefcase className="w-3.5 h-3.5" /> 10 · PROYEK
+          <Briefcase className="w-3.5 h-3.5" /> 14 · PROYEK
         </div>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>

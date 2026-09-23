@@ -40,7 +40,7 @@ export const Slide2Machine: React.FC = () => {
       {/* Header */}
       <div className="space-y-1">
         <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-xs font-mono font-bold tracking-wider uppercase">
-          <Cpu className="w-3.5 h-3.5" /> 02 · MESIN
+          <Cpu className="w-3.5 h-3.5" /> 03 · MESIN
         </div>
         <h1 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
           Mesin Fungsi

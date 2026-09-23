@@ -78,25 +78,29 @@ relasi-dan-fungsi/
 ├── vite.config.ts                 # Konfigurasi Vite (base: './')
 ├── tailwind.config.js             # Konfigurasi token warna & font
 ├── src/
-│   ├── App.tsx                    # Orkes 10 slide dan print worksheet
+│   ├── App.tsx                    # Orkes 14 slide terbagi 4 pertemuan dan print worksheet
 │   ├── main.tsx                   # Entry point React
 │   ├── index.css                  # Tailwind imports & utility glow proyektor
 │   ├── types/slides.ts            # Tipe TypeScript data slide dan topik proyek
 │   └── components/
 │       ├── MathFormula.tsx        # Komponen wrapper KaTeX yang aman
 │       ├── CanteenItemIcon.tsx    # Ilustrasi SVG vektor jajanan kantin proyektor
-│       ├── Navbar.tsx             # Navigasi atas, progress bar, fullscreen, drawer & link panduan guru / LKPD
+│       ├── Navbar.tsx             # Navigasi atas, progress bar dengan penanda sesi, drawer & link panduan guru / LKPD
 │       ├── SlideContainer.tsx     # Frame slide 16:9 + event listener keyboard (←, →, Spasi)
 │       ├── WorksheetPrint.tsx     # Lembar kerja siswa A4 print-only (Ctrl+P)
 │       └── slides/
-│           ├── Slide1Hook.tsx             # Slide 1: Mesin Kasir (Scanner Kasir Kantin & Multi-Barang Many-to-One)
-│           ├── Slide2Machine.tsx          # Slide 2: Mesin Fungsi (Model Mental Mesin)
-│           ├── Slide3ArrowDiagram.tsx     # Slide 3: Relasi & Fungsi (Diagram Panah)
-│           ├── Slide4VerticalLineTest.tsx # Slide 4: Uji Garis Vertikal (Vertical Line Test)
-│           ├── Slide5DomainRange.tsx      # Slide 5: Domain & Range (Batasan Fisik)
-│           ├── Slide6LinearGraph.tsx      # Slide 6: Model Linier (f(x) = ax + b)
-│           ├── Slide7WhyPiecewise.tsx     # Slide 7: Batasan 1 Garis (Dilema Tarif)
-│           ├── Slide8PiecewiseIntro.tsx   # Slide 8: Fungsi Bercabang (Piecewise & Titik ●, ○)
-│           ├── Slide9SandboxBuilder.tsx   # Slide 9: Rancang Fungsi (Sandbox Builder)
-│           └── Slide10ProjectHub.tsx      # Slide 10: Katalog Proyek (Kasus & Simulator)
+│           ├── Slide1OpeningRelasi.tsx    # Slide 1: Pembuka P1 (Konsep Besar "RELASI" & 3 Target Belajar)
+│           ├── Slide1Hook.tsx             # Slide 2: Mesin Kasir (Scanner Kasir Kantin & Multi-Barang Many-to-One)
+│           ├── Slide2Machine.tsx          # Slide 3: Mesin Fungsi (Model Mental Mesin f(x))
+│           ├── Slide3ArrowDiagram.tsx     # Slide 4: Diagram Panah (Syarat Emas Relasi vs Fungsi)
+│           ├── Slide4VerticalLineTest.tsx # Slide 5: Uji Garis Vertikal (Vertical Line Test)
+│           ├── Slide6OpeningDomain.tsx    # Slide 6: Pembuka P2 (Konsep "BATASAN NYATA" & 3 Target Belajar)
+│           ├── Slide5DomainRange.tsx      # Slide 7: Domain & Range (Batasan Fisik)
+│           ├── Slide6LinearGraph.tsx      # Slide 8: Model Linier (f(x) = ax + b)
+│           ├── Slide9OpeningPiecewise.tsx # Slide 9: Pembuka P3 (Konsep "PIECEWISE" & 3 Target Belajar)
+│           ├── Slide7WhyPiecewise.tsx     # Slide 10: Batasan 1 Garis (Dilema Tarif)
+│           ├── Slide8PiecewiseIntro.tsx   # Slide 11: Fungsi Bercabang (Piecewise & Titik ●, ○)
+│           ├── Slide9SandboxBuilder.tsx   # Slide 12: Rancang Fungsi (Sandbox Builder)
+│           ├── Slide13OpeningProject.tsx  # Slide 13: Pembuka P4 (Konsep "PROYEK NYATA" & 3 Target Belajar)
+│           └── Slide10ProjectHub.tsx      # Slide 14: Katalog Proyek (Kasus & Simulator)
 ```

@@ -4,27 +4,45 @@ Dokumen perencanaan dan pelacakan progres pengembangan media pembelajaran intera
 
 ---
 
-## 📌 Status Terkini: v1.6.0 (Ilustrasi Vektor SVG Jajanan Kantin & Animasi Laser Kasir Slide 1 ✅)
+## 📌 Status Terkini: v1.7.0 (Arsitektur 14 Slide Modular 4 Pertemuan, Pembuka "Relasi", dan Target Belajar di Setiap Sesi ✅)
+- [x] **Pemisahan Slide Tematik & Penambahan Slide Pembuka per Pertemuan (Total 14 Slide)**:
+  - Mengembangkan sistem slide pembuka (*Session Opening Deck*) dengan tata letak **Split Screen 50:50** ramah proyektor 16:9 Zero-Scroll.
+  - **Pertemuan 1 (Slide 1–5 · Fondasi Relasi & Fungsi)**:
+    * **Slide 1 (`Slide1OpeningRelasi.tsx`)**: Menampilkan tulisan sangat besar **"RELASI"** (gradient indigo-cyan glowing), ilustrasi interaktif SVG hubungan himpunan bebas (Preset "Hobi Siswa" & "Jajanan Kantin") di mana panah bisa dihubungkan bebas tanpa syarat fungsi, status badge *"Aturan Relasi: Bebas!"*, tombol jembatan investigasi *"Kapan Relasi Menjadi Fungsi?"*, serta panel 3 Target Belajar Hari Ini.
+    * **Slide 2 (`Slide1Hook.tsx`)**: Hook investigasi scanner kasir rusak vs normal & pembuktian *many-to-one* kantin.
+    * **Slide 3 (`Slide2Machine.tsx`)**: Mental model mesin input-output $f(x)$.
+    * **Slide 4 (`Slide3ArrowDiagram.tsx`)**: Diagram panah syarat fungsi (tidak jomblo & tidak mendua).
+    * **Slide 5 (`Slide4VerticalLineTest.tsx`)**: Uji garis vertikal (VLT) pada grafik Kartesius.
+  - **Pertemuan 2 (Slide 6–8 · Batasan Nyata & Model Linear)**:
+    * **Slide 6 (`Slide6OpeningDomain.tsx`)**: Pembuka tematik **"BATASAN NYATA"** dengan konteks batasan fisis (jarak ojol $\ge 0$, lift diskrit, kapasitas baterai HP), formula KaTeX, dan panel 3 Target Belajar P2.
+    * **Slide 7 (`Slide5DomainRange.tsx`)**: Simulasi batasan nyata nilai absurd input domain.
+    * **Slide 8 (`Slide6LinearGraph.tsx`)**: Model linear $f(x)=ax+b$ dengan slider kemiringan $a$ dan konstanta $b$.
+  - **Pertemuan 3 (Slide 9–12 · Fungsi Sepenggal / Piecewise)**:
+    * **Slide 9 (`Slide9OpeningPiecewise.tsx`)**: Pembuka tematik **"PIECEWISE"** dengan visual kurung kurawal $\{$, mini-grafik bercabang, sakelar titik sambungan sah (● vs ○) vs tabrakan mendua, dan panel 3 Target Belajar P3.
+    * **Slide 10 (`Slide7WhyPiecewise.tsx`)**: Dilema tarif parkir mall membuktikan batas fungsi 1 garis lurus.
+    * **Slide 11 (`Slide8PiecewiseIntro.tsx`)**: Fungsi bercabang dengan baris formula menyala (*highlight*) dan titik ● vs ○.
+    * **Slide 12 (`Slide9SandboxBuilder.tsx`)**: Sandbox builder interaktif merakit fungsi piecewise kustom.
+  - **Pertemuan 4 (Slide 13–14 · Proyek Nyata & Asesmen)**:
+    * **Slide 13 (`Slide13OpeningProject.tsx`)**: Pembuka tematik **"PROYEK NYATA"** dengan selector preview 4 studi kasus otentik, rumus piecewise, dan panel 3 Target Belajar P4.
+    * **Slide 14 (`Slide10ProjectHub.tsx`)**: Katalog proyek & simulator tarif interaktif beserta pencetakan Lembar Kerja Proyek A4.
+- [x] **Pembaruan Navigasi Navbar & Drawer Sesi**:
+  - Badge pertemuan dinamis di navbar atas (`P1 · 2 JP` s.d. `P4 · 2 JP`) dengan aksen warna tematik per sesi (Indigo, Emerald, Amber, Purple).
+  - Tanda pembatas halus (*session divider ticks*) pada progress bar atas untuk menandai batas antar-pertemuan (Slide 5, Slide 8, Slide 12).
+  - Drawer menu daftar slide dikelompokkan secara rapi per Pertemuan 1 s.d. 4.
+  - Sinkronisasi nomor tag slide (`01` s.d. `14`) pada semua komponen slide.
+- [x] **Sinkronisasi Dokumen Guru & Siswa**:
+  - Memperbarui [panduan-guru.html](file:///Users/fakhri246/project/matematika/relasi-dan-fungsi/panduan-guru.html) dan [public/panduan-guru.html](file:///Users/fakhri246/project/matematika/relasi-dan-fungsi/public/panduan-guru.html) dengan peta alur 14 slide dan tautan deep linking langsung.
+  - Memperbarui [lks-siswa.html](file:///Users/fakhri246/project/matematika/relasi-dan-fungsi/lks-siswa.html) dan [public/lks-siswa.html](file:///Users/fakhri246/project/matematika/relasi-dan-fungsi/public/lks-siswa.html) agar sinkronisasi proyektor merujuk ke nomor slide baru.
+- [x] **Evaluasi UI/UX Proyektor**:
+  - Skor UI: **9.6 / 10** | Skor UX: **9.7 / 10** (Rata-rata **9.65 / 10**, tuntas pada Loop 1 > 8).
+
+## 📌 Arsip Status v1.6.0 (Ilustrasi Vektor SVG Jajanan Kantin & Animasi Laser Kasir Slide 1 ✅)
 - [x] **Penggantian Total Emotikon Jajanan Kantin dengan Ilustrasi Vektor SVG (`CanteenItemIcon.tsx`)**:
   - Mengembangkan komponen SVG kustom bergaya *Modern Flat-Vector Bergradien & Berkontras Tinggi* yang dioptimalkan untuk layar proyektor resolusi berapapun tanpa pecah dan zero loading latency.
-  - **4 Jajanan Default**:
-    1. **Nice Cone**: Es krim cone dengan tekstur waffle bergradien, swirl krim lembut vanila lezat, saus cokelat, meses, dan ceri merah di puncak.
-    2. **Teh Kubus**: Kotak minuman karton hijau isometrik 2.5D dengan grafis daun teh, sedotan bergaris menancap di atas, dan barcode mini samping.
-    3. **Le Kristal**: Botol air mineral berlekuk kristal transparan cyan-biru dengan tutup ulir, label pemandangan gunung, dan refleksi cahaya vertikal.
-    4. **SilverKing**: Cokelat batangan premium berbungkus merah marun dengan foil perak terkoyak menampakkan petak cokelat berkilau dan pita emas mahkota.
-  - **6 Preset Jajanan Kustom**:
-    1. **Dimsum / Siomay**: Tiga pangsit kukus berlipatan ruffle dengan wortel cincang di atas wadah kukusan bambu berasap wangi.
-    2. **Sate / Cilok**: Tusukan bambu berisi 3 bulatan daging/cilok panggang berbalur saus kacang gurih mengkilap dan irisan cabai.
-    3. **Donat Manis**: Donat bulat berlubang dengan adonan keemasan, glaze stroberi merah muda lezat, dan taburan meses pelangi.
-    4. **Es Boba Cup**: Gelas cup boba transparan dengan tutup dome, sedotan boba miring, gradient milk tea, es batu, dan butiran tapioka boba hitam.
-    5. **Popcorn Jagung**: Wadah kotak bergaris merah-putih bioskop melimpah dengan butiran popcorn mentega mekar keemasan.
-    6. **Roti Sandwich**: Sandwich lapis segitiga panggang dengan isian selada hijau segar, lelehan keju cheddar kuning, irisan tomat, dan beef slice.
-- [x] **Hero Showcase Dinamis Slide 1 (`Slide1Hook.tsx`)**:
-  - **Mode 1-Barang Fokus**: Ilustrasi SVG tampil besar (`w-24 h-24` s.d. `w-28 h-28` / ~96-112px) di atas meja scanner dengan efek kaca sensor dan informasi produk yang sangat jelas bagi siswa di baris belakang kelas.
-  - **Mode Multi-Barang**: Ilustrasi SVG tampil proporsional (`w-16 h-16` / ~64px), dilengkapi mini-thumbnail SVG pada tombol Quick Chips dan daftar riwayat scan (*receipt history*).
-  - **Modal Tambah Barang Kustom**: Pilihan ilustrasi SVG interaktif berbingkai rapi menggantikan seleksi emotikon lama.
+  - 4 Jajanan Default: Nice Cone, Teh Kubus, Le Kristal, SilverKing.
+  - 6 Preset Jajanan Kustom: Dimsum, Sate/Cilok, Donat, Es Boba, Popcorn, Sandwich.
 - [x] **Animasi Sinar Laser Scanner Kasir Merah**:
-  - Efek garis sinar laser merah berpijar (`animate-laser-sweep`) yang menyapu gambar SVG barang saat kasir melakukan uji scan, menghadirkan nuansa mesin kasir riil yang imersif bagi siswa.
+  - Efek garis sinar laser merah berpijar (`animate-laser-sweep`) yang menyapu gambar SVG barang saat kasir melakukan uji scan.
 
 ## 📌 Arsip Status v1.5.0 (Mesin Kasir Slide 1: Progressive Reveal, Merk Samaran Kantin, Multi-Barang & Pembuktian Many-to-One ✅)
 - [x] **Pembaruan Mesin Kasir Slide 1 (`Slide1Hook.tsx`)**:

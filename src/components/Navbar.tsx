@@ -41,16 +41,36 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   const progressPercent = ((currentIndex + 1) / slides.length) * 100;
+  const currentMeeting = slides[currentIndex]?.meetingNumber || 1;
+
+  const getMeetingBadgeStyle = (meetingNum: number) => {
+    switch (meetingNum) {
+      case 1:
+        return 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30';
+      case 2:
+        return 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30';
+      case 3:
+        return 'bg-amber-500/20 text-amber-300 border-amber-500/30';
+      case 4:
+        return 'bg-purple-500/20 text-purple-300 border-purple-500/30';
+      default:
+        return 'bg-brand-500/20 text-brand-300 border-brand-500/30';
+    }
+  };
 
   return (
     <>
       <header className="no-print sticky top-0 z-30 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80 px-4 md:px-8 py-3">
-        {/* Progress Bar di bagian paling atas */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-slate-800">
+        {/* Progress Bar di bagian paling atas dengan Penanda Sesi */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-slate-800 overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-brand-500 to-emerald-400 transition-all duration-300"
+            className="h-full bg-gradient-to-r from-brand-500 via-indigo-500 to-emerald-400 transition-all duration-300"
             style={{ width: `${progressPercent}%` }}
           />
+          {/* Pembatas halus antar-pertemuan */}
+          <div className="absolute top-0 bottom-0 left-[35.71%] w-0.5 bg-slate-950/90 z-10" title="Batas Pertemuan 1" />
+          <div className="absolute top-0 bottom-0 left-[57.14%] w-0.5 bg-slate-950/90 z-10" title="Batas Pertemuan 2" />
+          <div className="absolute top-0 bottom-0 left-[85.71%] w-0.5 bg-slate-950/90 z-10" title="Batas Pertemuan 3" />
         </div>
 
         <div className="flex items-center justify-between gap-4">
@@ -72,9 +92,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <span className="hidden sm:inline-block text-xs px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-300 font-semibold border border-brand-500/30">
                   Relasi & Fungsi
                 </span>
+                <span
+                  className={`px-2 py-0.5 rounded-full font-mono text-xs font-bold border transition-colors ${getMeetingBadgeStyle(
+                    currentMeeting
+                  )}`}
+                >
+                  P{currentMeeting} · {slides[currentIndex]?.meetingJP || '2 JP'}
+                </span>
               </div>
               <div className="text-xs text-slate-400 hidden md:block">
                 Slide {currentIndex + 1} dari {slides.length}: <span className="text-slate-200 font-medium">{slides[currentIndex].title}</span>
+                <span className="text-slate-500"> — {slides[currentIndex]?.meetingTitle}</span>
               </div>
             </div>
           </div>
@@ -140,7 +168,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
       </header>
 
-      {/* Drawer Menu Daftar Slide */}
+      {/* Drawer Menu Daftar Slide Terbagi 4 Pertemuan */}
       {menuOpen && (
         <div className="no-print fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex justify-start animate-fadeIn">
           <div className="w-full max-w-md bg-slate-950 border-r border-slate-800 h-full p-6 flex flex-col justify-between shadow-2xl overflow-y-auto">
@@ -148,7 +176,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <div className="flex items-center justify-between pb-4 border-b border-slate-800">
                 <div className="flex items-center gap-2">
                   <Compass className="w-5 h-5 text-brand-400" />
-                  <h3 className="font-extrabold text-lg text-white">Navigasi Modul</h3>
+                  <h3 className="font-extrabold text-lg text-white">Navigasi 4 Pertemuan</h3>
                 </div>
                 <button
                   onClick={() => setMenuOpen(false)}
@@ -158,35 +186,62 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </button>
               </div>
 
-              <div className="space-y-2 mt-4">
-                {slides.map((s, idx) => (
-                  <button
-                    key={s.id}
-                    onClick={() => {
-                      onSelectSlide(idx);
-                      setMenuOpen(false);
-                    }}
-                    className={`w-full p-3 rounded-xl text-left transition-all border flex items-center gap-3 ${
-                      currentIndex === idx
-                        ? 'bg-brand-600/20 border-brand-500 text-white font-bold'
-                        : 'bg-slate-900/60 border-slate-800/80 text-slate-300 hover:bg-slate-900'
-                    }`}
-                  >
-                    <span
-                      className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-mono font-bold shrink-0 ${
-                        currentIndex === idx ? 'bg-brand-500 text-white' : 'bg-slate-800 text-slate-400'
-                      }`}
-                    >
-                      {idx + 1}
-                    </span>
-                    <div className="min-w-0">
-                      <div className="text-xs text-brand-400 uppercase tracking-wider font-semibold">
-                        {s.tag}
+              {/* Grouped Slides by Meeting */}
+              <div className="space-y-4 mt-4">
+                {[1, 2, 3, 4].map((meetingNum) => {
+                  const meetingSlides = slides
+                    .map((s, idx) => ({ ...s, originalIndex: idx }))
+                    .filter((s) => s.meetingNumber === meetingNum);
+
+                  if (meetingSlides.length === 0) return null;
+                  const firstSlide = meetingSlides[0];
+
+                  return (
+                    <div key={`meeting-group-${meetingNum}`} className="space-y-1.5">
+                      <div className="flex items-center justify-between px-1 text-xs font-mono font-bold text-slate-400 border-b border-slate-900 pb-1">
+                        <span className="text-brand-300 uppercase">
+                          Pertemuan {meetingNum}: {firstSlide.meetingTitle}
+                        </span>
+                        <span className="text-slate-500">{firstSlide.meetingJP}</span>
                       </div>
-                      <div className="text-sm truncate font-medium">{s.title}</div>
+                      <div className="space-y-1">
+                        {meetingSlides.map((s) => {
+                          const idx = s.originalIndex;
+                          const isActive = currentIndex === idx;
+
+                          return (
+                            <button
+                              key={s.id}
+                              onClick={() => {
+                                onSelectSlide(idx);
+                                setMenuOpen(false);
+                              }}
+                              className={`w-full p-2.5 rounded-xl text-left transition-all border flex items-center gap-2.5 ${
+                                isActive
+                                  ? 'bg-brand-600/20 border-brand-500 text-white font-bold'
+                                  : 'bg-slate-900/60 border-slate-800/80 text-slate-300 hover:bg-slate-900'
+                              }`}
+                            >
+                              <span
+                                className={`w-6 h-6 rounded-lg flex items-center justify-center text-xs font-mono font-bold shrink-0 ${
+                                  isActive ? 'bg-brand-500 text-white' : 'bg-slate-800 text-slate-400'
+                                }`}
+                              >
+                                {idx + 1}
+                              </span>
+                              <div className="min-w-0 flex-1">
+                                <div className="text-[10px] text-brand-400 uppercase tracking-wider font-semibold">
+                                  {s.tag}
+                                </div>
+                                <div className="text-xs truncate font-medium">{s.title}</div>
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
-                  </button>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
