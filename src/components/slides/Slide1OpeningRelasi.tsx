@@ -107,11 +107,9 @@ export const Slide1OpeningRelasi: React.FC<Slide1OpeningRelasiProps> = ({ onNext
   };
 
   // Helper coordinate calculation for SVG relation lines
-  const getItemY = (index: number, total: number) => {
-    const startY = 32;
-    const endY = 168;
-    if (total <= 1) return (startY + endY) / 2;
-    return startY + (index * (endY - startY)) / (total - 1);
+  const getItemY = (index: number) => {
+    const coords = [64, 102, 140, 178];
+    return coords[index] ?? 64 + index * 38;
   };
 
   return (
@@ -186,127 +184,404 @@ export const Slide1OpeningRelasi: React.FC<Slide1OpeningRelasiProps> = ({ onNext
             </button>
           </div>
 
-          {/* Interactive SVG Relation Canvas */}
-          <div className="relative w-full h-[190px] md:h-[210px] bg-slate-950/90 rounded-xl border border-slate-800/80 p-2 overflow-hidden flex items-center justify-between">
-            {/* SVG Lines Overlay */}
+          {/* Interactive Venn Diagram Relation Canvas */}
+          <div className="relative w-full h-[220px] md:h-[240px] bg-slate-950/90 rounded-2xl border border-slate-800/80 p-1.5 overflow-hidden flex items-center justify-center">
             <svg
-              className="absolute inset-0 w-full h-full pointer-events-none"
-              viewBox="0 0 400 200"
-              preserveAspectRatio="none"
+              className="w-full h-full select-none"
+              viewBox="0 0 520 230"
+              preserveAspectRatio="xMidYMid meet"
             >
               <defs>
-                <linearGradient id="relasiGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#818cf8" stopOpacity="0.85" />
-                  <stop offset="100%" stopColor="#38bdf8" stopOpacity="0.85" />
+                {/* Gradients */}
+                <linearGradient id="gradOvalA" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#1e1b4b" stopOpacity="0.75" />
+                  <stop offset="50%" stopColor="#0f172a" stopOpacity="0.85" />
+                  <stop offset="100%" stopColor="#1e1b4b" stopOpacity="0.75" />
                 </linearGradient>
+
+                <linearGradient id="gradOvalB" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#042f2e" stopOpacity="0.75" />
+                  <stop offset="50%" stopColor="#0f172a" stopOpacity="0.85" />
+                  <stop offset="100%" stopColor="#042f2e" stopOpacity="0.75" />
+                </linearGradient>
+
+                <linearGradient id="relasiGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#818cf8" />
+                  <stop offset="100%" stopColor="#38bdf8" />
+                </linearGradient>
+
+                {/* Arrowhead Marker */}
                 <marker
                   id="relasiArrow"
-                  viewBox="0 0 10 10"
-                  refX="6"
-                  refY="5"
-                  markerWidth="5"
-                  markerHeight="5"
-                  orient="auto-start-reverse"
+                  viewBox="0 0 10 8"
+                  refX="8"
+                  refY="4"
+                  markerWidth="8"
+                  markerHeight="6"
+                  orient="auto"
                 >
-                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+                  <polygon points="0 1, 8 4, 0 7, 2 4" fill="#38bdf8" />
                 </marker>
+
+                {/* Glow Filter */}
+                <filter id="arrowGlow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feDropShadow dx="0" dy="0" stdDeviation="2" floodColor="#38bdf8" floodOpacity="0.6" />
+                </filter>
               </defs>
 
+              {/* ===== HIMPUNAN A (DOMAIN) VENN OVAL ===== */}
+              <rect
+                x="14"
+                y="10"
+                width="144"
+                height="206"
+                rx="38"
+                fill="url(#gradOvalA)"
+                stroke="#6366f1"
+                strokeWidth="2.5"
+                className="transition-all"
+              />
+              <rect
+                x="36"
+                y="18"
+                width="100"
+                height="22"
+                rx="11"
+                fill="#1e1b4b"
+                stroke="#818cf8"
+                strokeWidth="1.2"
+              />
+              <text
+                x="86"
+                y="33"
+                textAnchor="middle"
+                fill="#c7d2fe"
+                fontSize="10"
+                fontWeight="bold"
+                fontFamily="monospace"
+                letterSpacing="0.8"
+              >
+                HIMPUNAN A
+              </text>
+
+              {/* ===== HIMPUNAN B (KODOMAIN) VENN OVAL ===== */}
+              <rect
+                x="362"
+                y="10"
+                width="144"
+                height="206"
+                rx="38"
+                fill="url(#gradOvalB)"
+                stroke="#06b6d4"
+                strokeWidth="2.5"
+                className="transition-all"
+              />
+              <rect
+                x="384"
+                y="18"
+                width="100"
+                height="22"
+                rx="11"
+                fill="#042f2e"
+                stroke="#22d3ee"
+                strokeWidth="1.2"
+              />
+              <text
+                x="434"
+                y="33"
+                textAnchor="middle"
+                fill="#a5f3fc"
+                fontSize="10"
+                fontWeight="bold"
+                fontFamily="monospace"
+                letterSpacing="0.8"
+              >
+                HIMPUNAN B
+              </text>
+
+              {/* ===== CENTER STAGE LABELS & HELPER ===== */}
+              <text
+                x="260"
+                y="24"
+                textAnchor="middle"
+                fill="#64748b"
+                fontSize="10.5"
+                fontFamily="monospace"
+                fontWeight="bold"
+                letterSpacing="1"
+              >
+                RELASI: A → B
+              </text>
+              {selectedSource ? (
+                <g>
+                  <rect
+                    x="180"
+                    y="34"
+                    width="160"
+                    height="20"
+                    rx="10"
+                    fill="#082f49"
+                    stroke="#38bdf8"
+                    strokeWidth="1"
+                  />
+                  <text
+                    x="260"
+                    y="47"
+                    textAnchor="middle"
+                    fill="#38bdf8"
+                    fontSize="9.5"
+                    fontWeight="bold"
+                  >
+                    Pilih target di B ➔
+                  </text>
+                </g>
+              ) : (
+                <text
+                  x="260"
+                  y="46"
+                  textAnchor="middle"
+                  fill="#475569"
+                  fontSize="9"
+                  fontStyle="italic"
+                >
+                  Klik anggota A untuk pasangkan
+                </text>
+              )}
+
+              {/* ===== DIRECTIONAL BEZIER ARROWS ===== */}
               {activeConnections.map(([fromId, toId], idx) => {
                 const fromIdx = currentPreset.setA.findIndex((item) => item.id === fromId);
                 const toIdx = currentPreset.setB.findIndex((item) => item.id === toId);
                 if (fromIdx === -1 || toIdx === -1) return null;
 
-                const y1 = getItemY(fromIdx, currentPreset.setA.length);
-                const y2 = getItemY(toIdx, currentPreset.setB.length);
+                const y1 = getItemY(fromIdx);
+                const y2 = getItemY(toIdx);
 
+                // Start from Noktah A (146) to edge of Noktah B (368)
                 return (
                   <path
-                    key={`line-${idx}`}
-                    d={`M 95 ${y1} C 170 ${y1}, 230 ${y2}, 305 ${y2}`}
+                    key={`arrow-${fromId}-${toId}-${idx}`}
+                    d={`M 146 ${y1} C 230 ${y1}, 290 ${y2}, 368 ${y2}`}
                     fill="none"
                     stroke="url(#relasiGrad)"
                     strokeWidth="2.5"
                     markerEnd="url(#relasiArrow)"
-                    strokeDasharray="4 2"
-                    className="animate-pulse"
+                    filter="url(#arrowGlow)"
+                    className="transition-all duration-300"
                   />
                 );
               })}
-            </svg>
 
-            {/* Kolom Himpunan A */}
-            <div className="z-10 flex flex-col justify-around h-full w-28">
-              <span className="text-[10px] font-mono font-bold text-indigo-400 text-center uppercase tracking-wider pb-1">
-                Himpunan A
-              </span>
-              {currentPreset.setA.map((item) => {
+              {/* ===== ITEMS IN HIMPUNAN A ===== */}
+              {currentPreset.setA.map((item, idx) => {
+                const y = getItemY(idx);
                 const isSelected = selectedSource === item.id;
                 const connectionCount = activeConnections.filter(([from]) => from === item.id).length;
 
                 return (
-                  <button
+                  <g
                     key={item.id}
                     onClick={() => {
                       setSelectedSource(selectedSource === item.id ? null : item.id);
                     }}
-                    className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg border text-xs font-semibold transition-all ${
-                      isSelected
-                        ? 'bg-indigo-600 text-white border-indigo-400 ring-2 ring-indigo-400/50 shadow-lg'
-                        : connectionCount > 1
-                        ? 'bg-amber-500/20 text-amber-200 border-amber-500/40'
-                        : connectionCount === 0
-                        ? 'bg-slate-900 text-slate-400 border-slate-800'
-                        : 'bg-slate-900 text-slate-200 border-slate-700/80 hover:border-slate-500'
-                    }`}
+                    className="cursor-pointer group"
                   >
-                    <span>{item.icon}</span>
-                    <span className="truncate">{item.label}</span>
+                    {/* Item capsule */}
+                    <rect
+                      x="22"
+                      y={y - 15}
+                      width="118"
+                      height="30"
+                      rx="8"
+                      fill={isSelected ? '#4338ca' : connectionCount > 1 ? '#1e1b4b' : '#0f172a'}
+                      stroke={
+                        isSelected
+                          ? '#a5b4fc'
+                          : connectionCount > 1
+                          ? '#f59e0b'
+                          : '#334155'
+                      }
+                      strokeWidth={isSelected ? 2 : 1.2}
+                      className="transition-all duration-200 group-hover:stroke-indigo-400"
+                    />
+
+                    {/* Emoji */}
+                    <text
+                      x="36"
+                      y={y + 5}
+                      fontSize="14"
+                      textAnchor="middle"
+                      className="select-none pointer-events-none"
+                    >
+                      {item.icon}
+                    </text>
+
+                    {/* Name */}
+                    <text
+                      x="50"
+                      y={y + 4}
+                      fontSize="11.5"
+                      fontWeight="bold"
+                      fill={isSelected ? '#ffffff' : '#f1f5f9'}
+                      className="select-none pointer-events-none"
+                    >
+                      {item.label}
+                    </text>
+
+                    {/* Connection Count Badge */}
                     {connectionCount > 1 && (
-                      <span className="ml-auto text-[9px] px-1 rounded bg-amber-500/30 text-amber-300 font-mono">
-                        {connectionCount}
-                      </span>
+                      <g>
+                        <rect
+                          x="116"
+                          y={y - 8}
+                          width="18"
+                          height="16"
+                          rx="6"
+                          fill="#78350f"
+                          stroke="#f59e0b"
+                          strokeWidth="1"
+                        />
+                        <text
+                          x="125"
+                          y={y + 4}
+                          textAnchor="middle"
+                          fill="#fde68a"
+                          fontSize="9"
+                          fontWeight="bold"
+                          fontFamily="monospace"
+                        >
+                          {connectionCount}
+                        </text>
+                      </g>
                     )}
                     {connectionCount === 0 && (
-                      <span className="ml-auto text-[9px] px-1 rounded bg-slate-800 text-slate-400 font-mono">
-                        0
-                      </span>
+                      <g>
+                        <rect
+                          x="116"
+                          y={y - 8}
+                          width="18"
+                          height="16"
+                          rx="6"
+                          fill="#1e293b"
+                          stroke="#475569"
+                          strokeWidth="1"
+                        />
+                        <text
+                          x="125"
+                          y={y + 4}
+                          textAnchor="middle"
+                          fill="#94a3b8"
+                          fontSize="9"
+                          fontWeight="bold"
+                          fontFamily="monospace"
+                        >
+                          0
+                        </text>
+                      </g>
                     )}
-                  </button>
+
+                    {/* Noktah Anchor Dot A */}
+                    {isSelected && (
+                      <circle
+                        cx="146"
+                        cy={y}
+                        r="8"
+                        fill="#818cf8"
+                        opacity="0.3"
+                        className="animate-ping"
+                      />
+                    )}
+                    <circle
+                      cx="146"
+                      cy={y}
+                      r={isSelected ? 5.5 : 4.5}
+                      fill={isSelected ? '#ffffff' : connectionCount > 0 ? '#818cf8' : '#475569'}
+                      stroke={isSelected ? '#818cf8' : '#ffffff'}
+                      strokeWidth={isSelected ? 2 : 1}
+                      className="transition-all duration-200"
+                    />
+                  </g>
                 );
               })}
-            </div>
 
-            {/* Kolom Himpunan B */}
-            <div className="z-10 flex flex-col justify-around h-full w-28">
-              <span className="text-[10px] font-mono font-bold text-cyan-400 text-center uppercase tracking-wider pb-1">
-                Himpunan B
-              </span>
-              {currentPreset.setB.map((item) => {
+              {/* ===== ITEMS IN HIMPUNAN B ===== */}
+              {currentPreset.setB.map((item, idx) => {
+                const y = getItemY(idx);
                 const isConnectedToSource = selectedSource
                   ? activeConnections.some(([from, to]) => from === selectedSource && to === item.id)
                   : false;
+                const isConnectedAny = activeConnections.some(([, to]) => to === item.id);
 
                 return (
-                  <button
+                  <g
                     key={item.id}
                     onClick={() => {
                       if (selectedSource) {
                         handleToggleConnection(selectedSource, item.id);
                       }
                     }}
-                    className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg border text-xs font-semibold transition-all ${
-                      isConnectedToSource
-                        ? 'bg-cyan-600/30 text-cyan-200 border-cyan-400 ring-1 ring-cyan-400'
-                        : 'bg-slate-900 text-slate-200 border-slate-700/80 hover:border-slate-500'
-                    }`}
+                    className="cursor-pointer group"
                   >
-                    <span>{item.icon}</span>
-                    <span className="truncate">{item.label}</span>
-                  </button>
+                    {/* Noktah Anchor Dot B */}
+                    {selectedSource && (
+                      <circle
+                        cx="374"
+                        cy={y}
+                        r="7"
+                        fill="#38bdf8"
+                        opacity="0.25"
+                        className="animate-pulse"
+                      />
+                    )}
+                    <circle
+                      cx="374"
+                      cy={y}
+                      r={isConnectedToSource ? 5.5 : 4.5}
+                      fill={isConnectedToSource ? '#38bdf8' : isConnectedAny ? '#06b6d4' : '#475569'}
+                      stroke={isConnectedToSource ? '#ffffff' : '#ffffff'}
+                      strokeWidth={isConnectedToSource ? 2 : 1}
+                      className="transition-all duration-200"
+                    />
+
+                    {/* Item capsule */}
+                    <rect
+                      x="382"
+                      y={y - 15}
+                      width="118"
+                      height="30"
+                      rx="8"
+                      fill={isConnectedToSource ? '#0e7490' : '#0f172a'}
+                      stroke={isConnectedToSource ? '#67e8f9' : '#334155'}
+                      strokeWidth={isConnectedToSource ? 2 : 1.2}
+                      className="transition-all duration-200 group-hover:stroke-cyan-400"
+                    />
+
+                    {/* Emoji */}
+                    <text
+                      x="396"
+                      y={y + 5}
+                      fontSize="14"
+                      textAnchor="middle"
+                      className="select-none pointer-events-none"
+                    >
+                      {item.icon}
+                    </text>
+
+                    {/* Name */}
+                    <text
+                      x="410"
+                      y={y + 4}
+                      fontSize="11.5"
+                      fontWeight="bold"
+                      fill={isConnectedToSource ? '#ffffff' : '#f1f5f9'}
+                      className="select-none pointer-events-none"
+                    >
+                      {item.label}
+                    </text>
+                  </g>
                 );
               })}
-            </div>
+            </svg>
           </div>
 
           {/* Status Badge & Bridge ke Fungsi */}

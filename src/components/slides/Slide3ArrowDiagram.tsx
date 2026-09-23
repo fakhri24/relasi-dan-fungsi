@@ -90,47 +90,56 @@ export const Slide3ArrowDiagram: React.FC = () => {
         <div className="md:col-span-7 flex justify-center items-center bg-slate-950 p-3 rounded-2xl border border-slate-800/80">
           <svg className="w-full max-w-[420px] h-[220px]" viewBox="0 0 460 260">
             <defs>
+              <linearGradient id="relasiGrad3" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#818cf8" />
+                <stop offset="100%" stopColor="#34d399" />
+              </linearGradient>
+
               <marker
                 id="arrowhead-brand"
+                viewBox="0 0 10 8"
+                refX="8"
+                refY="4"
                 markerWidth="8"
                 markerHeight="6"
-                refX="7"
-                refY="3"
                 orient="auto"
               >
-                <polygon points="0 0, 8 3, 0 6" fill="#818cf8" />
+                <polygon points="0 1, 8 4, 0 7, 2 4" fill="#34d399" />
               </marker>
+
+              <filter id="arrowGlow3" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="0" stdDeviation="2" floodColor="#34d399" floodOpacity="0.5" />
+              </filter>
             </defs>
 
             {/* Ellipse Himpunan A */}
-            <ellipse cx="90" cy="130" rx="65" ry="110" fill="#1e1b4b" stroke="#6366f1" strokeWidth="2.5" strokeDasharray="4 2" />
-            <text x="90" y="36" textAnchor="middle" fill="#c7d2fe" fontWeight="bold" fontSize="14">
+            <ellipse cx="90" cy="130" rx="68" ry="110" fill="#1e1b4b" fillOpacity="0.75" stroke="#6366f1" strokeWidth="2.5" />
+            <text x="90" y="36" textAnchor="middle" fill="#c7d2fe" fontWeight="bold" fontSize="13" fontFamily="monospace">
               Domain (A)
             </text>
 
             {/* Ellipse Himpunan B */}
-            <ellipse cx="370" cy="130" rx="65" ry="110" fill="#064e3b" stroke="#10b981" strokeWidth="2.5" strokeDasharray="4 2" />
-            <text x="370" y="36" textAnchor="middle" fill="#a7f3d0" fontWeight="bold" fontSize="14">
+            <ellipse cx="370" cy="130" rx="68" ry="110" fill="#064e3b" fillOpacity="0.75" stroke="#10b981" strokeWidth="2.5" />
+            <text x="370" y="36" textAnchor="middle" fill="#a7f3d0" fontWeight="bold" fontSize="13" fontFamily="monospace">
               Kodomain (B)
             </text>
 
-            {/* Garis Panah Relasi */}
+            {/* Garis Panah Relasi (Smooth Bezier) */}
             {activePreset.arrows.map(([aIdx, bIdx], i) => {
               const startX = 135;
               const startY = 65 + aIdx * 45;
-              const endX = 325;
+              const endX = 322;
               const endY = 80 + bIdx * 55;
               return (
-                <line
+                <path
                   key={i}
-                  x1={startX}
-                  y1={startY}
-                  x2={endX}
-                  y2={endY}
-                  stroke="#818cf8"
+                  d={`M ${startX} ${startY} C ${startX + 75} ${startY}, ${endX - 75} ${endY}, ${endX} ${endY}`}
+                  fill="none"
+                  stroke="url(#relasiGrad3)"
                   strokeWidth="2.5"
                   markerEnd="url(#arrowhead-brand)"
-                  className="transition-all duration-500"
+                  filter="url(#arrowGlow3)"
+                  className="transition-all duration-300"
                 />
               );
             })}
