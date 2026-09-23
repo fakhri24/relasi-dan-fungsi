@@ -25,16 +25,13 @@ export const Slide6LinearGraph: React.FC = () => {
   return (
     <div className="flex flex-col h-full justify-between max-w-6xl mx-auto">
       {/* Header */}
-      <div className="space-y-2">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-sm font-semibold tracking-wide uppercase">
-          <TrendingUp className="w-4 h-4" /> Konsep 5 · Representasi Visual
+      <div className="space-y-1">
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-xs font-mono font-bold tracking-wider uppercase">
+          <TrendingUp className="w-3.5 h-3.5" /> 06 · MODEL
         </div>
-        <h1 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight">
-          Kata-kata <MathFormula math="\to" /> Rumus <MathFormula math="\to" /> Grafik
+        <h1 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
+          Model Linier
         </h1>
-        <p className="text-xl text-slate-400 font-medium">
-          Setiap fungsi linear <MathFormula math="f(x) = ax + b" /> punya 2 komponen: <span className="text-brand-300 font-semibold">Tarif Variabel (<MathFormula math="a" />)</span> dan <span className="text-emerald-300 font-semibold">Biaya Tetap (<MathFormula math="b" />)</span>.
-        </p>
       </div>
 
       {/* Main Interactive Grid */}
@@ -116,7 +113,7 @@ export const Slide6LinearGraph: React.FC = () => {
             <div>
               <div className="flex justify-between text-xs font-bold text-slate-400 mb-1">
                 <span className="flex items-center gap-1 text-indigo-400">
-                  <TrendingUp className="w-3.5 h-3.5" /> Kemiringan / Tarif per km (a):
+                  <TrendingUp className="w-3.5 h-3.5" /> Kemiringan a:
                 </span>
                 <span className="text-white font-mono">Rp {a * 1000}/km</span>
               </div>
@@ -134,7 +131,7 @@ export const Slide6LinearGraph: React.FC = () => {
             <div>
               <div className="flex justify-between text-xs font-bold text-slate-400 mb-1">
                 <span className="flex items-center gap-1 text-emerald-400">
-                  <DollarSign className="w-3.5 h-3.5" /> Biaya Tetap / Buka Pintu (b):
+                  <DollarSign className="w-3.5 h-3.5" /> Buka Pintu b:
                 </span>
                 <span className="text-white font-mono">Rp {b * 1000}</span>
               </div>
@@ -152,7 +149,7 @@ export const Slide6LinearGraph: React.FC = () => {
             <div>
               <div className="flex justify-between text-xs font-bold text-slate-400 mb-1">
                 <span className="flex items-center gap-1 text-amber-400">
-                  <MapPin className="w-3.5 h-3.5" /> Jarak Tempuh Pelanggan (x):
+                  <MapPin className="w-3.5 h-3.5" /> Jarak x:
                 </span>
                 <span className="text-white font-mono">{testKm} km</span>
               </div>
@@ -169,20 +166,20 @@ export const Slide6LinearGraph: React.FC = () => {
           </div>
 
           <div className="p-3 bg-amber-950/30 border border-amber-500/40 rounded-xl text-xs text-amber-200">
-            📊 Total Tagihan: <span className="font-bold text-white">Rp {totalCost * 1000}</span>
+            Tagihan: <span className="font-bold text-white">Rp {(totalCost * 1000).toLocaleString('id-ID')}</span>
             <div className="text-slate-400 mt-0.5">
-              Rincian: Buka pintu Rp {b * 1000} + ({testKm} km × Rp {a * 1000})
+              Rincian: Rp {b * 1000} + ({testKm} km × Rp {a * 1000})
             </div>
           </div>
         </div>
       </div>
 
       {/* Footer Takeaway */}
-      <div className="bg-slate-900 border-l-4 border-brand-500 p-2.5 px-4 rounded-r-xl flex items-center justify-between mt-1 shrink-0">
+      <div className="bg-slate-900 border-l-4 border-brand-500 px-4 py-2.5 rounded-r-xl flex items-center justify-between mt-1 shrink-0">
         <div className="flex items-center gap-2.5">
-          <span className="font-mono text-xs px-2 py-0.5 rounded bg-brand-500/20 text-brand-300 font-bold">PEMAHAMAN GRAFIK</span>
+          <span className="font-mono text-xs px-2 py-0.5 rounded bg-brand-500/20 text-brand-300 font-bold">KUNCI</span>
           <p className="text-slate-200 text-sm md:text-base font-semibold">
-            Semakin mahal tarif per km (<MathFormula math="a" />), semakin <span className="text-indigo-400 font-bold">curam/tegak</span> garisnya. Biaya buka pintu (<MathFormula math="b" />) menentukan <span className="text-emerald-400 font-bold">titik awal</span> di sumbu tegak.
+            <MathFormula math="a" /> menentukan kemiringan grafik, <MathFormula math="b" /> menentukan titik potong sumbu-y
           </p>
         </div>
       </div>

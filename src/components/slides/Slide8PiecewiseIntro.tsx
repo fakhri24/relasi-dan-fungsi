@@ -24,16 +24,13 @@ export const Slide8PiecewiseIntro: React.FC = () => {
   return (
     <div className="flex flex-col h-full justify-between max-w-6xl mx-auto">
       {/* Header */}
-      <div className="space-y-2">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-sm font-semibold tracking-wide uppercase">
-          <Layers className="w-4 h-4" /> Konsep 6 · Notasi Matematika
+      <div className="space-y-1">
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-xs font-mono font-bold tracking-wider uppercase">
+          <Layers className="w-3.5 h-3.5" /> 08 · PIECEWISE
         </div>
-        <h1 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight">
-          Membaca Notasi Fungsi Sepenggal
+        <h1 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
+          Fungsi Bercabang
         </h1>
-        <p className="text-xl text-slate-400 font-medium">
-          Kurung kurawal besar <MathFormula math="\{" /> membagi fungsi menjadi beberapa wilayah domain yang berbeda.
-        </p>
       </div>
 
       {/* Main Grid */}
@@ -42,13 +39,13 @@ export const Slide8PiecewiseIntro: React.FC = () => {
         <div className="md:col-span-6 flex flex-col justify-between space-y-3">
           <div className="p-3.5 bg-slate-950 rounded-2xl border border-slate-800">
             <span className="text-[11px] uppercase font-bold tracking-widest text-slate-500 block mb-2">
-              Notasi Formal Piecewise
+              Notasi Piecewise
             </span>
 
-            {/* Render 3 Baris Cabang dengan State Highlight */}
+            {/* Render 3 Baris Cabang */}
             <div className="space-y-2 font-mono text-sm">
               <div
-                className={`p-2 px-3 rounded-xl border transition-all ${
+                className={`p-2.5 px-3 rounded-xl border transition-all ${
                   currentBranch.branch === 1
                     ? 'bg-brand-600/30 border-brand-400 text-white shadow-lg ring-1 ring-brand-400'
                     : 'bg-slate-900/50 border-slate-800/80 text-slate-400'
@@ -62,48 +59,39 @@ export const Slide8PiecewiseIntro: React.FC = () => {
                     jika <MathFormula math="0 \le x \le 1" />
                   </span>
                 </div>
-                <div className="text-xs text-slate-400 mt-1">
-                  Cabang 1: Nilai konstan 4 untuk rentang 0 sampai 1
-                </div>
               </div>
 
               <div
-                className={`p-3 rounded-xl border transition-all ${
+                className={`p-2.5 px-3 rounded-xl border transition-all ${
                   currentBranch.branch === 2
                     ? 'bg-brand-600/30 border-brand-400 text-white shadow-lg ring-1 ring-brand-400'
                     : 'bg-slate-900/50 border-slate-800/80 text-slate-400'
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-lg">
+                  <span className="font-bold text-base">
                     <MathFormula math="f(x) = 2x + 2" />
                   </span>
                   <span className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-800 text-slate-300">
                     jika <MathFormula math="1 < x \le 4" />
                   </span>
                 </div>
-                <div className="text-xs text-slate-400 mt-1">
-                  Cabang 2: Garis miring naik untuk rentang 1 sampai 4
-                </div>
               </div>
 
               <div
-                className={`p-3 rounded-xl border transition-all ${
+                className={`p-2.5 px-3 rounded-xl border transition-all ${
                   currentBranch.branch === 3
                     ? 'bg-brand-600/30 border-brand-400 text-white shadow-lg ring-1 ring-brand-400'
                     : 'bg-slate-900/50 border-slate-800/80 text-slate-400'
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-lg">
+                  <span className="font-bold text-base">
                     <MathFormula math="f(x) = 10" />
                   </span>
                   <span className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-800 text-slate-300">
                     jika <MathFormula math="x > 4" />
                   </span>
-                </div>
-                <div className="text-xs text-slate-400 mt-1">
-                  Cabang 3: Nilai datar maksimal 10 untuk x di atas 4
                 </div>
               </div>
             </div>
@@ -207,7 +195,7 @@ export const Slide8PiecewiseIntro: React.FC = () => {
           {/* Slider Kontrol Tracker x */}
           <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
             <div className="flex justify-between items-center text-xs font-bold text-slate-400 mb-1.5">
-              <span>Geser Nilai Input (<MathFormula math="x" />):</span>
+              <span>Input <MathFormula math="x" />:</span>
               <span className="text-brand-300 font-mono text-xs font-bold">
                 x = {activeX.toFixed(1)} <MathFormula math="\to" /> y = {currentBranch.val.toFixed(1)}
               </span>
@@ -226,11 +214,11 @@ export const Slide8PiecewiseIntro: React.FC = () => {
       </div>
 
       {/* Footer Takeaway */}
-      <div className="bg-slate-900 border-l-4 border-brand-500 p-2.5 px-4 rounded-r-xl flex items-center justify-between mt-1 shrink-0">
+      <div className="bg-slate-900 border-l-4 border-brand-500 px-4 py-2.5 rounded-r-xl flex items-center justify-between mt-1 shrink-0">
         <div className="flex items-center gap-2.5">
-          <span className="font-mono text-xs px-2 py-0.5 rounded bg-brand-500/20 text-brand-300 font-bold">KUNCI MEMBACA</span>
+          <span className="font-mono text-xs px-2 py-0.5 rounded bg-brand-500/20 text-brand-300 font-bold">KUNCI</span>
           <p className="text-slate-200 text-sm md:text-base font-semibold">
-            Lihat dulu nilai <MathFormula math="x" /> masuk di syarat yang mana, baru gunakan rumus di baris tersebut!
+            Cek syarat interval <MathFormula math="x" /> terlebih dahulu, lalu hitung menggunakan rumus cabang terkait
           </p>
         </div>
       </div>

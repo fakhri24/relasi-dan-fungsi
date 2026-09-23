@@ -17,16 +17,16 @@ import { Slide9SandboxBuilder } from './components/slides/Slide9SandboxBuilder';
 import { Slide10ProjectHub } from './components/slides/Slide10ProjectHub';
 
 const SLIDES: SlideItem[] = [
-  { id: 1, title: 'Pemantik: Mengapa Butuh Fungsi?', subtitle: 'Dunia Tanpa Kepastian', tag: 'Hook' },
-  { id: 2, title: 'Model Mental: Mesin Fungsi', subtitle: 'Input, Aturan, dan Output', tag: 'Konsep 1' },
-  { id: 3, title: 'Relasi vs Fungsi: Syarat Pemetaan', subtitle: 'Diagram Panah Interaktif', tag: 'Konsep 2' },
-  { id: 4, title: 'Uji Garis Vertikal pada Grafik', subtitle: 'Vertical Line Test', tag: 'Konsep 3' },
-  { id: 5, title: 'Domain & Range: Batasan Fisik', subtitle: 'Bukan Sekadar Angka', tag: 'Konsep 4' },
-  { id: 6, title: 'Kata-kata → Rumus → Grafik', subtitle: 'Representasi f(x) = ax + b', tag: 'Konsep 5' },
-  { id: 7, title: 'Tantangan: Mengapa 1 Rumus Gagal?', subtitle: 'Kebutuhan Aturan Bercabang', tag: 'Masalah' },
-  { id: 8, title: 'Membaca Notasi Fungsi Sepenggal', subtitle: 'Piecewise & Titik Terbuka/Tertutup', tag: 'Konsep 6' },
-  { id: 9, title: 'Sandbox: Merakit Aturan Sendiri', subtitle: 'Eksperimen Interaktif', tag: 'Lab' },
-  { id: 10, title: 'Proyek: Katalog Fungsi Dunia Nyata', subtitle: 'Studi Kasus, Rubrik & Worksheet', tag: 'Proyek' },
+  { id: 1, title: 'Mesin Kasir', subtitle: 'Kasir Rusak', tag: '01 · PEMANTIK' },
+  { id: 2, title: 'Mesin Fungsi', subtitle: 'Input & Output', tag: '02 · MESIN' },
+  { id: 3, title: 'Relasi & Fungsi', subtitle: 'Diagram Panah', tag: '03 · RELASI' },
+  { id: 4, title: 'Uji Garis Vertikal', subtitle: 'Scanner Garis', tag: '04 · UJI GRAFIK' },
+  { id: 5, title: 'Domain & Range', subtitle: 'Batasan Nyata', tag: '05 · DOMAIN' },
+  { id: 6, title: 'Model Linier', subtitle: 'f(x) = ax + b', tag: '06 · MODEL' },
+  { id: 7, title: 'Batasan 1 Garis', subtitle: 'Dilema Tarif', tag: '07 · MASALAH' },
+  { id: 8, title: 'Fungsi Bercabang', subtitle: 'Piecewise & Titik', tag: '08 · PIECEWISE' },
+  { id: 9, title: 'Rancang Fungsi', subtitle: 'Sandbox Builder', tag: '09 · SANDBOX' },
+  { id: 10, title: 'Katalog Proyek', subtitle: 'Kasus & Rubrik', tag: '10 · PROYEK' },
 ];
 
 export const App: React.FC = () => {

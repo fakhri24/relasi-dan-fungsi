@@ -4,7 +4,24 @@ Dokumen perencanaan dan pelacakan progres pengembangan media pembelajaran intera
 
 ---
 
-## 📌 Status Terkini: v1.3.1 (Hook Slide 1 Diselaraskan ke Es Krim Cornetto Kasir Kantin ✅)
+## 📌 Status Terkini: v1.4.0 (Redesain Ekstrem Minimalis Slide: Judul Ringkas & Nol Paragraf Narasi ✅)
+- [x] **Redesain Minimalis Teks 10 Slide Proyektor**:
+  - Menghapus total seluruh subjudul dan paragraf narasi di bawah judul pada 10 slide (`Slide1Hook` s.d. `Slide10ProjectHub`).
+  - Menghapus kotak aktivitas guru di layar (`🗣️ Aktivitas Kelas: ...`) agar layar proyektor 100% bersih dan fokus pada visual interaktif.
+  - Mempersingkat judul menjadi 1–2 kata:
+    1. `Mesin Kasir` (01 · PEMANTIK)
+    2. `Mesin Fungsi` (02 · MESIN)
+    3. `Relasi & Fungsi` (03 · RELASI)
+    4. `Uji Garis Vertikal` (04 · UJI GRAFIK)
+    5. `Domain & Range` (05 · DOMAIN)
+    6. `Model Linier` (06 · MODEL)
+    7. `Batasan 1 Garis` (07 · MASALAH)
+    8. `Fungsi Bercabang` (08 · PIECEWISE)
+    9. `Rancang Fungsi` (09 · SANDBOX)
+    10. `Katalog Proyek` (10 · PROYEK)
+  - Menyederhanakan feedback pembuktian menjadi status badge ringkas (misal: `✅ FUNGSI SAH`, `❌ BUKAN FUNGSI (Budi Mendua)`).
+  - Mengubah narasi cerita kasus di Slide 10 menjadi parameter spesifikasi teknis ringkas.
+  - Menyelaraskan navigasi drawer dan navbar di `src/App.tsx`.
 - [x] **Revisi Hook Slide 1 (Apersepsi Kontekstual Kantin Sekolah)**:
   - Mengubah analogi generic "Beli Susu Kotak" / vending machine menjadi **Scanner Kasir Kantin: Scan Barcode Es Krim Cornetto Cokelat**.
   - Menambahkan simulator interaktif dengan tombol "Scan Ulang":

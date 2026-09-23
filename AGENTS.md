@@ -32,9 +32,9 @@ Setiap kali ada perubahan, penambahan fitur, atau perbaikan kode:
 1. **Satu Konsep Terpisah Per Slide**:
    - Jangan menggabungkan multi-konsep dalam satu tampilan awal.
    - Pecah menjadi langkah-langkah atomik agar siswa pemula dan siswa yang lambat pemahamannya dapat mencerna tanpa beban kognitif berlebih.
-2. **Minimalisir Teks Panjang di Layar**:
-   - Website dirancang sebagai media tayang guru di proyektor kelas, bukan e-book bacaan mandiri.
-   - Teks di layar hanya berupa judul besar pemantik, formula KaTeX tajam, dan visualisasi interaktif. Penjelasan narasi diserahkan kepada guru.
+2. **Minimalisir Teks di Layar (Ekstrem Minimalis Proyektor)**:
+   - Website dirancang sebagai media visual proyektor kelas, bukan e-book bacaan mandiri.
+   - Nol paragraf narasi di bawah judul, judul super ringkas (1–2 kata), kotak aktivitas kelas di layar dihapus, dan hasil pembuktian berupa status badge padat. Penjelasan narasi 100% disuarakan oleh guru di depan kelas.
 3. **Didaktik "Tebak Dulu, Baru Buktikan" (Interactive Reveal)**:
    - Setiap slide wajib memiliki skenario tebakan untuk kelas sebelum tombol pembuktian/animasi diaktifkan.
    - Umpan balik visual jelas: Hijau/Emerald (Lolos/Fungsi Sah) vs Merah/Rose (Gagal/Bukan Fungsi).
@@ -88,14 +88,14 @@ relasi-dan-fungsi/
 │       ├── SlideContainer.tsx     # Frame slide 16:9 + event listener keyboard (←, →, Spasi)
 │       ├── WorksheetPrint.tsx     # Lembar kerja siswa A4 print-only (Ctrl+P)
 │       └── slides/
-│           ├── Slide1Hook.tsx             # Slide 1: Pemantik & Vending Machine Rusak
-│           ├── Slide2Machine.tsx          # Slide 2: Mesin Fungsi Input-Aturan-Output
-│           ├── Slide3ArrowDiagram.tsx     # Slide 3: Relasi vs Fungsi (Diagram Panah)
-│           ├── Slide4VerticalLineTest.tsx # Slide 4: Vertical Line Test & Scanner
-│           ├── Slide5DomainRange.tsx      # Slide 5: Domain & Range Batasan Fisik
-│           ├── Slide6LinearGraph.tsx      # Slide 6: Representasi f(x) = ax + b
-│           ├── Slide7WhyPiecewise.tsx     # Slide 7: Masalah Nyata (Mengapa 1 Garis Gagal)
-│           ├── Slide8PiecewiseIntro.tsx   # Slide 8: Notasi Piecewise & Titik (●, ○)
-│           ├── Slide9SandboxBuilder.tsx   # Slide 9: Sandbox Rancang Aturan Sendiri
-│           └── Slide10ProjectHub.tsx      # Slide 10: Katalog Kasus, Simulator & Rubrik
+│           ├── Slide1Hook.tsx             # Slide 1: Mesin Kasir (Scanner Kasir Kantin)
+│           ├── Slide2Machine.tsx          # Slide 2: Mesin Fungsi (Model Mental Mesin)
+│           ├── Slide3ArrowDiagram.tsx     # Slide 3: Relasi & Fungsi (Diagram Panah)
+│           ├── Slide4VerticalLineTest.tsx # Slide 4: Uji Garis Vertikal (Vertical Line Test)
+│           ├── Slide5DomainRange.tsx      # Slide 5: Domain & Range (Batasan Fisik)
+│           ├── Slide6LinearGraph.tsx      # Slide 6: Model Linier (f(x) = ax + b)
+│           ├── Slide7WhyPiecewise.tsx     # Slide 7: Batasan 1 Garis (Dilema Tarif)
+│           ├── Slide8PiecewiseIntro.tsx   # Slide 8: Fungsi Bercabang (Piecewise & Titik ●, ○)
+│           ├── Slide9SandboxBuilder.tsx   # Slide 9: Rancang Fungsi (Sandbox Builder)
+│           └── Slide10ProjectHub.tsx      # Slide 10: Katalog Proyek (Kasus & Simulator)
 ```

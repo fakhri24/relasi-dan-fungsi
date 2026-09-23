@@ -38,16 +38,13 @@ export const Slide9SandboxBuilder: React.FC = () => {
   return (
     <div className="flex flex-col h-full justify-between max-w-6xl mx-auto">
       {/* Header */}
-      <div className="space-y-2">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-sm font-semibold tracking-wide uppercase">
-          <Wrench className="w-4 h-4" /> Lab Kreatif · Merakit Aturan Sendiri
+      <div className="space-y-1">
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-xs font-mono font-bold tracking-wider uppercase">
+          <Wrench className="w-3.5 h-3.5" /> 09 · SANDBOX
         </div>
-        <h1 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight">
-          Sandbox: Rancang Fungsi Tarifmu!
+        <h1 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
+          Rancang Fungsi
         </h1>
-        <p className="text-xl text-slate-400 font-medium">
-          Cobalah ubah parameter batas waktu dan tarif per jam. Perhatikan bagaimana grafik dan rumusnya merespons secara instan.
-        </p>
       </div>
 
       {/* Main Grid */}
@@ -151,7 +148,7 @@ export const Slide9SandboxBuilder: React.FC = () => {
           <div className="space-y-3">
             <div>
               <div className="flex justify-between text-xs font-bold text-slate-400 mb-1">
-                <span className="text-indigo-400">Batas Durasi Flat Awal (<MathFormula math="t_1" />):</span>
+                <span className="text-indigo-400">Batas Flat <MathFormula math="t_1" />:</span>
                 <span className="text-white font-mono">{t1} Jam</span>
               </div>
               <input
@@ -167,7 +164,7 @@ export const Slide9SandboxBuilder: React.FC = () => {
 
             <div>
               <div className="flex justify-between text-xs font-bold text-slate-400 mb-1">
-                <span className="text-emerald-400">Tarif per Jam Tambahan:</span>
+                <span className="text-emerald-400">Tarif Tambahan:</span>
                 <span className="text-white font-mono">Rp {rate.toLocaleString('id-ID')}/jam</span>
               </div>
               <input
@@ -183,7 +180,7 @@ export const Slide9SandboxBuilder: React.FC = () => {
 
             <div>
               <div className="flex justify-between text-xs font-bold text-slate-400 mb-1">
-                <span className="text-pink-400">Uji Durasi Pelanggan (<MathFormula math="x" />):</span>
+                <span className="text-pink-400">Uji <MathFormula math="x" />:</span>
                 <span className="text-white font-mono">{testInput} Jam</span>
               </div>
               <input
@@ -201,7 +198,7 @@ export const Slide9SandboxBuilder: React.FC = () => {
           {/* Hasil Kalkulator Uji */}
           <div className="p-4 bg-slate-950 rounded-xl border border-slate-800">
             <div className="flex items-center justify-between">
-              <span className="text-xs uppercase font-bold tracking-wider text-slate-500">Output Total Tagihan</span>
+              <span className="text-xs uppercase font-bold tracking-wider text-slate-500">Total Tagihan</span>
               <span className="text-xs px-2 py-0.5 rounded bg-pink-500/20 text-pink-300 font-mono font-bold">
                 Tier {currentResult.tier}
               </span>
@@ -217,11 +214,11 @@ export const Slide9SandboxBuilder: React.FC = () => {
       </div>
 
       {/* Footer Takeaway */}
-      <div className="bg-slate-900 border-l-4 border-brand-500 p-4 rounded-r-xl flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <span className="font-mono text-sm px-2.5 py-1 rounded bg-brand-500/20 text-brand-300 font-bold">KESIAPAN PROYEK</span>
-          <p className="text-slate-200 text-lg font-semibold">
-            Kalian sudah siap merancang aturan matematika sendiri untuk <span className="text-brand-300 font-bold">Proyek Katalog Fungsi Dunia Nyata</span>!
+      <div className="bg-slate-900 border-l-4 border-brand-500 px-4 py-2.5 rounded-r-xl flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <span className="font-mono text-xs px-2 py-0.5 rounded bg-brand-500/20 text-brand-300 font-bold">KUNCI</span>
+          <p className="text-slate-200 text-sm md:text-base font-semibold">
+            Rancang batasan interval dan formula tarif untuk memodelkan fungsi sepenggal
           </p>
         </div>
       </div>

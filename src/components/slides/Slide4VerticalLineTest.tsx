@@ -15,14 +15,11 @@ interface GraphOption {
 const GRAPH_OPTIONS: GraphOption[] = [
   {
     id: 'linear',
-    name: 'Grafik Linear',
+    name: 'Garis Linear',
     formulaLatex: 'y = 0.5x + 1',
     isFunction: true,
-    verdict: 'FUNGSI (Setiap x hanya punya 1 nilai y)',
+    verdict: 'Maksimal 1 titik potong',
     renderPath: () => {
-      // mapping: canvas range x: -5 to 5, y: -5 to 5 -> canvas width 400, height 300
-      // x0 = -5 -> y = -1.5, x1 = 5 -> y = 3.5
-      // toCanvas: cx = 200 + x * 35, cy = 150 - y * 25
       return 'M 25 187.5 L 375 62.5';
     },
     getIntersections: (x) => [0.5 * x + 1],
@@ -32,7 +29,7 @@ const GRAPH_OPTIONS: GraphOption[] = [
     name: 'Parabola Vertikal',
     formulaLatex: 'y = 0.4x^2 - 2',
     isFunction: true,
-    verdict: 'FUNGSI (Garis tegak memotong maksimal di 1 titik)',
+    verdict: 'Maksimal 1 titik potong',
     renderPath: () => {
       let d = '';
       for (let x = -4; x <= 4; x += 0.2) {
@@ -48,12 +45,11 @@ const GRAPH_OPTIONS: GraphOption[] = [
   },
   {
     id: 'circle',
-    name: 'Kurva Lingkaran',
+    name: 'Lingkaran',
     formulaLatex: 'x^2 + y^2 = 9',
     isFunction: false,
-    verdict: 'BUKAN FUNGSI (Garis tegak memotong di 2 titik sekaligus!)',
+    verdict: 'Memotong 2 titik sekaligus',
     renderPath: () => {
-      // r = 3 units -> rx = 3 * 35 = 105, ry = 3 * 25 = 75
       return 'M 200 75 A 105 75 0 1 0 200 225 A 105 75 0 1 0 200 75';
     },
     getIntersections: (x) => {
@@ -68,7 +64,7 @@ const GRAPH_OPTIONS: GraphOption[] = [
     name: 'Parabola Horizontal',
     formulaLatex: 'x = 0.5y^2 - 2',
     isFunction: false,
-    verdict: 'BUKAN FUNGSI (Untuk 1 nilai x, terdapat 2 nilai y)',
+    verdict: 'Memotong 2 titik sekaligus',
     renderPath: () => {
       let d = '';
       for (let y = -3.5; y <= 3.5; y += 0.2) {
@@ -115,16 +111,13 @@ export const Slide4VerticalLineTest: React.FC = () => {
   return (
     <div className="flex flex-col h-full justify-between max-w-6xl mx-auto">
       {/* Header */}
-      <div className="space-y-2">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-sm font-semibold tracking-wide uppercase">
-          <Scan className="w-4 h-4" /> Konsep 3 · Uji Visual Grafik
+      <div className="space-y-1">
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-xs font-mono font-bold tracking-wider uppercase">
+          <Scan className="w-3.5 h-3.5" /> 04 · UJI GRAFIK
         </div>
-        <h1 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight">
-          Uji Garis Vertikal (Vertical Line Test)
+        <h1 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
+          Uji Garis Vertikal
         </h1>
-        <p className="text-xl text-slate-400 font-medium">
-          Tarik garis tegak vertikal dari atas ke bawah. Jika garis memotong kurva <span className="text-rose-400 font-semibold">lebih dari satu titik</span>, maka kurva itu <span className="text-rose-400 font-semibold">BUKAN fungsi</span>!
-        </p>
       </div>
 
       {/* Preset Buttons */}
@@ -218,12 +211,11 @@ export const Slide4VerticalLineTest: React.FC = () => {
           </svg>
         </div>
 
-        {/* Panel Kontrol Guru */}
+        {/* Panel Kontrol */}
         <div className="md:col-span-5 flex flex-col justify-between space-y-4">
           <div>
-            <span className="text-xs uppercase font-bold tracking-widest text-slate-500">Kontrol Pemindai Garis:</span>
-            <div className="flex items-center justify-between mt-2">
-              <span className="text-slate-300 font-mono text-sm">Posisi Garis: <MathFormula math={`x = ${sliderX.toFixed(1)}`} /></span>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-slate-300 font-mono text-sm">Garis: <MathFormula math={`x = ${sliderX.toFixed(1)}`} /></span>
               <button
                 onClick={handleScan}
                 disabled={isScanning}
@@ -241,45 +233,41 @@ export const Slide4VerticalLineTest: React.FC = () => {
               step="0.1"
               value={sliderX}
               onChange={(e) => setSliderX(parseFloat(e.target.value))}
-              className="w-full mt-3 accent-brand-500 cursor-pointer h-2 bg-slate-800 rounded-lg"
+              className="w-full mt-2 accent-brand-500 cursor-pointer h-2 bg-slate-800 rounded-lg"
             />
           </div>
 
           {/* Status Hasil Potong */}
           <div
-            className={`p-3.5 rounded-xl border transition-all ${
+            className={`p-4 rounded-xl border transition-all ${
               intersections.length > 1
                 ? 'bg-rose-950/40 border-rose-500/60 text-rose-200'
                 : 'bg-emerald-950/40 border-emerald-500/60 text-emerald-200'
             }`}
           >
-            <div className="flex items-center gap-2.5 mb-1">
+            <div className="flex items-center gap-2 mb-1">
               {intersections.length > 1 ? (
                 <XCircle className="w-5 h-5 text-rose-400" />
               ) : (
                 <CheckCircle2 className="w-5 h-5 text-emerald-400" />
               )}
-              <span className="text-base font-extrabold">
-                {intersections.length} Titik Potong Terdeteksi
+              <span className="text-lg font-extrabold">
+                {intersections.length > 1 ? 'BUKAN FUNGSI' : 'FUNGSI SAH'}
               </span>
             </div>
-            <p className="text-xs leading-relaxed text-slate-300">
-              {selectedGraph.verdict}
-            </p>
-          </div>
-
-          <div className="p-2 bg-slate-950 rounded-xl border border-slate-800 text-[11px] text-slate-400">
-            💬 Ajukan ke siswa: "Kenapa lingkaran tidak bisa disebut fungsi <MathFormula math="y = f(x)" />? Berapa nilai <MathFormula math="y" /> saat <MathFormula math="x = 0" />?"
+            <div className="text-xs text-slate-300 font-medium">
+              {intersections.length} titik potong ({selectedGraph.verdict})
+            </div>
           </div>
         </div>
       </div>
 
       {/* Footer Takeaway */}
-      <div className="bg-slate-900 border-l-4 border-brand-500 p-2.5 px-4 rounded-r-xl flex items-center justify-between mt-1 shrink-0">
+      <div className="bg-slate-900 border-l-4 border-brand-500 px-4 py-2.5 rounded-r-xl flex items-center justify-between mt-1 shrink-0">
         <div className="flex items-center gap-2.5">
-          <span className="font-mono text-xs px-2 py-0.5 rounded bg-brand-500/20 text-brand-300 font-bold">RUMUS CEPAT</span>
+          <span className="font-mono text-xs px-2 py-0.5 rounded bg-brand-500/20 text-brand-300 font-bold">KUNCI</span>
           <p className="text-slate-200 text-sm md:text-base font-semibold">
-            1 Garis Vertikal <MathFormula math="\to" /> Maksimal 1 Titik Potong = <span className="text-emerald-400">FUNGSI</span>. Lebih dari 1 Titik = <span className="text-rose-400">BUKAN FUNGSI</span>.
+            Maksimal 1 titik potong = <span className="text-emerald-400 font-bold">Fungsi</span> | Lebih dari 1 titik = <span className="text-rose-400 font-bold">Bukan Fungsi</span>
           </p>
         </div>
       </div>
