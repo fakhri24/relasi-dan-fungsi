@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
-import { Scan, CheckCircle2, XCircle } from 'lucide-react';
+import { Scan, CheckCircle2, XCircle, Smartphone } from 'lucide-react';
 import { MathFormula } from '../MathFormula';
+
+interface Slide4VerticalLineTestProps {
+  onOpenQrModal?: () => void;
+}
 
 interface GraphOption {
   id: string;
@@ -85,7 +89,7 @@ const GRAPH_OPTIONS: GraphOption[] = [
   },
 ];
 
-export const Slide4VerticalLineTest: React.FC = () => {
+export const Slide4VerticalLineTest: React.FC<Slide4VerticalLineTestProps> = ({ onOpenQrModal }) => {
   const [selectedGraph, setSelectedGraph] = useState<GraphOption>(GRAPH_OPTIONS[2]); // Default circle for dramatic demo
   const [sliderX, setSliderX] = useState<number>(0);
   const [isScanning, setIsScanning] = useState<boolean>(false);
@@ -196,10 +200,22 @@ export const Slide4VerticalLineTest: React.FC = () => {
                     stroke="#ffffff"
                     strokeWidth="2"
                   />
+                  {/* High contrast label badge */}
+                  <rect
+                    x={cxLine + 8}
+                    y={cyPoint - 10}
+                    width="54"
+                    height="18"
+                    rx="4"
+                    fill="var(--theme-svg-bg, #0b1120)"
+                    stroke={intersections.length > 1 ? '#f43f5e' : '#10b981'}
+                    strokeWidth="1"
+                    opacity="0.95"
+                  />
                   <text
                     x={cxLine + 12}
-                    y={cyPoint + 4}
-                    fill="#ffffff"
+                    y={cyPoint + 3}
+                    fill="var(--theme-svg-point-text, #ffffff)"
                     fontSize="11"
                     fontWeight="bold"
                     className="font-mono"
@@ -264,13 +280,23 @@ export const Slide4VerticalLineTest: React.FC = () => {
       </div>
 
       {/* Footer Takeaway */}
-      <div className="bg-slate-900 border-l-4 border-brand-500 px-4 py-2.5 rounded-r-xl flex items-center justify-between mt-1 shrink-0">
+      <div className="bg-slate-900 border-l-4 border-brand-500 px-4 py-2 rounded-r-xl flex flex-wrap items-center justify-between gap-3 mt-1 shrink-0">
         <div className="flex items-center gap-2.5">
           <span className="font-mono text-xs px-2 py-0.5 rounded bg-brand-500/20 text-brand-300 font-bold">KUNCI</span>
           <p className="text-slate-200 text-sm md:text-base font-semibold">
             Maksimal 1 titik potong = <span className="text-emerald-400 font-bold">Fungsi</span> | Lebih dari 1 titik = <span className="text-rose-400 font-bold">Bukan Fungsi</span>
           </p>
         </div>
+
+        {onOpenQrModal && (
+          <button
+            onClick={onOpenQrModal}
+            className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold text-xs flex items-center gap-1.5 shadow-md shadow-brand-500/30 transition-all cursor-pointer animate-pulse hover:animate-none"
+          >
+            <Smartphone className="w-3.5 h-3.5 text-cyan-300" />
+            <span>Mulai LKPD Digital (Tablet/HP) ➔</span>
+          </button>
+        )}
       </div>
     </div>
   );

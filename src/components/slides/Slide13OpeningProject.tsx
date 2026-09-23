@@ -97,7 +97,7 @@ export const Slide13OpeningProject: React.FC<Slide13OpeningProjectProps> = ({ on
               </div>
             </div>
 
-            <h1 className="text-3xl md:text-4xl xl:text-5xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-fuchsia-300 to-indigo-300 mt-1">
+            <h1 className="text-3xl md:text-4xl xl:text-5xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r dark:from-purple-300 dark:via-fuchsia-300 dark:to-indigo-300 from-purple-700 via-fuchsia-700 to-indigo-800 mt-1">
               PROYEK NYATA
             </h1>
           </div>
@@ -126,7 +126,7 @@ export const Slide13OpeningProject: React.FC<Slide13OpeningProjectProps> = ({ on
               <div className="flex items-center gap-2">
                 <span className="text-xl">{activeCase.icon}</span>
                 <div>
-                  <div className="text-xs font-bold text-white">{activeCase.name}</div>
+                  <div className="text-xs font-bold text-slate-900 dark:text-white">{activeCase.name}</div>
                   <div className="text-[10px] text-purple-400 font-mono">{activeCase.field}</div>
                 </div>
               </div>
@@ -168,11 +168,11 @@ export const Slide13OpeningProject: React.FC<Slide13OpeningProjectProps> = ({ on
                 <div className="w-8 h-8 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-300">
                   <Target className="w-4 h-4" />
                 </div>
-                <h2 className="text-base md:text-lg font-extrabold text-white">
+                <h2 className="text-base md:text-lg font-extrabold text-slate-900 dark:text-white">
                   Target Belajar
                 </h2>
               </div>
-              <span className="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 text-xs font-mono font-bold text-purple-400">
+              <span className="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 text-xs font-mono font-bold text-purple-700 dark:text-purple-400">
                 3 Misi
               </span>
             </div>
@@ -181,46 +181,46 @@ export const Slide13OpeningProject: React.FC<Slide13OpeningProjectProps> = ({ on
           {/* 3 Kartu Target Belajar Ultra-Minimalis */}
           <div className="space-y-3 my-auto py-2">
             {/* Target 1 */}
-            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-purple-500/30 flex items-center justify-between gap-3">
+            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-purple-500/30 flex items-center justify-between gap-3 shadow-sm">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/40 flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-700 dark:text-purple-300 border border-purple-500/40 flex items-center justify-center shrink-0">
                   <FileSpreadsheet className="w-4 h-4" />
                 </div>
-                <h3 className="text-sm md:text-base font-bold text-white">
+                <h3 className="text-sm md:text-base font-bold text-slate-900 dark:text-white">
                   1. Analisis Kasus
                 </h3>
               </div>
-              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 shrink-0">
+              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-800 dark:text-purple-300 border border-purple-500/30 shrink-0">
                 Ekstraksi Syarat
               </span>
             </div>
 
             {/* Target 2 */}
-            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-fuchsia-500/30 flex items-center justify-between gap-3">
+            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-fuchsia-500/30 flex items-center justify-between gap-3 shadow-sm">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-fuchsia-500/20 text-fuchsia-300 border border-fuchsia-500/40 flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-lg bg-fuchsia-500/20 text-fuchsia-700 dark:text-fuchsia-300 border border-fuchsia-500/40 flex items-center justify-center shrink-0">
                   <Calculator className="w-4 h-4" />
                 </div>
-                <h3 className="text-sm md:text-base font-bold text-white">
+                <h3 className="text-sm md:text-base font-bold text-slate-900 dark:text-white">
                   2. Rancang Piecewise
                 </h3>
               </div>
-              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-fuchsia-500/20 text-fuchsia-300 border border-fuchsia-500/30 shrink-0">
+              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-fuchsia-500/20 text-fuchsia-800 dark:text-fuchsia-300 border border-fuchsia-500/30 shrink-0">
                 Rumus & Interval
               </span>
             </div>
 
             {/* Target 3 */}
-            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-indigo-500/30 flex items-center justify-between gap-3">
+            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-indigo-500/30 flex items-center justify-between gap-3 shadow-sm">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border border-indigo-500/40 flex items-center justify-center shrink-0">
                   <Award className="w-4 h-4" />
                 </div>
-                <h3 className="text-sm md:text-base font-bold text-white">
+                <h3 className="text-sm md:text-base font-bold text-slate-900 dark:text-white">
                   3. Lembar Kerja Proyek
                 </h3>
               </div>
-              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 shrink-0">
+              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-indigo-500/20 text-indigo-800 dark:text-indigo-300 border border-indigo-500/30 shrink-0">
                 Katalog & LKPD 4
               </span>
             </div>

@@ -100,40 +100,40 @@ export const Slide2Machine: React.FC = () => {
         {/* Visualisasi Mesin */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center my-6 py-2">
           {/* Box Input */}
-          <div className="flex flex-col items-center justify-center p-6 bg-slate-950/80 border-2 border-dashed border-slate-700 rounded-2xl text-center">
+          <div className="flex flex-col items-center justify-center p-6 bg-slate-950/80 border-2 border-dashed border-slate-700 rounded-2xl text-center shadow-md">
             <span className="text-xs uppercase font-bold tracking-widest text-slate-500">Input</span>
-            <div className="text-5xl font-extrabold font-mono text-brand-400 my-2">{inputVal}</div>
-            <span className="text-xs text-slate-400 font-mono">Nilai x</span>
+            <div className="text-5xl font-extrabold font-mono text-indigo-700 dark:text-brand-400 my-2">{inputVal}</div>
+            <span className="text-xs text-slate-500 dark:text-slate-400 font-mono font-medium">Nilai x</span>
           </div>
 
           {/* Mesin Proses */}
-          <div className="relative flex flex-col items-center justify-center p-6 bg-gradient-to-b from-brand-900/40 to-slate-900 border-2 border-brand-500/50 rounded-2xl text-center glow-brand">
-            <div className="absolute -top-3 px-3 py-0.5 rounded-full bg-brand-500 text-white text-xs font-bold uppercase tracking-wider">
+          <div className="relative flex flex-col items-center justify-center p-6 bg-gradient-to-b from-indigo-50 to-white dark:from-brand-900/40 dark:to-slate-900 border-2 border-indigo-300 dark:border-brand-500/50 rounded-2xl text-center glow-brand shadow-md">
+            <div className="absolute -top-3 px-3 py-0.5 rounded-full bg-brand-600 text-white text-xs font-bold uppercase tracking-wider shadow-sm">
               Mesin f(x)
             </div>
-            <Cpu className={`w-10 h-10 text-brand-400 my-2 ${isProcessing ? 'animate-spin' : ''}`} />
-            <div className="text-xl font-bold text-white my-1">
-              <MathFormula math={currentCalc.formulaLatex} />
+            <Cpu className={`w-10 h-10 text-indigo-600 dark:text-brand-400 my-2 ${isProcessing ? 'animate-spin' : ''}`} />
+            <div className="text-xl font-bold text-slate-900 dark:text-white my-1">
+              <MathFormula math={currentCalc.formulaLatex} className="text-indigo-950 dark:text-white" />
             </div>
             <button
               onClick={handleRun}
               disabled={isProcessing}
-              className="mt-3 w-full py-2.5 px-5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-sm shadow-lg transition-all flex items-center justify-center gap-2"
+              className="mt-3 w-full py-2.5 px-5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-sm shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
-              {revealed ? <RotateCcw className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-              {revealed ? 'Hitung Nilai Lain' : 'Proses Mesin'}
+              {revealed ? <RotateCcw className="w-4 h-4 text-white" /> : <Play className="w-4 h-4 text-white" />}
+              <span className="text-white">{revealed ? 'Hitung Nilai Lain' : 'Proses Mesin'}</span>
             </button>
           </div>
 
           {/* Box Output */}
-          <div className="flex flex-col items-center justify-center p-6 bg-slate-950/80 border-2 border-dashed border-slate-700 rounded-2xl text-center min-h-[160px]">
+          <div className="flex flex-col items-center justify-center p-6 bg-slate-950/80 border-2 border-dashed border-slate-700 rounded-2xl text-center min-h-[160px] shadow-md">
             <span className="text-xs uppercase font-bold tracking-widest text-slate-500">Output</span>
             {revealed ? (
               <div className="animate-fadeIn">
-                <div className="text-5xl font-extrabold font-mono text-emerald-400 my-2">
+                <div className="text-5xl font-extrabold font-mono text-emerald-700 dark:text-emerald-400 my-2">
                   {currentCalc.res}
                 </div>
-                <div className="text-xs text-emerald-300 font-mono">
+                <div className="text-xs text-emerald-800 dark:text-emerald-300 font-mono font-bold">
                   <MathFormula math={currentCalc.substLatex + ` = ${currentCalc.res}`} />
                 </div>
               </div>

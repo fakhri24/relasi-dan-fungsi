@@ -20,6 +20,11 @@ import { Slide9SandboxBuilder } from './components/slides/Slide9SandboxBuilder';
 import { Slide13OpeningProject } from './components/slides/Slide13OpeningProject';
 import { Slide10ProjectHub } from './components/slides/Slide10ProjectHub';
 
+// Modul LKPD Digital & Dashboard Guru
+import { LkpdDigitalModal } from './components/lkpd/LkpdDigitalModal';
+import { TeacherDashboard } from './components/admin/TeacherDashboard';
+import { ProjectorQrModal } from './components/lkpd/ProjectorQrModal';
+
 const SLIDES: SlideItem[] = [
   // Pertemuan 1 (Slide 1–5)
   { id: 1, meetingNumber: 1, meetingTitle: 'Fondasi Relasi & Fungsi', meetingJP: '2 JP', title: 'Relasi & Target', subtitle: 'Hubungan Bebas', tag: '01 · PEMBUKA' },
@@ -60,6 +65,26 @@ export const App: React.FC = () => {
   };
 
   const [currentSlideIndex, setCurrentSlideIndex] = useState<number>(getInitialSlide);
+
+  // State Modal LKPD Digital, Dashboard Guru & QR Code Proyektor
+  const [isLkpdOpen, setIsLkpdOpen] = useState(false);
+  const [isTeacherDashboardOpen, setIsTeacherDashboardOpen] = useState(false);
+  const [isProjectorQrOpen, setIsProjectorQrOpen] = useState(false);
+
+  // Auto-detect mode via URL parameters (cth: ?mode=lkpd atau ?mode=admin)
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const mode = params.get('mode');
+      if (mode === 'lkpd' || params.get('lkpd') === '1') {
+        setIsLkpdOpen(true);
+      } else if (mode === 'admin' || params.get('admin') === '1') {
+        setIsTeacherDashboardOpen(true);
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
 
   // State Tema: 'dark' (Mode Gelap) atau 'light' (Mode Cerah)
   const [theme, setTheme] = useState<'dark' | 'light'>(() => {
@@ -138,7 +163,7 @@ export const App: React.FC = () => {
       case 3:
         return <Slide3ArrowDiagram />;
       case 4:
-        return <Slide4VerticalLineTest />;
+        return <Slide4VerticalLineTest onOpenQrModal={() => setIsProjectorQrOpen(true)} />;
       case 5:
         return <Slide6OpeningDomain onNext={handleNext} />;
       case 6:
@@ -173,6 +198,9 @@ export const App: React.FC = () => {
         onPrev={handlePrev}
         theme={theme}
         onToggleTheme={toggleTheme}
+        onOpenLkpd={() => setIsLkpdOpen(true)}
+        onOpenTeacherDashboard={() => setIsTeacherDashboardOpen(true)}
+        onOpenProjectorQr={() => setIsProjectorQrOpen(true)}
       />
 
       {/* Slide Presentation Frame */}
@@ -182,6 +210,26 @@ export const App: React.FC = () => {
 
       {/* Print-Only A4 Project Worksheet */}
       <WorksheetPrint />
+
+      {/* Modal Interaktif LKPD Digital Siswa */}
+      <LkpdDigitalModal
+        isOpen={isLkpdOpen}
+        onClose={() => setIsLkpdOpen(false)}
+      />
+
+      {/* Panel Dashboard Guru (Admin & Roster) */}
+      <TeacherDashboard
+        isOpen={isTeacherDashboardOpen}
+        onClose={() => setIsTeacherDashboardOpen(false)}
+      />
+
+      {/* Modal QR Code Proyektor Akses Siswa di Kelas */}
+      <ProjectorQrModal
+        isOpen={isProjectorQrOpen}
+        onClose={() => setIsProjectorQrOpen(false)}
+        onOpenLkpd={() => setIsLkpdOpen(true)}
+        onOpenTeacherDashboard={() => setIsTeacherDashboardOpen(true)}
+      />
     </div>
   );
 };

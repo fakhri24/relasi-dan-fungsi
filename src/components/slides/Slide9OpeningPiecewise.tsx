@@ -52,7 +52,7 @@ export const Slide9OpeningPiecewise: React.FC<Slide9OpeningPiecewiseProps> = ({ 
               </div>
             </div>
 
-            <h1 className="text-4xl md:text-5xl xl:text-6xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-orange-300 to-rose-300 mt-1">
+            <h1 className="text-4xl md:text-5xl xl:text-6xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r dark:from-amber-300 dark:via-orange-300 dark:to-rose-300 from-amber-700 via-orange-700 to-rose-700 mt-1">
               PIECEWISE
             </h1>
           </div>
@@ -116,7 +116,7 @@ export const Slide9OpeningPiecewise: React.FC<Slide9OpeningPiecewiseProps> = ({ 
                 <line x1="160" y1="18" x2="280" y2="18" stroke="#38bdf8" strokeWidth="3" />
                 {/* Titik di Cabang 2 (Valid = Kosong, Conflict = Penuh) */}
                 {boundaryState === 'valid' ? (
-                  <circle cx="160" cy="18" r="4.5" fill="#0f172a" stroke="#38bdf8" strokeWidth="2" />
+                  <circle cx="160" cy="18" r="4.5" fill="var(--theme-svg-bg, #0f172a)" stroke="#38bdf8" strokeWidth="2" />
                 ) : (
                   <circle cx="160" cy="18" r="4.5" fill="#f43f5e" stroke="#ffffff" strokeWidth="1.5" />
                 )}
@@ -179,11 +179,11 @@ export const Slide9OpeningPiecewise: React.FC<Slide9OpeningPiecewiseProps> = ({ 
                 <div className="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-300">
                   <Target className="w-4 h-4" />
                 </div>
-                <h2 className="text-base md:text-lg font-extrabold text-white">
+                <h2 className="text-base md:text-lg font-extrabold text-slate-900 dark:text-white">
                   Target Belajar
                 </h2>
               </div>
-              <span className="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 text-xs font-mono font-bold text-amber-400">
+              <span className="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 text-xs font-mono font-bold text-amber-700 dark:text-amber-400">
                 3 Misi
               </span>
             </div>
@@ -192,46 +192,46 @@ export const Slide9OpeningPiecewise: React.FC<Slide9OpeningPiecewiseProps> = ({ 
           {/* 3 Kartu Target Belajar Ultra-Minimalis */}
           <div className="space-y-3 my-auto py-2">
             {/* Target 1 */}
-            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-amber-500/30 flex items-center justify-between gap-3">
+            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-amber-500/30 flex items-center justify-between gap-3 shadow-sm">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40 flex items-center justify-center shrink-0">
                   <AlertTriangle className="w-4 h-4" />
                 </div>
-                <h3 className="text-sm md:text-base font-bold text-white">
+                <h3 className="text-sm md:text-base font-bold text-slate-900 dark:text-white">
                   1. Kebutuhan Cabang
                 </h3>
               </div>
-              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 shrink-0">
+              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/30 shrink-0">
                 Dilema 1 Garis
               </span>
             </div>
 
             {/* Target 2 */}
-            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-orange-500/30 flex items-center justify-between gap-3">
+            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-orange-500/30 flex items-center justify-between gap-3 shadow-sm">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-orange-500/20 text-orange-300 border border-orange-500/40 flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-lg bg-orange-500/20 text-orange-700 dark:text-orange-300 border border-orange-500/40 flex items-center justify-center shrink-0">
                   <Split className="w-4 h-4" />
                 </div>
-                <h3 className="text-sm md:text-base font-bold text-white">
+                <h3 className="text-sm md:text-base font-bold text-slate-900 dark:text-white">
                   2. Notasi Kurawal
                 </h3>
               </div>
-              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-orange-500/20 text-orange-300 border border-orange-500/30 shrink-0">
+              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-orange-500/20 text-orange-800 dark:text-orange-300 border border-orange-500/30 shrink-0">
                 f(x) = &#123; ... &#125;
               </span>
             </div>
 
             {/* Target 3 */}
-            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-rose-500/30 flex items-center justify-between gap-3">
+            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-rose-500/30 flex items-center justify-between gap-3 shadow-sm">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/40 flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-lg bg-rose-500/20 text-rose-700 dark:text-rose-300 border border-rose-500/40 flex items-center justify-center shrink-0">
                   <CheckCircle2 className="w-4 h-4" />
                 </div>
-                <h3 className="text-sm md:text-base font-bold text-white">
+                <h3 className="text-sm md:text-base font-bold text-slate-900 dark:text-white">
                   3. Titik Sambungan
                 </h3>
               </div>
-              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 shrink-0">
+              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-800 dark:text-rose-300 border border-rose-500/30 shrink-0">
                 Solid ● vs Lubang ○
               </span>
             </div>

@@ -100,18 +100,18 @@ export const Slide8PiecewiseIntro: React.FC = () => {
           {/* Arti Titik Penuh vs Berlubang */}
           <div className="grid grid-cols-2 gap-3">
             <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-center gap-2.5">
-              <div className="w-5 h-5 rounded-full bg-brand-400 border-2 border-white flex items-center justify-center shrink-0" />
+              <div className="w-5 h-5 rounded-full bg-brand-500 border-2 border-slate-900 dark:border-white flex items-center justify-center shrink-0 shadow-sm" />
               <div>
-                <div className="text-xs font-bold text-white">Titik Penuh (●)</div>
-                <div className="text-[11px] text-slate-400">Ikut masuk (<MathFormula math="\le" /> atau <MathFormula math="\ge" />)</div>
+                <div className="text-xs font-bold text-slate-900 dark:text-white">Titik Penuh (●)</div>
+                <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Ikut masuk (<MathFormula math="\le" /> atau <MathFormula math="\ge" />)</div>
               </div>
             </div>
 
             <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-center gap-2.5">
-              <div className="w-5 h-5 rounded-full bg-slate-950 border-2 border-brand-400 shrink-0" />
+              <div className="w-5 h-5 rounded-full bg-slate-100 dark:bg-slate-950 border-2 border-brand-500 shrink-0 shadow-sm" />
               <div>
-                <div className="text-xs font-bold text-white">Titik Terbuka (○)</div>
-                <div className="text-[11px] text-slate-400">Tidak ikut (<MathFormula math="<" /> atau <MathFormula math=">" />)</div>
+                <div className="text-xs font-bold text-slate-900 dark:text-white">Titik Terbuka (○)</div>
+                <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Tidak ikut (<MathFormula math="<" /> atau <MathFormula math=">" />)</div>
               </div>
             </div>
           </div>

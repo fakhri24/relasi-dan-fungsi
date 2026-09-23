@@ -102,7 +102,7 @@ export const Slide6OpeningDomain: React.FC<Slide6OpeningDomainProps> = ({ onNext
               </div>
             </div>
 
-            <h1 className="text-3xl md:text-4xl xl:text-5xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-teal-300 to-cyan-300 mt-1">
+            <h1 className="text-3xl md:text-4xl xl:text-5xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r dark:from-emerald-300 dark:via-teal-300 dark:to-cyan-300 from-emerald-700 via-teal-700 to-cyan-800 mt-1">
               BATASAN NYATA
             </h1>
           </div>
@@ -129,9 +129,9 @@ export const Slide6OpeningDomain: React.FC<Slide6OpeningDomainProps> = ({ onNext
           <div className="w-full bg-slate-950/90 rounded-xl border border-slate-800/80 p-3.5 space-y-2.5">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="text-2xl">{currentCase.icon}</span>
+                <span className="text-xl">{currentCase.icon}</span>
                 <div>
-                  <div className="text-xs font-bold text-white">{currentCase.name}</div>
+                  <div className="text-xs font-bold text-slate-900 dark:text-white">{currentCase.name}</div>
                   <div className="text-[11px] text-slate-400">{currentCase.variable}</div>
                 </div>
               </div>
@@ -199,11 +199,11 @@ export const Slide6OpeningDomain: React.FC<Slide6OpeningDomainProps> = ({ onNext
                 <div className="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-300">
                   <Target className="w-4 h-4" />
                 </div>
-                <h2 className="text-base md:text-lg font-extrabold text-white">
+                <h2 className="text-base md:text-lg font-extrabold text-slate-900 dark:text-white">
                   Target Belajar
                 </h2>
               </div>
-              <span className="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 text-xs font-mono font-bold text-emerald-400">
+              <span className="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 text-xs font-mono font-bold text-emerald-700 dark:text-emerald-400">
                 3 Misi
               </span>
             </div>
@@ -212,46 +212,46 @@ export const Slide6OpeningDomain: React.FC<Slide6OpeningDomainProps> = ({ onNext
           {/* 3 Kartu Target Belajar Ultra-Minimalis */}
           <div className="space-y-3 my-auto py-2">
             {/* Target 1 */}
-            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-emerald-500/30 flex items-center justify-between gap-3">
+            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-emerald-500/30 flex items-center justify-between gap-3 shadow-sm">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/40 flex items-center justify-center shrink-0">
                   <MapPin className="w-4 h-4" />
                 </div>
-                <h3 className="text-sm md:text-base font-bold text-white">
+                <h3 className="text-sm md:text-base font-bold text-slate-900 dark:text-white">
                   1. Domain & Range Fisik
                 </h3>
               </div>
-              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shrink-0">
+              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30 shrink-0">
                 Batasan Nyata
               </span>
             </div>
 
             {/* Target 2 */}
-            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-teal-500/30 flex items-center justify-between gap-3">
+            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-teal-500/30 flex items-center justify-between gap-3 shadow-sm">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-teal-500/20 text-teal-300 border border-teal-500/40 flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-lg bg-teal-500/20 text-teal-700 dark:text-teal-300 border border-teal-500/40 flex items-center justify-center shrink-0">
                   <Users className="w-4 h-4" />
                 </div>
-                <h3 className="text-sm md:text-base font-bold text-white">
+                <h3 className="text-sm md:text-base font-bold text-slate-900 dark:text-white">
                   2. Diskrit vs Kontinu
                 </h3>
               </div>
-              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/30 shrink-0">
+              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-teal-500/20 text-teal-800 dark:text-teal-300 border border-teal-500/30 shrink-0">
                 Cacah vs Riil
               </span>
             </div>
 
             {/* Target 3 */}
-            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-cyan-500/30 flex items-center justify-between gap-3">
+            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-cyan-500/30 flex items-center justify-between gap-3 shadow-sm">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 border border-cyan-500/40 flex items-center justify-center shrink-0">
                   <TrendingUp className="w-4 h-4" />
                 </div>
-                <h3 className="text-sm md:text-base font-bold text-white">
+                <h3 className="text-sm md:text-base font-bold text-slate-900 dark:text-white">
                   3. Model Linear
                 </h3>
               </div>
-              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 shrink-0">
+              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-800 dark:text-cyan-300 border border-cyan-500/30 shrink-0">
                 f(x) = ax + b
               </span>
             </div>

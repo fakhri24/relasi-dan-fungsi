@@ -87,19 +87,29 @@ relasi-dan-fungsi/
 │   ├── App.tsx                    # Orkes 14 slide terbagi 4 pertemuan dan print worksheet
 │   ├── main.tsx                   # Entry point React
 │   ├── index.css                  # Tailwind imports & utility glow proyektor
-│   ├── types/slides.ts            # Tipe TypeScript data slide dan topik proyek
+│   ├── types/
+│   │   ├── slides.ts              # Tipe TypeScript data slide dan topik proyek
+│   │   └── lkpd.ts                # Tipe TypeScript data pengerjaan LKPD siswa & Firestore model
+│   ├── lib/
+│   │   └── firebase.ts            # Konfigurasi client Firebase (Auth, Firestore, Whitelist fkhr2nd@gmail.com)
 │   └── components/
 │       ├── MathFormula.tsx        # Komponen wrapper KaTeX yang aman
 │       ├── CanteenItemIcon.tsx    # Ilustrasi SVG vektor jajanan kantin proyektor
 │       ├── Navbar.tsx             # Navigasi atas, progress bar dengan penanda sesi, drawer & link panduan guru / LKPD
 │       ├── SlideContainer.tsx     # Frame slide 16:9 + event listener keyboard (←, →, Spasi)
 │       ├── WorksheetPrint.tsx     # Lembar kerja siswa A4 print-only (Ctrl+P)
+│       ├── admin/
+│       │   └── TeacherDashboard.tsx # Panel evaluasi guru: live feed, scoring, ekspor CSV, showcase & roster
+│       ├── lkpd/
+│       │   ├── InteractiveArrowCanvas.tsx # Kanvas diagram panah interaktif dengan export Base64
+│       │   ├── LkpdDigitalModal.tsx       # Modal pengerjaan LKPD digital siswa (6 stepper terhubung Firestore)
+│       │   └── ProjectorQrModal.tsx       # Modal QR Code proyektor untuk akses siswa serentak di kelas
 │       └── slides/
 │           ├── Slide1OpeningRelasi.tsx    # Slide 1: Pembuka P1 (Konsep Besar "RELASI" & 3 Target Belajar)
 │           ├── Slide1Hook.tsx             # Slide 2: Mesin Kasir (Scanner Kasir Kantin & Multi-Barang Many-to-One)
 │           ├── Slide2Machine.tsx          # Slide 3: Mesin Fungsi (Model Mental Mesin f(x))
 │           ├── Slide3ArrowDiagram.tsx     # Slide 4: Diagram Panah (Syarat Emas Relasi vs Fungsi)
-│           ├── Slide4VerticalLineTest.tsx # Slide 5: Uji Garis Vertikal (Vertical Line Test)
+│           ├── Slide4VerticalLineTest.tsx # Slide 5: Uji Garis Vertikal & Tombol Buka LKPD Digital Siswa
 │           ├── Slide6OpeningDomain.tsx    # Slide 6: Pembuka P2 (Konsep "BATASAN NYATA" & 3 Target Belajar)
 │           ├── Slide5DomainRange.tsx      # Slide 7: Domain & Range (Batasan Fisik)
 │           ├── Slide6LinearGraph.tsx      # Slide 8: Model Linier (f(x) = ax + b)

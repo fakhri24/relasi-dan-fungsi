@@ -259,35 +259,35 @@ export const Slide10ProjectHub: React.FC = () => {
       ) : (
         /* Tab Rubrik Penilaian */
         <div className="bg-slate-900/90 border border-slate-800 p-4 rounded-2xl shadow-xl my-1 space-y-3 flex-1 min-h-0">
-          <h3 className="text-lg font-bold text-white flex items-center gap-2">
-            <Award className="w-5 h-5 text-amber-400" /> Rubrik Penilaian Proyek
+          <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <Award className="w-5 h-5 text-amber-500 dark:text-amber-400" /> Rubrik Penilaian Proyek
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-            <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
-              <div className="text-amber-400 font-extrabold text-xl">25%</div>
-              <h4 className="text-white font-bold text-xs mt-0.5">1. Identifikasi Masalah</h4>
-              <p className="text-[11px] text-slate-400 mt-0.5">
+            <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 shadow-sm">
+              <div className="text-amber-700 dark:text-amber-400 font-extrabold text-xl font-mono">25%</div>
+              <h4 className="text-slate-900 dark:text-white font-bold text-xs mt-0.5">1. Identifikasi Masalah</h4>
+              <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5 leading-relaxed">
                 Kesesuaian masalah nyata dan batasan Domain-Range.
               </p>
             </div>
-            <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
-              <div className="text-brand-400 font-extrabold text-xl">35%</div>
-              <h4 className="text-white font-bold text-xs mt-0.5">2. Perumusan Fungsi</h4>
-              <p className="text-[11px] text-slate-400 mt-0.5">
+            <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 shadow-sm">
+              <div className="text-indigo-700 dark:text-brand-400 font-extrabold text-xl font-mono">35%</div>
+              <h4 className="text-slate-900 dark:text-white font-bold text-xs mt-0.5">2. Perumusan Fungsi</h4>
+              <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5 leading-relaxed">
                 Ketepatan notasi kurung kurawal & syarat interval.
               </p>
             </div>
-            <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
-              <div className="text-emerald-400 font-extrabold text-xl">25%</div>
-              <h4 className="text-white font-bold text-xs mt-0.5">3. Gambar Grafik</h4>
-              <p className="text-[11px] text-slate-400 mt-0.5">
+            <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 shadow-sm">
+              <div className="text-emerald-700 dark:text-emerald-400 font-extrabold text-xl font-mono">25%</div>
+              <h4 className="text-slate-900 dark:text-white font-bold text-xs mt-0.5">3. Gambar Grafik</h4>
+              <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5 leading-relaxed">
                 Skala proporsional & ketepatan titik ● vs ○.
               </p>
             </div>
-            <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
-              <div className="text-purple-400 font-extrabold text-xl">15%</div>
-              <h4 className="text-white font-bold text-xs mt-0.5">4. Analisis & Kesimpulan</h4>
-              <p className="text-[11px] text-slate-400 mt-0.5">
+            <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 shadow-sm">
+              <div className="text-purple-700 dark:text-purple-400 font-extrabold text-xl font-mono">15%</div>
+              <h4 className="text-slate-900 dark:text-white font-bold text-xs mt-0.5">4. Analisis & Kesimpulan</h4>
+              <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5 leading-relaxed">
                 Interpretasi dunia nyata & relevansi kebijakan.
               </p>
             </div>

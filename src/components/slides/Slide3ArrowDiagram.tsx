@@ -113,14 +113,14 @@ export const Slide3ArrowDiagram: React.FC = () => {
             </defs>
 
             {/* Ellipse Himpunan A */}
-            <ellipse cx="90" cy="130" rx="68" ry="110" fill="#1e1b4b" fillOpacity="0.75" stroke="#6366f1" strokeWidth="2.5" />
-            <text x="90" y="36" textAnchor="middle" fill="#c7d2fe" fontWeight="bold" fontSize="13" fontFamily="monospace">
+            <ellipse cx="90" cy="130" rx="68" ry="110" fill="var(--theme-set-a-bg, #1e1b4b)" fillOpacity="0.85" stroke="var(--theme-set-a-stroke, #6366f1)" strokeWidth="2.5" />
+            <text x="90" y="36" textAnchor="middle" fill="var(--theme-set-a-title, #c7d2fe)" fontWeight="bold" fontSize="13" fontFamily="monospace">
               Domain (A)
             </text>
 
             {/* Ellipse Himpunan B */}
-            <ellipse cx="370" cy="130" rx="68" ry="110" fill="#064e3b" fillOpacity="0.75" stroke="#10b981" strokeWidth="2.5" />
-            <text x="370" y="36" textAnchor="middle" fill="#a7f3d0" fontWeight="bold" fontSize="13" fontFamily="monospace">
+            <ellipse cx="370" cy="130" rx="68" ry="110" fill="var(--theme-set-b-bg, #064e3b)" fillOpacity="0.85" stroke="var(--theme-set-b-stroke, #10b981)" strokeWidth="2.5" />
+            <text x="370" y="36" textAnchor="middle" fill="var(--theme-set-b-title, #a7f3d0)" fontWeight="bold" fontSize="13" fontFamily="monospace">
               Kodomain (B)
             </text>
 
@@ -149,8 +149,8 @@ export const Slide3ArrowDiagram: React.FC = () => {
               const cy = 65 + idx * 45;
               return (
                 <g key={nama}>
-                  <circle cx="130" cy={cy} r="5" fill="#a5b4fc" />
-                  <text x="115" y={cy + 4} textAnchor="end" fill="#ffffff" fontSize="13" fontWeight="600">
+                  <circle cx="130" cy={cy} r="5" fill="var(--theme-set-a-stroke, #6366f1)" />
+                  <text x="115" y={cy + 4} textAnchor="end" fill="var(--theme-set-a-text, #ffffff)" fontSize="13" fontWeight="bold">
                     {nama}
                   </text>
                 </g>
@@ -162,8 +162,8 @@ export const Slide3ArrowDiagram: React.FC = () => {
               const cy = 80 + idx * 55;
               return (
                 <g key={makanan}>
-                  <circle cx="330" cy={cy} r="5" fill="#6ee7b7" />
-                  <text x="345" y={cy + 4} textAnchor="start" fill="#ffffff" fontSize="13" fontWeight="600">
+                  <circle cx="330" cy={cy} r="5" fill="var(--theme-set-b-stroke, #10b981)" />
+                  <text x="345" y={cy + 4} textAnchor="start" fill="var(--theme-set-b-text, #ffffff)" fontSize="13" fontWeight="bold">
                     {makanan}
                   </text>
                 </g>

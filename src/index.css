@@ -25,6 +25,16 @@
   --theme-svg-text: #94a3b8;
   --theme-svg-bg: #0b1120;
   --donut-hole-bg: #0b1120;
+  --theme-svg-point-text: #ffffff;
+  --theme-svg-coord-text: #fde68a;
+  --theme-set-a-bg: #1e1b4b;
+  --theme-set-a-stroke: #6366f1;
+  --theme-set-a-title: #c7d2fe;
+  --theme-set-a-text: #ffffff;
+  --theme-set-b-bg: #064e3b;
+  --theme-set-b-stroke: #10b981;
+  --theme-set-b-title: #a7f3d0;
+  --theme-set-b-text: #ffffff;
 }
 
 html.light {
@@ -49,6 +59,16 @@ html.light {
   --theme-svg-text: #334155;
   --theme-svg-bg: #f8fafc;
   --donut-hole-bg: #ffffff;
+  --theme-svg-point-text: #0f172a;
+  --theme-svg-coord-text: #92400e;
+  --theme-set-a-bg: #e0e7ff;
+  --theme-set-a-stroke: #4f46e5;
+  --theme-set-a-title: #312e81;
+  --theme-set-a-text: #1e1b4b;
+  --theme-set-b-bg: #d1fae5;
+  --theme-set-b-stroke: #059669;
+  --theme-set-b-title: #064e3b;
+  --theme-set-b-text: #064e3b;
 }
 
 /* Classroom Projector Optimizations */
@@ -58,55 +78,231 @@ html.light {
   }
 }
 
-/* Light mode typography & contrast overrides */
+/* =========================================================================
+   LIGHT MODE HIGH-CONTRAST TYPOGRAPHY & ACCENT ADAPTATIONS (WCAG AAA)
+   ========================================================================= */
+
+/* 1. All Headings & Slide Titles */
 html.light h1,
 html.light h2,
 html.light h3,
 html.light h4,
 html.light .slide-title,
 html.light .theme-heading {
-  color: #0f172a;
-}
-
-html.light h1.text-white,
-html.light h2.text-white,
-html.light h3.text-white,
-html.light h4.text-white {
   color: #0f172a !important;
 }
 
-/* Keep headings inside saturated colored containers crisp white */
-html.light [class*="bg-brand-500"] h1,
-html.light [class*="bg-brand-600"] h1,
-html.light [class*="bg-brand-500"] h2,
-html.light [class*="bg-brand-600"] h2,
-html.light [class*="bg-brand-500"] h3,
-html.light [class*="bg-brand-600"] h3,
-html.light [class*="bg-brand-500"] h4,
-html.light [class*="bg-brand-600"] h4,
-html.light [class*="bg-emerald-600"] h1,
-html.light [class*="bg-emerald-600"] h2,
-html.light [class*="bg-emerald-600"] h3,
-html.light [class*="bg-purple-600"] h1,
-html.light [class*="bg-purple-600"] h2,
-html.light [class*="bg-purple-600"] h3,
-html.light [class*="bg-rose-600"] h1,
-html.light [class*="bg-rose-600"] h2,
-html.light [class*="bg-rose-600"] h3 {
+/* 2. Default text-white converts to deep near-black in Light Mode unless inside solid colored buttons */
+html.light .text-white {
+  color: #0f172a;
+}
+
+/* 3. Keep text crisp white inside saturated solid buttons & solid badges */
+html.light button.bg-brand-600,
+html.light button.bg-brand-500,
+html.light button.bg-indigo-600,
+html.light button.bg-indigo-500,
+html.light button.bg-emerald-600,
+html.light button.bg-emerald-500,
+html.light button.bg-purple-600,
+html.light button.bg-purple-500,
+html.light button.bg-rose-600,
+html.light button.bg-rose-500,
+html.light button.bg-amber-600,
+html.light .bg-brand-600,
+html.light .bg-indigo-600,
+html.light .bg-emerald-600,
+html.light .bg-purple-600,
+html.light .bg-rose-600,
+html.light [class*="bg-brand-600"] text,
+html.light [class*="bg-brand-600"] span,
+html.light [class*="bg-emerald-600"] span,
+html.light [class*="bg-rose-600"] span {
   color: #ffffff !important;
 }
 
-/* Light mode container shadow */
+/* Exceptions: text-transparent in gradient titles should remain text-transparent */
+html.light .text-transparent {
+  color: transparent !important;
+}
+
+/* 4. Pastel Colors Converted to High-Contrast Saturated Colors in Light Mode */
+html.light .text-brand-300,
+html.light .text-brand-400,
+html.light .text-indigo-300,
+html.light .text-indigo-400 {
+  color: #3730a3 !important; /* indigo-800: Contrast 8.4:1 on white */
+}
+
+html.light .text-emerald-200,
+html.light .text-emerald-300,
+html.light .text-emerald-400 {
+  color: #065f46 !important; /* emerald-800: Contrast 7.1:1 on white */
+}
+
+html.light .text-amber-200,
+html.light .text-amber-300,
+html.light .text-amber-400 {
+  color: #92400e !important; /* amber-800: Contrast 7.1:1 on white */
+}
+
+html.light .text-purple-200,
+html.light .text-purple-300,
+html.light .text-purple-400 {
+  color: #6b21a8 !important; /* purple-800: Contrast 7.8:1 on white */
+}
+
+html.light .text-rose-200,
+html.light .text-rose-300,
+html.light .text-rose-400 {
+  color: #9f1239 !important; /* rose-800: Contrast 7.9:1 on white */
+}
+
+html.light .text-pink-200,
+html.light .text-pink-300,
+html.light .text-pink-400 {
+  color: #9d174d !important; /* pink-800: Contrast 8.2:1 on white */
+}
+
+html.light .text-cyan-200,
+html.light .text-cyan-300,
+html.light .text-cyan-400 {
+  color: #155e75 !important; /* cyan-800: Contrast 7.2:1 on white */
+}
+
+html.light .text-teal-200,
+html.light .text-teal-300,
+html.light .text-teal-400 {
+  color: #115e59 !important; /* teal-800: Contrast 7.4:1 on white */
+}
+
+/* 5. Translucent Badge Backgrounds Converted to Soft Pastel with Dark Borders */
+html.light .bg-indigo-500\/10,
+html.light .bg-indigo-500\/20,
+html.light .bg-brand-500\/10,
+html.light .bg-brand-500\/20 {
+  background-color: #e0e7ff !important;
+  border-color: #a5b4fc !important;
+  color: #312e81 !important;
+}
+
+html.light .bg-emerald-500\/10,
+html.light .bg-emerald-500\/20 {
+  background-color: #d1fae5 !important;
+  border-color: #6ee7b7 !important;
+  color: #064e3b !important;
+}
+
+html.light .bg-amber-500\/10,
+html.light .bg-amber-500\/20 {
+  background-color: #fef3c7 !important;
+  border-color: #fcd34d !important;
+  color: #78350f !important;
+}
+
+html.light .bg-purple-500\/10,
+html.light .bg-purple-500\/20 {
+  background-color: #f3e8ff !important;
+  border-color: #d8b4fe !important;
+  color: #581c87 !important;
+}
+
+html.light .bg-rose-500\/10,
+html.light .bg-rose-500\/20 {
+  background-color: #ffe4e6 !important;
+  border-color: #fda4af !important;
+  color: #881337 !important;
+}
+
+html.light .bg-cyan-500\/10,
+html.light .bg-cyan-500\/20 {
+  background-color: #cffafe !important;
+  border-color: #67e8f9 !important;
+  color: #164e63 !important;
+}
+
+/* 6. Verdict / Feedback Alert Boxes in Light Mode */
+html.light .bg-emerald-950\/40,
+html.light .bg-emerald-950\/50,
+html.light .bg-emerald-950\/60 {
+  background-color: #ecfdf5 !important;
+  border-color: #6ee7b7 !important;
+  color: #064e3b !important;
+}
+
+html.light .bg-rose-950\/20,
+html.light .bg-rose-950\/40,
+html.light .bg-rose-950\/50,
+html.light .bg-rose-950\/60 {
+  background-color: #fff1f2 !important;
+  border-color: #fda4af !important;
+  color: #881337 !important;
+}
+
+html.light .bg-indigo-950\/40,
+html.light .bg-indigo-950\/50,
+html.light .bg-indigo-950\/60 {
+  background-color: #eef2ff !important;
+  border-color: #a5b4fc !important;
+  color: #312e81 !important;
+}
+
+html.light .bg-amber-950\/30,
+html.light .bg-amber-950\/40 {
+  background-color: #fffbeb !important;
+  border-color: #fcd34d !important;
+  color: #78350f !important;
+}
+
+/* 7. Button Hover Contrast in Light Mode */
+html.light button:hover {
+  text-shadow: none;
+}
+
+html.light [class*="hover:text-white"]:hover {
+  color: #0f172a !important;
+}
+
+/* Keep hover on solid dark buttons white */
+html.light [class*="bg-brand-600"]:hover,
+html.light [class*="bg-emerald-600"]:hover,
+html.light [class*="bg-purple-600"]:hover,
+html.light [class*="bg-rose-600"]:hover {
+  color: #ffffff !important;
+}
+
+/* 8. Light Mode Container Frame Shadow */
 html.light .slide-container-frame {
   box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08), 0 4px 12px -2px rgba(15, 23, 42, 0.04) !important;
 }
 
-/* Failsafe to prevent any double rendering of MathML alongside KaTeX HTML */
+/* 9. Failsafe to prevent any double rendering of MathML alongside KaTeX HTML */
 .katex-mathml {
   display: none !important;
 }
 
-/* Custom animations and styling */
+/* 9b. KaTeX High-Contrast Typography in Light Mode */
+html.light .katex {
+  color: #0f172a;
+}
+html.light .text-indigo-300 .katex,
+html.light .text-brand-300 .katex {
+  color: #3730a3 !important;
+}
+html.light .text-emerald-300 .katex,
+html.light .text-emerald-400 .katex {
+  color: #065f46 !important;
+}
+html.light .text-rose-300 .katex,
+html.light .text-rose-400 .katex {
+  color: #9f1239 !important;
+}
+html.light .text-amber-300 .katex,
+html.light .text-amber-400 .katex {
+  color: #92400e !important;
+}
+
+/* 10. Custom animations and styling */
 .glow-brand {
   box-shadow: 0 0 35px -5px rgba(99, 102, 241, 0.35);
 }
@@ -132,7 +328,7 @@ html.light .glow-rose {
   box-shadow: 0 4px 20px -2px rgba(244, 63, 94, 0.2);
 }
 
-/* Animasi Sinar Laser Scanner Kasir */
+/* 11. Animasi Sinar Laser Scanner Kasir */
 @keyframes laser-sweep {
   0% {
     top: 5%;

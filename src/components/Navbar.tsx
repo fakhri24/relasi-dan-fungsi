@@ -11,6 +11,8 @@ import {
   FileText,
   Sun,
   Moon,
+  QrCode,
+  ShieldCheck,
 } from 'lucide-react';
 import { SlideItem } from '../types/slides';
 
@@ -22,6 +24,9 @@ interface NavbarProps {
   onPrev: () => void;
   theme?: 'dark' | 'light';
   onToggleTheme?: () => void;
+  onOpenLkpd?: () => void;
+  onOpenTeacherDashboard?: () => void;
+  onOpenProjectorQr?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -32,6 +37,9 @@ export const Navbar: React.FC<NavbarProps> = ({
   onPrev,
   theme = 'dark',
   onToggleTheme,
+  onOpenLkpd,
+  onOpenTeacherDashboard,
+  onOpenProjectorQr,
 }) => {
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
@@ -92,7 +100,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-extrabold text-white text-base md:text-lg tracking-tight">
+                <span className="font-extrabold text-slate-900 dark:text-white text-base md:text-lg tracking-tight">
                   SuperMath MTK X
                 </span>
                 <span className="hidden sm:inline-block text-xs px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-300 font-semibold border border-brand-500/30">
@@ -160,8 +168,19 @@ export const Navbar: React.FC<NavbarProps> = ({
               title="Cetak Lembar Kerja Siswa (LKPD A4)"
             >
               <FileText className="w-4 h-4 text-emerald-400" />
-              <span className="hidden xl:inline">LKPD Siswa</span>
+              <span className="hidden xl:inline">LKPD Cetak</span>
             </a>
+
+            {onOpenProjectorQr && (
+              <button
+                onClick={onOpenProjectorQr}
+                className="p-2.5 rounded-xl bg-gradient-to-r from-brand-600/30 to-indigo-600/30 hover:from-brand-600/50 hover:to-indigo-600/50 border border-brand-500/50 text-brand-300 hover:text-white transition-all ml-1 flex items-center gap-1.5 text-xs font-bold shadow-sm"
+                title="Buka LKPD Digital Siswa (Scan QR / Laptop)"
+              >
+                <QrCode className="w-4 h-4 text-cyan-400" />
+                <span className="hidden xl:inline">LKPD Digital</span>
+              </button>
+            )}
 
             {onToggleTheme && (
               <button
@@ -244,7 +263,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                               }}
                               className={`w-full p-2.5 rounded-xl text-left transition-all border flex items-center gap-2.5 ${
                                 isActive
-                                  ? 'bg-brand-600/20 border-brand-500 text-white font-bold'
+                                  ? 'bg-brand-600/20 border-brand-500 text-slate-900 dark:text-white font-bold'
                                   : 'bg-slate-900/60 border-slate-800/80 text-slate-300 hover:bg-slate-900'
                               }`}
                             >
@@ -291,6 +310,45 @@ export const Navbar: React.FC<NavbarProps> = ({
                   </span>
                 </button>
               )}
+              {onOpenProjectorQr && (
+                <button
+                  onClick={() => {
+                    setMenuOpen(false);
+                    onOpenProjectorQr();
+                  }}
+                  className="w-full p-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white transition-all flex items-center justify-center gap-2 text-xs font-bold shadow-md shadow-brand-600/30"
+                >
+                  <QrCode className="w-4 h-4 text-cyan-300" />
+                  <span>Mulai LKPD Digital (QR / Tablet)</span>
+                </button>
+              )}
+
+              {onOpenTeacherDashboard && (
+                <button
+                  onClick={() => {
+                    setMenuOpen(false);
+                    onOpenTeacherDashboard();
+                  }}
+                  className="w-full p-2.5 rounded-xl bg-amber-600/20 hover:bg-amber-600/30 border border-amber-500/40 text-amber-300 transition-all flex items-center justify-center gap-2 text-xs font-bold"
+                >
+                  <ShieldCheck className="w-4 h-4 text-amber-400" />
+                  <span>Dashboard Guru (Admin & Roster) 🔒</span>
+                </button>
+              )}
+
+              {onOpenLkpd && (
+                <button
+                  onClick={() => {
+                    setMenuOpen(false);
+                    onOpenLkpd();
+                  }}
+                  className="w-full p-2.5 rounded-xl bg-indigo-600/20 hover:bg-indigo-600/30 border border-indigo-500/40 text-indigo-300 transition-all flex items-center justify-center gap-2 text-xs font-bold"
+                >
+                  <FileText className="w-4 h-4 text-indigo-400" />
+                  <span>Kerjakan LKPD Digital (Laptop) ➔</span>
+                </button>
+              )}
+
               <a
                 href="./panduan-guru.html"
                 target="_blank"

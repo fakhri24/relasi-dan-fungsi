@@ -83,15 +83,37 @@ export const Slide6LinearGraph: React.FC = () => {
 
             {/* Titik Intercept b (0, b) */}
             <circle cx={mapX(0)} cy={y0} r="6" fill="#10b981" stroke="#ffffff" strokeWidth="2" />
-            <text x={mapX(0) + 10} y={y0 - 8} fill="#a7f3d0" fontSize="11" fontWeight="bold" className="font-mono">
-              Buka Pintu (b={b}k)
+            <rect
+              x={mapX(0) + 6}
+              y={y0 - 20}
+              width="105"
+              height="16"
+              rx="3"
+              fill="var(--theme-svg-bg, #0b1120)"
+              stroke="#10b981"
+              strokeWidth="0.75"
+              opacity="0.9"
+            />
+            <text x={mapX(0) + 10} y={y0 - 8} fill="var(--theme-svg-point-text, #a7f3d0)" fontSize="11" fontWeight="bold" className="font-mono">
+              Buka Pintu ({b}k)
             </text>
 
             {/* Titik Uji x (testKm, totalCost) */}
             <line x1={pointX} y1="250" x2={pointX} y2={pointY} stroke="#f59e0b" strokeWidth="1.5" strokeDasharray="3 3" />
             <line x1="50" y1={pointY} x2={pointX} y2={pointY} stroke="#f59e0b" strokeWidth="1.5" strokeDasharray="3 3" />
             <circle cx={pointX} cy={pointY} r="7" fill="#f59e0b" stroke="#ffffff" strokeWidth="2" />
-            <text x={pointX + 10} y={pointY - 6} fill="#fde68a" fontSize="12" fontWeight="bold" className="font-mono">
+            <rect
+              x={pointX + 6}
+              y={pointY - 18}
+              width="145"
+              height="17"
+              rx="3"
+              fill="var(--theme-svg-bg, #0b1120)"
+              stroke="#f59e0b"
+              strokeWidth="0.75"
+              opacity="0.9"
+            />
+            <text x={pointX + 10} y={pointY - 6} fill="var(--theme-svg-coord-text, #fde68a)" fontSize="11" fontWeight="bold" className="font-mono">
               ({testKm} km, Rp {totalCost * 1000})
             </text>
           </svg>

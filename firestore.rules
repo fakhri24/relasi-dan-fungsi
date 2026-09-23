@@ -1,0 +1,28 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Fungsi pembantu untuk memvalidasi apakah pengguna adalah guru fkhr2nd@gmail.com
+    function isTeacher() {
+      return request.auth != null && (
+        request.auth.token.email == 'fkhr2nd@gmail.com' ||
+        request.auth.token.email == 'f.fadllillah@gmail.com'
+      );
+    }
+
+    // Koleksi Roster Kelas & Siswa
+    // Siswa publik (tanpa login) bisa membaca daftar kelas & nama
+    // Hanya guru yang bisa membuat, mengedit, atau menghapus kelas
+    match /classes/{classId} {
+      allow read: if true;
+      allow write: if isTeacher();
+    }
+
+    // Koleksi Jawaban LKPD Siswa
+    // Siswa publik bisa membuat (create) jawaban mereka
+    // Guru bisa membaca seluruh jawaban, memberi nilai skor, dan menghapus jika perlu
+    match /submissions/{subId} {
+      allow create: if true;
+      allow read, update, delete: if isTeacher();
+    }
+  }
+}

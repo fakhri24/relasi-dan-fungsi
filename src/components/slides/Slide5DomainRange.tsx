@@ -111,9 +111,9 @@ export const Slide5DomainRange: React.FC = () => {
               <span className="text-xs uppercase font-bold tracking-widest text-indigo-400">Daerah Asal (Domain)</span>
               <span className="text-xs px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 font-mono">Sumbu X</span>
             </div>
-            <h3 className="text-xl font-bold text-white mt-1">{activeScenario.variableX}</h3>
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-1">{activeScenario.variableX}</h3>
             <div className="my-3 p-3 bg-slate-950 rounded-xl border border-slate-800 text-center">
-              <MathFormula math={activeScenario.domainLatex} block className="text-indigo-300 font-bold text-xl" />
+              <MathFormula math={activeScenario.domainLatex} block className="text-indigo-800 dark:text-indigo-300 font-bold text-xl" />
             </div>
             <p className="text-slate-300 text-sm">
               {activeScenario.domainText}
@@ -150,9 +150,9 @@ export const Slide5DomainRange: React.FC = () => {
               <span className="text-xs uppercase font-bold tracking-widest text-emerald-400">Daerah Hasil (Range)</span>
               <span className="text-xs px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono">Sumbu Y</span>
             </div>
-            <h3 className="text-xl font-bold text-white mt-1">{activeScenario.variableY}</h3>
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-1">{activeScenario.variableY}</h3>
             <div className="my-3 p-3 bg-slate-950 rounded-xl border border-slate-800 text-center">
-              <MathFormula math={activeScenario.rangeLatex} block className="text-emerald-300 font-bold text-xl" />
+              <MathFormula math={activeScenario.rangeLatex} block className="text-emerald-800 dark:text-emerald-300 font-bold text-xl" />
             </div>
             <p className="text-slate-300 text-sm">
               {activeScenario.rangeText}

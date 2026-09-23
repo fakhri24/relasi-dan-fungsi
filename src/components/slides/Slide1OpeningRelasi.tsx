@@ -147,7 +147,7 @@ export const Slide1OpeningRelasi: React.FC<Slide1OpeningRelasiProps> = ({ onNext
               </div>
             </div>
 
-            <h1 className="text-4xl md:text-5xl xl:text-6xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-brand-300 to-cyan-300 mt-1">
+            <h1 className="text-4xl md:text-5xl xl:text-6xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r dark:from-indigo-300 dark:via-brand-300 dark:to-cyan-300 from-indigo-700 via-brand-700 to-cyan-800 mt-1">
               RELASI
             </h1>
           </div>
@@ -620,11 +620,11 @@ export const Slide1OpeningRelasi: React.FC<Slide1OpeningRelasiProps> = ({ onNext
                 <div className="w-8 h-8 rounded-xl bg-brand-500/20 border border-brand-500/40 flex items-center justify-center text-brand-300">
                   <Target className="w-4 h-4" />
                 </div>
-                <h2 className="text-base md:text-lg font-extrabold text-white">
+                <h2 className="text-base md:text-lg font-extrabold text-slate-900 dark:text-white">
                   Target Belajar
                 </h2>
               </div>
-              <span className="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 text-xs font-mono font-bold text-brand-400">
+              <span className="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 text-xs font-mono font-bold text-brand-700 dark:text-brand-400">
                 3 Misi
               </span>
             </div>
@@ -633,46 +633,46 @@ export const Slide1OpeningRelasi: React.FC<Slide1OpeningRelasiProps> = ({ onNext
           {/* 3 Kartu Target Belajar Ultra-Minimalis */}
           <div className="space-y-3 my-auto py-2">
             {/* Target 1 */}
-            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-indigo-500/30 flex items-center justify-between gap-3">
+            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-indigo-500/30 flex items-center justify-between gap-3 shadow-sm">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border border-indigo-500/40 flex items-center justify-center shrink-0">
                   <GitFork className="w-4 h-4" />
                 </div>
-                <h3 className="text-sm md:text-base font-bold text-white">
+                <h3 className="text-sm md:text-base font-bold text-slate-900 dark:text-white">
                   1. Hubungan Bebas
                 </h3>
               </div>
-              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 shrink-0">
+              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-indigo-500/20 text-indigo-800 dark:text-indigo-300 border border-indigo-500/30 shrink-0">
                 Bebas Aturan
               </span>
             </div>
 
             {/* Target 2 */}
-            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-emerald-500/30 flex items-center justify-between gap-3">
+            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-emerald-500/30 flex items-center justify-between gap-3 shadow-sm">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/40 flex items-center justify-center shrink-0">
                   <CheckCircle2 className="w-4 h-4" />
                 </div>
-                <h3 className="text-sm md:text-base font-bold text-white">
+                <h3 className="text-sm md:text-base font-bold text-slate-900 dark:text-white">
                   2. Syarat Fungsi
                 </h3>
               </div>
-              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shrink-0">
+              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30 shrink-0">
                 Wajib 1 Pasangan
               </span>
             </div>
 
             {/* Target 3 */}
-            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-cyan-500/30 flex items-center justify-between gap-3">
+            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-cyan-500/30 flex items-center justify-between gap-3 shadow-sm">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 border border-cyan-500/40 flex items-center justify-center shrink-0">
                   <ScanLine className="w-4 h-4" />
                 </div>
-                <h3 className="text-sm md:text-base font-bold text-white">
+                <h3 className="text-sm md:text-base font-bold text-slate-900 dark:text-white">
                   3. Uji Garis Vertikal
                 </h3>
               </div>
-              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 shrink-0">
+              <span className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-800 dark:text-cyan-300 border border-cyan-500/30 shrink-0">
                 Maks. 1 Titik Potong
               </span>
             </div>

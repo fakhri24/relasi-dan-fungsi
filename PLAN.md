@@ -4,7 +4,45 @@ Dokumen perencanaan dan pelacakan progres pengembangan media pembelajaran intera
 
 ---
 
-## 📌 Status Terkini: v1.9.0 (Fitur Toggle "Mode Cerah" & "Mode Gelap" Ramah Proyektor ✅)
+## 📌 Status Terkini: v2.0.0 (Modul LKPD Digital Siswa Tablet/Laptop & Dashboard Guru Cloud Firestore ✅)
+- [x] **Setup Backend Cloud Firestore (100% Spark Free Plan Tanpa Wajib Blaze/Billing)**:
+  - Membuat project Firebase `relasi-fungsi-edu-x` dan Web App `relasi-fungsi-web` via Firebase CLI dengan akun `fkhr2nd@gmail.com`.
+  - Mengaktifkan Cloud Firestore API dan menginisialisasi database `default`.
+  - Mengonfigurasi `firestore.rules`: hak baca publik untuk roster kelas/nama siswa, izin create publik untuk pengerjaan siswa tanpa wajib login, dan hak akses penuh read/write/grade hanya untuk email guru (`fkhr2nd@gmail.com`).
+  - Inisialisasi modul client `src/lib/firebase.ts` untuk Firebase App, Auth, dan Firestore.
+- [x] **Komponen Diagram Panah Interaktif (`InteractiveArrowCanvas.tsx`)**:
+  - Render SVG diagram panah matematis (Venn elips, noktah bibir •, kurva Bezier halus bergradien).
+  - Interaksi intuitif sentuh/klik: klik elemen Domain A lalu klik elemen Kodomain B untuk menarik/menghapus panah.
+  - Mode Kreasi Mandiri (*The Creator Mission*): Siswa dapat mengubah nama Himpunan A & B serta menambah/menghapus elemen sesuka mereka.
+  - Fitur ekspor Base64 otomatis via Canvas offscreen untuk penyimpanan dokumen Firestore dan opsi download PNG mandiri bagi siswa.
+- [x] **Modal LKPD Digital Siswa (`LkpdDigitalModal.tsx`)**:
+  - Stepper 6 langkah responsif tablet/laptop:
+    * Langkah 0: Identitas Siswa (Dropdown Kelas & Nama Siswa real-time terhubung ke Firestore).
+    * Langkah 1: Kasus 1 (Pesanan Kantin Many-to-One: Ali, Budi, Citra, Dewi vs Bakso, Mie, Soto + Analisis Status & Alasan).
+    * Langkah 2: Kasus 2 (Uji Pelanggaran Aturan Fungsi: Mendua / Jomblo).
+    * Langkah 3: Kasus 3 (Kreasi Mandiri Siswa: Himpunan & relasi bebas ciptaan sendiri).
+    * Langkah 4: Uji Garis Vertikal (VLT) pada 4 kurva + Refleksi Aturan Emas ("Tidak boleh jomblo, tidak boleh mendua").
+    * Langkah 5: Pratinjau & Tombol "Kirim Jawaban ke Guru 🚀" dengan efek konfeti selebrasi 🎉 dan tanda terima digital.
+- [x] **Dashboard Guru / Admin Panel (`TeacherDashboard.tsx`)**:
+  - Login aman via Google Sign-In (Firebase Auth) terbatas pada email `fkhr2nd@gmail.com` (+ opsi Master PIN darurat `246810`).
+  - **Tab Monitoring & Penilaian**:
+    * Live feed statistik pengerjaan: Total Siswa, Sudah Mengumpulkan (badge hijau), Belum Mengumpulkan.
+    * Review kartu siswa: Pratinjau 3 visual diagram panah yang digambar siswa, status, argumen, VLT, dan refleksi.
+    * Form Penilaian: Input skor nilai (0-100) dan catatan guru / feedback tersimpan ke Firestore.
+    * Fitur Ekspor Rekap Nilai ke file `.csv` (kompatibel Excel).
+    * Fitur **Mode Showcase Proyektor**: 1-klik untuk menampilkan diagram karya siswa ke layar proyektor untuk bahan diskusi kelas.
+  - **Tab Kelola Roster Kelas & Siswa**:
+    * Tambah kelas baru (misal X-1, X-2, X-E1).
+    * Bulk Paste nama siswa (copy-paste dari Excel / Absen sekolah per baris) langsung tersimpan ke Firestore.
+- [x] **Integrasi Proyektor, Slide 5 & Navbar (`ProjectorQrModal.tsx`, `Slide4VerticalLineTest.tsx`, `Navbar.tsx`, `App.tsx`)**:
+  - Slide 5 (penutup P1): Tombol *"Mulai LKPD Digital (Tablet/HP) ➔"* yang memunculkan modal QR Code besar proyektor agar siswa dapat memindai link secara serentak.
+  - Header Navbar: Tombol *"LKPD Digital"* untuk akses cepat kelas.
+  - Drawer Navbar: Tombol *"Mulai LKPD Digital (QR / Tablet)"*, *"Kerjakan LKPD Digital (Laptop) ➔"*, dan *"Dashboard Guru (Admin & Roster) 🔒"*.
+  - Query parameters auto-detect: URL dengan `?mode=lkpd` atau `?mode=admin` langsung membuka modal yang sesuai.
+- [x] **Build Verification**:
+  - `npm run build` (`tsc -b && vite build`) lolos 100% tanpa error TypeScript maupun CSS.
+
+## 📌 Arsip Status v1.9.0 (Fitur Toggle "Mode Cerah" & "Mode Gelap" Ramah Proyektor ✅)
 - [x] **Arsitektur Tailwind CSS Variable Palette Theme**:
   - Mengonfigurasi `darkMode: 'class'` pada `tailwind.config.js` dengan pemetaan warna `slate` berbasis CSS Variable dinamis (`rgb(var(--color-slate-*) / <alpha-value>)`).
   - Mendefinisikan token `:root` (Mode Gelap) dan `html.light` (Mode Cerah) di `src/index.css` untuk background, surface card putih bersih, border, dan hierarki teks kontras tinggi.
