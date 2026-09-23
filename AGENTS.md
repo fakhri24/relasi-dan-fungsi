@@ -54,9 +54,14 @@ Setiap kali ada perubahan, penambahan fitur, atau perbaikan kode:
   - Menggunakan Tailwind CSS dengan `darkMode: 'class'` dan pemetaan palet `slate` dinamis berbasis CSS Variables (`rgb(var(--color-slate-*) / <alpha-value>)`).
   - **Mode Gelap (Default Proyektor)**: Latar `slate-950` (#0b1120), kartu `slate-900`, aksen `brand-500`, dan glow neon proyektor.
   - **Mode Cerah (Ruang Kelas Terang)**: Latar `slate-100` (#f1f5f9), kartu putih bersih `white` (#ffffff), border `slate-200`, dan tipografi kontras tinggi `slate-900` (#0f172a).
+  - **Standar Tipografi Kontras Tinggi Mode Cerah (WCAG 2.1 AAA Target $\ge$ 7:1)**:
+    * Dilarang keras menggunakan teks putih statis (`text-white`) di atas kartu/background yang menjadi putih/terang di mode cerah. Gunakan kelas adaptif `text-slate-900 dark:text-white`.
+    * Teks putih murni (`#ffffff`) hanya diizinkan di atas tombol solid yang memiliki background warna jenuh pekat (`bg-brand-600`, `bg-emerald-600`, `bg-rose-600`, dsb.).
+    * Warna aksen teks di Mode Cerah otomatis di-inversikan ke tingkat 700/800 (`text-brand-700/800`, `text-indigo-800`, `text-emerald-800`, `text-amber-800`, dsb.) melalui ruleset terpusat di `src/index.css`.
+    * Elemen teks di dalam kanvas SVG matematika (titik potong, koordinat, label himpunan) wajib menggunakan token variabel `--theme-svg-point-text`, `--theme-svg-coord-text`, `--theme-set-a-*`, dan `--theme-set-b-*` dengan badge latar belakang agar tidak lenyap di atas kanvas putih.
   - **Persistensi & Anti-FOUC**: Preferensi tersimpan di `localStorage` (`supermath_theme`), disinkronkan langsung via inline script di `<head>` `index.html` dan `<meta name="color-scheme">`.
   - **Kontrol Guru**: Tombol toggle di Navbar (ikon `Sun`/`Moon`), di Drawer Menu 4 Pertemuan, dan pintasan keyboard instan tombol `T`.
-- **Aturan KaTeX Anti-Double Render**:
+- **Aturan KaTeX Anti-Double Render & Kontras Tinggi**:
   - Wajib mengimpor stylesheet lokal `import 'katex/dist/katex.min.css';` di `src/main.tsx` (ter-bundle langsung oleh Vite, hindari CDN eksternal dengan hash integrity yang rentan gagal).
   - Wajib menetapkan `output: 'html'` pada opsi `katex.renderToString` di `MathFormula.tsx` agar tidak merender elemen MathML secara ganda.
   - Failsafe `.katex-mathml { display: none !important; }` di `src/index.css`.
