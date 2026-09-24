@@ -60,12 +60,14 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
   const [case1Arrows, setCase1Arrows] = useState<ArrowRelation[]>([]);
   const [case1Status, setCase1Status] = useState<'Fungsi' | 'Bukan' | ''>('');
   const [case1Reason, setCase1Reason] = useState('');
+  const [case1Image, setCase1Image] = useState<string>('');
 
   // State Jawaban Kasus 2 (Uji Pelanggaran) - Bersih / Kosong
   const [case2Arrows, setCase2Arrows] = useState<ArrowRelation[]>([]);
   const [case2Status, setCase2Status] = useState<'Fungsi' | 'Bukan' | ''>('');
   const [case2Violator, setCase2Violator] = useState('');
   const [case2Reason, setCase2Reason] = useState('');
+  const [case2Image, setCase2Image] = useState<string>('');
 
   // State Jawaban Kasus 3 (Kreasi Mandiri Siswa) - Bersih / Kosong
   const [case3SetAName, setCase3SetAName] = useState('');
@@ -75,6 +77,7 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
   const [case3Arrows, setCase3Arrows] = useState<ArrowRelation[]>([]);
   const [case3Status, setCase3Status] = useState<'Fungsi' | 'Bukan' | ''>('');
   const [case3Reason, setCase3Reason] = useState('');
+  const [case3Image, setCase3Image] = useState<string>('');
 
   // State Uji Garis Vertikal (VLT) - Bersih / Kosong
   const [vlt1, setVlt1] = useState<'Fungsi' | 'Bukan' | ''>('');
@@ -97,6 +100,77 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
   const canProceedStep2 = case2Arrows.length >= 1 && case2Status !== '' && case2Violator.trim().length >= 3 && case2Reason.trim().length >= 5;
   const canProceedStep3 = case3SetAName.trim().length > 0 && case3SetBName.trim().length > 0 && case3Arrows.length >= 1 && case3Status !== '' && case3Reason.trim().length >= 5;
   const canProceedStep4 = vlt1 !== '' && vlt2 !== '' && vlt3 !== '' && vlt4 !== '' && goldenSingle.trim().length >= 5 && goldenAffair.trim().length >= 5;
+
+  // Auto-capture sebelum pindah step jika kanvas sedang aktif
+  const captureCurrentCanvasIfActive = async () => {
+    if (currentStep === 1 && case1Ref.current) {
+      try {
+        const b64 = await case1Ref.current.exportToBase64();
+        if (b64) setCase1Image(b64);
+      } catch (err) {
+        console.warn('Capture case1 failed:', err);
+      }
+    } else if (currentStep === 2 && case2Ref.current) {
+      try {
+        const b64 = await case2Ref.current.exportToBase64();
+        if (b64) setCase2Image(b64);
+      } catch (err) {
+        console.warn('Capture case2 failed:', err);
+      }
+    } else if (currentStep === 3 && case3Ref.current) {
+      try {
+        const b64 = await case3Ref.current.exportToBase64();
+        if (b64) setCase3Image(b64);
+      } catch (err) {
+        console.warn('Capture case3 failed:', err);
+      }
+    }
+  };
+
+  const handleStepClick = async (targetStep: number) => {
+    if (targetStep > currentStep) return;
+    await captureCurrentCanvasIfActive();
+    setCurrentStep(targetStep);
+  };
+
+  // Navigasi aman step 1 -> step 2
+  const handleProceedToStep2 = async () => {
+    if (case1Ref.current) {
+      try {
+        const b64 = await case1Ref.current.exportToBase64();
+        if (b64) setCase1Image(b64);
+      } catch (err) {
+        console.warn('Capture case1 failed:', err);
+      }
+    }
+    setCurrentStep(2);
+  };
+
+  // Navigasi aman step 2 -> step 3
+  const handleProceedToStep3 = async () => {
+    if (case2Ref.current) {
+      try {
+        const b64 = await case2Ref.current.exportToBase64();
+        if (b64) setCase2Image(b64);
+      } catch (err) {
+        console.warn('Capture case2 failed:', err);
+      }
+    }
+    setCurrentStep(3);
+  };
+
+  // Navigasi aman step 3 -> step 4
+  const handleProceedToStep4 = async () => {
+    if (case3Ref.current) {
+      try {
+        const b64 = await case3Ref.current.exportToBase64();
+        if (b64) setCase3Image(b64);
+      } catch (err) {
+        console.warn('Capture case3 failed:', err);
+      }
+    }
+    setCurrentStep(4);
+  };
 
   // Load daftar kelas dari Firestore jika ada
   useEffect(() => {
@@ -131,7 +205,7 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
   const currentClass = classes.find(c => c.id === selectedClassId) || classes[0];
 
-  // Kirim Jawaban ke Firebase
+  // Kirim Jawaban ke Firebase (Menyimpan seluruh teks, panah, dan 3 gambar diagram Base64)
   const handleSubmitLkpd = async () => {
     if (!selectedStudentName) {
       alert('Silakan pilih Nama Siswa Anda terlebih dahulu di Langkah 1!');
@@ -143,12 +217,21 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
       setIsSubmitting(true);
       setSubmitError(null);
 
-      // Ekspor Base64 dari ketiga kanvas
-      const [img1, img2, img3] = await Promise.all([
-        case1Ref.current ? case1Ref.current.exportToBase64() : Promise.resolve(''),
-        case2Ref.current ? case2Ref.current.exportToBase64() : Promise.resolve(''),
-        case3Ref.current ? case3Ref.current.exportToBase64() : Promise.resolve('')
-      ]);
+      // Pastikan seluruh 3 gambar diagram terambil secara sempurna
+      let img1 = case1Image;
+      if (!img1 && case1Ref.current) {
+        img1 = await case1Ref.current.exportToBase64();
+      }
+
+      let img2 = case2Image;
+      if (!img2 && case2Ref.current) {
+        img2 = await case2Ref.current.exportToBase64();
+      }
+
+      let img3 = case3Image;
+      if (!img3 && case3Ref.current) {
+        img3 = await case3Ref.current.exportToBase64();
+      }
 
       const submissionPayload = {
         classId: selectedClassId,
@@ -159,14 +242,14 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
           status: case1Status,
           reason: case1Reason,
           arrows: case1Arrows,
-          imageBase64: img1
+          imageBase64: img1 || ''
         },
         case2: {
           status: case2Status,
           violator: case2Violator,
           reason: case2Reason,
           arrows: case2Arrows,
-          imageBase64: img2
+          imageBase64: img2 || ''
         },
         case3: {
           setAName: case3SetAName,
@@ -176,7 +259,7 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
           arrows: case3Arrows,
           status: case3Status,
           reason: case3Reason,
-          imageBase64: img3
+          imageBase64: img3 || ''
         },
         vlt: {
           q1: vlt1,
@@ -263,7 +346,7 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   disabled={isLocked || (!!submittedSubmissionId && step.id !== 5)}
                   onClick={() => {
                     if (!isLocked) {
-                      setCurrentStep(step.id);
+                      handleStepClick(step.id);
                     }
                   }}
                   title={isLocked ? 'Selesaikan langkah saat ini untuk membuka' : `Buka ${step.label}`}
@@ -441,6 +524,8 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
                 itemsB={['Bakso', 'Mie', 'Soto']}
                 arrows={case1Arrows}
                 onChangeArrows={setCase1Arrows}
+                savedImage={case1Image}
+                onSaveSnapshot={setCase1Image}
               />
 
               {/* Form Analisis Kasus 1 */}
@@ -508,7 +593,7 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   <button
                     type="button"
                     disabled={!canProceedStep1}
-                    onClick={() => setCurrentStep(2)}
+                    onClick={handleProceedToStep2}
                     className={`px-5 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${
                       canProceedStep1
                         ? 'bg-brand-600 hover:bg-brand-500 text-white shadow-md shadow-brand-600/30 cursor-pointer'
@@ -596,6 +681,8 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
                 itemsB={['Bakso', 'Mie', 'Soto']}
                 arrows={case2Arrows}
                 onChangeArrows={setCase2Arrows}
+                savedImage={case2Image}
+                onSaveSnapshot={setCase2Image}
               />
 
               {/* Form Analisis Kasus 2 */}
@@ -676,7 +763,7 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   <button
                     type="button"
                     disabled={!canProceedStep2}
-                    onClick={() => setCurrentStep(3)}
+                    onClick={handleProceedToStep3}
                     className={`px-5 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${
                       canProceedStep2
                         ? 'bg-brand-600 hover:bg-brand-500 text-white shadow-md shadow-brand-600/30 cursor-pointer'
@@ -737,6 +824,8 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
                 onUpdateSetBName={setCase3SetBName}
                 onUpdateItemsA={setCase3ItemsA}
                 onUpdateItemsB={setCase3ItemsB}
+                savedImage={case3Image}
+                onSaveSnapshot={setCase3Image}
               />
 
               {/* Form Analisis Kasus 3 */}
@@ -804,7 +893,7 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   <button
                     type="button"
                     disabled={!canProceedStep3}
-                    onClick={() => setCurrentStep(4)}
+                    onClick={handleProceedToStep4}
                     className={`px-5 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${
                       canProceedStep3
                         ? 'bg-brand-600 hover:bg-brand-500 text-white shadow-md shadow-brand-600/30 cursor-pointer'
@@ -977,6 +1066,98 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
                 </div>
               </div>
 
+              {/* Ringkasan Bukti Gambar Diagram Siswa Terkumpul */}
+              <div className="bg-slate-950/70 border border-slate-800 rounded-2xl p-3.5 space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-indigo-400 flex items-center gap-1.5">
+                    <CheckCircle className="w-4 h-4 text-emerald-400" />
+                    Status Gambar Diagram Jawaban Kamu:
+                  </h4>
+                  <span className="text-[10px] text-slate-400 font-mono">
+                    Otomatis Disimpan ke Server Guru
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                  {/* Card Kasus 1 */}
+                  <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-bold text-slate-300">Kasus 1: Skenario Kasir</span>
+                      {case1Image ? (
+                        <span className="text-[10px] text-emerald-400 font-bold flex items-center gap-0.5">
+                          ✓ Tersimpan
+                        </span>
+                      ) : (
+                        <span className="text-[10px] text-amber-400 font-bold">
+                          ⏳ Belum Ada Foto
+                        </span>
+                      )}
+                    </div>
+                    {case1Image ? (
+                      <img src={case1Image} alt="Kasus 1" className="w-full h-20 object-contain bg-slate-950 rounded-lg border border-slate-800" />
+                    ) : (
+                      <div className="h-20 bg-slate-950 rounded-lg flex items-center justify-center text-slate-600 text-[10px]">
+                        Diagram Kasus 1
+                      </div>
+                    )}
+                    <span className="text-[10px] text-slate-400 block truncate">
+                      Status: <strong className={case1Status === 'Fungsi' ? 'text-emerald-400' : 'text-rose-400'}>{case1Status || '-'}</strong>
+                    </span>
+                  </div>
+
+                  {/* Card Kasus 2 */}
+                  <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-bold text-slate-300">Kasus 2: Pelanggaran</span>
+                      {case2Image ? (
+                        <span className="text-[10px] text-emerald-400 font-bold flex items-center gap-0.5">
+                          ✓ Tersimpan
+                        </span>
+                      ) : (
+                        <span className="text-[10px] text-amber-400 font-bold">
+                          ⏳ Belum Ada Foto
+                        </span>
+                      )}
+                    </div>
+                    {case2Image ? (
+                      <img src={case2Image} alt="Kasus 2" className="w-full h-20 object-contain bg-slate-950 rounded-lg border border-slate-800" />
+                    ) : (
+                      <div className="h-20 bg-slate-950 rounded-lg flex items-center justify-center text-slate-600 text-[10px]">
+                        Diagram Kasus 2
+                      </div>
+                    )}
+                    <span className="text-[10px] text-slate-400 block truncate">
+                      Pelanggar: <strong className="text-rose-400">{case2Violator || '-'}</strong>
+                    </span>
+                  </div>
+
+                  {/* Card Kasus 3 */}
+                  <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-bold text-slate-300">Kasus 3: Kreasi Mandiri</span>
+                      {case3Image ? (
+                        <span className="text-[10px] text-emerald-400 font-bold flex items-center gap-0.5">
+                          ✓ Tersimpan
+                        </span>
+                      ) : (
+                        <span className="text-[10px] text-amber-400 font-bold">
+                          ⏳ Belum Ada Foto
+                        </span>
+                      )}
+                    </div>
+                    {case3Image ? (
+                      <img src={case3Image} alt="Kasus 3" className="w-full h-20 object-contain bg-slate-950 rounded-lg border border-slate-800" />
+                    ) : (
+                      <div className="h-20 bg-slate-950 rounded-lg flex items-center justify-center text-slate-600 text-[10px]">
+                        Diagram Kasus 3
+                      </div>
+                    )}
+                    <span className="text-[10px] text-slate-400 block truncate">
+                      {case3SetAName || 'Himpunan A'} ➔ {case3SetBName || 'Himpunan B'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
               {/* Navigasi Stepper */}
               <div className="flex justify-between items-center pt-2">
                 <button
@@ -1031,15 +1212,15 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
           {/* LANGKAH 5: SELESAI & TANDA TERIMA DIGITAL */}
           {/* ============================================================ */}
           {currentStep === 5 && (
-            <div className="max-w-lg mx-auto py-8 text-center space-y-5">
-              <div className="w-16 h-16 mx-auto rounded-3xl bg-emerald-600/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
-                <CheckCircle className="w-10 h-10" />
+            <div className="max-w-lg mx-auto py-6 text-center space-y-4">
+              <div className="w-14 h-14 mx-auto rounded-3xl bg-emerald-600/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
+                <CheckCircle className="w-8 h-8" />
               </div>
 
               <div className="space-y-1">
                 <h3 className="text-xl font-black text-white">Jawaban Berhasil Terkirim! 🎉</h3>
                 <p className="text-xs text-slate-400">
-                  Kerja bagus, <strong>{selectedStudentName}</strong>! Data pengerjaan dan diagram ciptaanmu telah tersimpan rapi di dashboard Guru.
+                  Kerja bagus, <strong>{selectedStudentName}</strong>! Seluruh data pengerjaan dan diagram ciptaanmu telah tersimpan rapi di dashboard Guru.
                 </p>
               </div>
 
@@ -1056,9 +1237,36 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   <span className="text-slate-400">ID Pengumpulan:</span>
                   <span className="font-mono text-slate-300 text-[11px]">{submittedSubmissionId || 'TERKIRIM'}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between border-b border-slate-800 pb-2">
                   <span className="text-slate-400">Waktu:</span>
                   <span className="font-mono text-slate-400 text-[11px]">{new Date().toLocaleTimeString()} WIB</span>
+                </div>
+
+                {/* Galeri Gambar yang Disimpan */}
+                <div className="pt-1 space-y-1.5">
+                  <span className="text-[11px] font-bold text-slate-300 block">
+                    3 Diagram Panah yang Tersimpan:
+                  </span>
+                  <div className="grid grid-cols-3 gap-2">
+                    {case1Image ? (
+                      <div className="space-y-0.5 text-center">
+                        <img src={case1Image} alt="Kasus 1" className="h-16 w-full object-contain rounded-lg border border-slate-800 bg-slate-900" />
+                        <span className="text-[10px] text-slate-400">Kasus 1</span>
+                      </div>
+                    ) : null}
+                    {case2Image ? (
+                      <div className="space-y-0.5 text-center">
+                        <img src={case2Image} alt="Kasus 2" className="h-16 w-full object-contain rounded-lg border border-slate-800 bg-slate-900" />
+                        <span className="text-[10px] text-slate-400">Kasus 2</span>
+                      </div>
+                    ) : null}
+                    {case3Image ? (
+                      <div className="space-y-0.5 text-center">
+                        <img src={case3Image} alt="Kasus 3" className="h-16 w-full object-contain rounded-lg border border-slate-800 bg-slate-900" />
+                        <span className="text-[10px] text-slate-400">Kasus 3</span>
+                      </div>
+                    ) : null}
+                  </div>
                 </div>
               </div>
 

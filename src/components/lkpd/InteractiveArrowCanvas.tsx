@@ -1,5 +1,5 @@
 import { useState, useRef, useImperativeHandle, forwardRef } from 'react';
-import { Trash2, Plus, Download, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { Trash2, Plus, Download, CheckCircle2, AlertTriangle, Camera, Check } from 'lucide-react';
 import { ArrowRelation } from '../../types/lkpd';
 
 export interface InteractiveArrowCanvasRef {
@@ -22,6 +22,8 @@ interface Props {
   onUpdateItemsA?: (items: string[]) => void;
   onUpdateItemsB?: (items: string[]) => void;
   allowDownload?: boolean;
+  savedImage?: string;
+  onSaveSnapshot?: (base64: string) => void;
 }
 
 export const InteractiveArrowCanvas = forwardRef<InteractiveArrowCanvasRef, Props>(({
@@ -38,11 +40,15 @@ export const InteractiveArrowCanvas = forwardRef<InteractiveArrowCanvasRef, Prop
   onUpdateSetBName,
   onUpdateItemsA,
   onUpdateItemsB,
-  allowDownload = true
+  allowDownload = true,
+  savedImage,
+  onSaveSnapshot
 }, ref) => {
   const [selectedA, setSelectedA] = useState<string | null>(null);
   const [newItemA, setNewItemA] = useState('');
   const [newItemB, setNewItemB] = useState('');
+  const [isCapturing, setIsCapturing] = useState(false);
+  const [justSaved, setJustSaved] = useState(false);
   const svgRef = useRef<SVGSVGElement | null>(null);
 
   // Analisis real-time apakah diagram ini memenuhi syarat fungsi
@@ -160,7 +166,9 @@ export const InteractiveArrowCanvas = forwardRef<InteractiveArrowCanvasRef, Prop
         }
 
         const svgElement = svgRef.current;
-        const svgString = new XMLSerializer().serializeToString(svgElement);
+        const svgClone = svgElement.cloneNode(true) as SVGSVGElement;
+        svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+        const svgString = new XMLSerializer().serializeToString(svgClone);
         const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
         const URL = window.URL || window.webkitURL || window;
         const blobURL = URL.createObjectURL(svgBlob);
@@ -182,7 +190,9 @@ export const InteractiveArrowCanvas = forwardRef<InteractiveArrowCanvasRef, Prop
             resolve('');
           }
         };
-        image.onerror = () => {
+        image.onerror = (err) => {
+          console.error('Image render error:', err);
+          URL.revokeObjectURL(blobURL);
           resolve('');
         };
         image.src = blobURL;
@@ -196,6 +206,23 @@ export const InteractiveArrowCanvas = forwardRef<InteractiveArrowCanvasRef, Prop
   useImperativeHandle(ref, () => ({
     exportToBase64
   }));
+
+  // Handle klik tombol Simpan Gambar ke Jawaban
+  const handleSaveSnapshot = async () => {
+    try {
+      setIsCapturing(true);
+      const base64 = await exportToBase64();
+      if (base64) {
+        onSaveSnapshot?.(base64);
+        setJustSaved(true);
+        setTimeout(() => setJustSaved(false), 2500);
+      }
+    } catch (err) {
+      console.error('Save snapshot failed:', err);
+    } finally {
+      setIsCapturing(false);
+    }
+  };
 
   // Download manual PNG
   const handleDownloadImage = async () => {
@@ -246,6 +273,41 @@ export const InteractiveArrowCanvas = forwardRef<InteractiveArrowCanvasRef, Prop
               </>
             )}
           </div>
+
+          {/* Tombol Simpan Gambar ke Jawaban LKPD */}
+          <button
+            type="button"
+            onClick={handleSaveSnapshot}
+            disabled={isCapturing}
+            className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm ${
+              justSaved || savedImage
+                ? 'bg-emerald-950/90 text-emerald-300 border border-emerald-500/60 shadow-emerald-500/20'
+                : 'bg-brand-600 hover:bg-brand-500 text-white shadow-brand-600/30'
+            }`}
+            title="Simpan diagram panah ini ke data jawaban LKPD"
+          >
+            {isCapturing ? (
+              <>
+                <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <span>Menyimpan...</span>
+              </>
+            ) : justSaved ? (
+              <>
+                <Check className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Tersimpan!</span>
+              </>
+            ) : savedImage ? (
+              <>
+                <Check className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Perbarui Simpanan</span>
+              </>
+            ) : (
+              <>
+                <Camera className="w-3.5 h-3.5 text-white" />
+                <span>Simpan Diagram</span>
+              </>
+            )}
+          </button>
 
           {/* Reset button */}
           <button
@@ -390,6 +452,7 @@ export const InteractiveArrowCanvas = forwardRef<InteractiveArrowCanvasRef, Prop
       <div className="relative w-full overflow-hidden rounded-xl bg-slate-950 border border-slate-800 flex justify-center py-2">
         <svg
           ref={svgRef}
+          xmlns="http://www.w3.org/2000/svg"
           viewBox={`0 0 ${width} ${height}`}
           className="w-full max-w-xl h-auto select-none"
           style={{ minHeight: '260px' }}

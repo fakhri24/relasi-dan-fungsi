@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { 
   X, LogOut, CheckCircle2, AlertCircle, FileSpreadsheet, 
-  Tv, Eye, Award, Users, Plus, Save, RefreshCw, KeyRound
+  Tv, Eye, Award, Users, Plus, Save, RefreshCw, KeyRound,
+  Trash2, ZoomIn, Download, Sparkles
 } from 'lucide-react';
 import { 
   signInWithPopup, signOut, onAuthStateChanged, User as FirebaseUser 
 } from 'firebase/auth';
 import { 
-  collection, getDocs, doc, updateDoc, setDoc
+  collection, getDocs, doc, updateDoc, setDoc, deleteDoc
 } from 'firebase/firestore';
 import { auth, db, googleProvider, TEACHER_WHITELIST } from '../../lib/firebase';
 import { ClassRoster, LkpdSubmission } from '../../types/lkpd';
@@ -45,6 +46,16 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
 
   // Showcase Modal State (untuk menampilkan karya siswa di proyektor)
   const [showcaseSub, setShowcaseSub] = useState<LkpdSubmission | null>(null);
+  const [showcaseCase, setShowcaseCase] = useState<1 | 2 | 3>(3);
+
+  // Zoom Lightbox Modal
+  const [zoomImage, setZoomImage] = useState<{ url: string; title: string; subtitle?: string } | null>(null);
+
+  // Status Filter: 'all' | 'needs_grade' | 'graded' | 'unsubmitted'
+  const [filterStatus, setFilterStatus] = useState<'all' | 'needs_grade' | 'graded' | 'unsubmitted'>('all');
+
+  // Deletion state
+  const [isClearingSubmissions, setIsClearingSubmissions] = useState(false);
 
   // Roster Management State
   const [newClassName, setNewClassName] = useState('');
@@ -185,12 +196,56 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
     };
   });
 
-  const filteredStudents = studentRosterWithSubmissions.filter(item => 
-    item.studentName.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   const totalSubmitted = studentRosterWithSubmissions.filter(s => s.isSubmitted).length;
   const totalStudents = studentRosterWithSubmissions.length;
+  const needsGradingCount = studentRosterWithSubmissions.filter(s => s.isSubmitted && (s.submission?.score === null || s.submission?.score === undefined)).length;
+  const gradedCount = studentRosterWithSubmissions.filter(s => s.isSubmitted && s.submission?.score !== null && s.submission?.score !== undefined).length;
+  const unsubmittedCount = totalStudents - totalSubmitted;
+
+  // Filter siswa berdasarkan status pengerjaan / penilaian & pencarian
+  const filteredStudents = studentRosterWithSubmissions
+    .filter(item => {
+      if (filterStatus === 'needs_grade') {
+        return item.isSubmitted && (item.submission?.score === null || item.submission?.score === undefined);
+      }
+      if (filterStatus === 'graded') {
+        return item.isSubmitted && item.submission?.score !== null && item.submission?.score !== undefined;
+      }
+      if (filterStatus === 'unsubmitted') {
+        return !item.isSubmitted;
+      }
+      return true;
+    })
+    .filter(item => 
+      item.studentName.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+  // Bersihkan semua data submissions siswa dari Firestore (Reset Uji Coba)
+  const handleClearSubmissions = async () => {
+    const confirmPrompt = window.confirm(
+      '⚠️ PERINGATAN GURU:\nApakah Anda yakin ingin menghapus SEMUA data pengerjaan siswa yang tersimpan di server?\n\nGunakan fitur ini untuk membersihkan data uji coba atau sebelum memulai sesi kelas baru.'
+    );
+    if (!confirmPrompt) return;
+
+    try {
+      setLoadingData(true);
+      setIsClearingSubmissions(true);
+      const subSnap = await getDocs(collection(db, 'submissions'));
+      const deletePromises = subSnap.docs.map(d => deleteDoc(doc(db, 'submissions', d.id)));
+      await Promise.all(deletePromises);
+      setSubmissions([]);
+      setSelectedSub(null);
+      setShowcaseSub(null);
+      alert('✓ Semua data pengumpulan siswa berhasil dibersihkan! Dashboard kini kembali bersih.');
+    } catch (err: unknown) {
+      console.error('Gagal membersihkan data pengumpulan:', err);
+      const msg = err instanceof Error ? err.message : 'Terjadi kendala';
+      alert('Gagal membersihkan data: ' + msg);
+    } finally {
+      setLoadingData(false);
+      setIsClearingSubmissions(false);
+    }
+  };
 
   // Buka Modal Review untuk satu siswa
   const handleOpenReview = (sub: LkpdSubmission) => {
@@ -471,32 +526,95 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                     </span>
                   </div>
                   <div className="bg-slate-950/70 border border-slate-800 p-3 rounded-2xl">
-                    <span className="text-slate-400 block text-[11px]">Belum Mengumpulkan</span>
-                    <span className="text-xl font-black text-amber-400">{totalStudents - totalSubmitted}</span>
+                    <span className="text-slate-400 block text-[11px]">Perlu Dinilai</span>
+                    <span className="text-xl font-black text-amber-400">
+                      {needsGradingCount} <span className="text-xs text-slate-500 font-normal">siswa</span>
+                    </span>
                   </div>
-                  <div className="flex items-center justify-end">
+                  <div className="flex flex-col sm:flex-row gap-2 items-center justify-end">
                     <button
                       onClick={handleExportCsv}
                       className="w-full h-full py-2 px-3 rounded-2xl bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-emerald-300 font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-sm"
+                      title="Unduh seluruh rekap nilai ke format Excel .CSV"
                     >
                       <FileSpreadsheet className="w-4 h-4" />
-                      <span>Ekspor Excel (.csv)</span>
+                      <span>Ekspor Excel</span>
+                    </button>
+                    <button
+                      onClick={handleClearSubmissions}
+                      disabled={isClearingSubmissions || submissions.length === 0}
+                      className="w-full h-full py-2 px-3 rounded-2xl bg-rose-950/40 hover:bg-rose-900/60 border border-rose-800/60 text-rose-300 disabled:opacity-30 disabled:cursor-not-allowed font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-sm"
+                      title="Bersihkan seluruh data percobaan pengumpulan siswa agar database kembali bersih"
+                    >
+                      <Trash2 className="w-4 h-4 text-rose-400" />
+                      <span className="hidden sm:inline">Reset Data</span>
                     </button>
                   </div>
                 </div>
 
-                {/* Filter Search */}
-                <div className="flex items-center justify-between gap-3">
-                  <input
-                    type="text"
-                    value={searchTerm}
-                    onChange={e => setSearchTerm(e.target.value)}
-                    placeholder="Cari nama siswa di kelas ini..."
-                    className="max-w-xs bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500"
-                  />
-                  <span className="text-[11px] text-slate-500">
-                    Menampilkan {filteredStudents.length} siswa
-                  </span>
+                {/* Filter Status & Search Bar */}
+                <div className="flex flex-wrap items-center justify-between gap-2.5 pt-1">
+                  {/* Status Filter Pills */}
+                  <div className="flex flex-wrap items-center gap-1.5 bg-slate-950/80 p-1 rounded-xl border border-slate-800 text-xs">
+                    <button
+                      type="button"
+                      onClick={() => setFilterStatus('all')}
+                      className={`px-2.5 py-1 rounded-lg font-bold text-[11px] transition-all ${
+                        filterStatus === 'all'
+                          ? 'bg-amber-600 text-white shadow-sm'
+                          : 'text-slate-400 hover:text-slate-200'
+                      }`}
+                    >
+                      Semua ({totalStudents})
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFilterStatus('needs_grade')}
+                      className={`px-2.5 py-1 rounded-lg font-bold text-[11px] transition-all flex items-center gap-1 ${
+                        filterStatus === 'needs_grade'
+                          ? 'bg-amber-500 text-slate-950 shadow-sm font-extrabold'
+                          : 'text-amber-400 hover:bg-slate-900'
+                      }`}
+                    >
+                      <span>⏳ Perlu Dinilai ({needsGradingCount})</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFilterStatus('graded')}
+                      className={`px-2.5 py-1 rounded-lg font-bold text-[11px] transition-all flex items-center gap-1 ${
+                        filterStatus === 'graded'
+                          ? 'bg-indigo-600 text-white shadow-sm font-extrabold'
+                          : 'text-indigo-400 hover:bg-slate-900'
+                      }`}
+                    >
+                      <span>⭐ Sudah Dinilai ({gradedCount})</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFilterStatus('unsubmitted')}
+                      className={`px-2.5 py-1 rounded-lg font-bold text-[11px] transition-all ${
+                        filterStatus === 'unsubmitted'
+                          ? 'bg-slate-700 text-white shadow-sm'
+                          : 'text-slate-500 hover:text-slate-300'
+                      }`}
+                    >
+                      Belum Kumpul ({unsubmittedCount})
+                    </button>
+                  </div>
+
+                  {/* Search Input */}
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      value={searchTerm}
+                      onChange={e => setSearchTerm(e.target.value)}
+                      placeholder="Cari nama siswa..."
+                      className="w-48 sm:w-56 bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500"
+                    />
+                    <span className="text-[11px] text-slate-500 hidden sm:inline">
+                      {filteredStudents.length} siswa
+                    </span>
+                  </div>
                 </div>
 
                 {/* Tabel / Grid Siswa */}
@@ -521,13 +639,24 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                           </td>
                           <td className="p-3">
                             {item.isSubmitted ? (
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-950/80 border border-emerald-800 text-emerald-300 font-bold text-[10px]">
-                                <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-                                Sudah Masuk
-                              </span>
+                              <div className="flex flex-col gap-1">
+                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-950/80 border border-emerald-800 text-emerald-300 font-bold text-[10px] w-fit">
+                                  <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                                  Terkumpul
+                                </span>
+                                {item.submission?.score !== undefined && item.submission?.score !== null ? (
+                                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-indigo-950/80 border border-indigo-700 text-indigo-300 font-bold text-[10px] w-fit">
+                                    ✓ Dinilai
+                                  </span>
+                                ) : (
+                                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-950/80 border border-amber-600/80 text-amber-300 font-bold text-[10px] w-fit animate-pulse">
+                                    ⏳ Perlu Dinilai
+                                  </span>
+                                )}
+                              </div>
                             ) : (
                               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-900 border border-slate-800 text-slate-500 text-[10px]">
-                                Belum
+                                Belum Kumpul
                               </span>
                             )}
                           </td>
@@ -538,9 +667,11 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                           </td>
                           <td className="p-3 text-center font-bold">
                             {item.submission?.score !== undefined && item.submission?.score !== null ? (
-                              <span className="px-2 py-0.5 rounded-lg bg-indigo-950/80 border border-indigo-700 text-indigo-300">
-                                {item.submission.score} / 100
+                              <span className="px-2.5 py-1 rounded-lg bg-indigo-950/80 border border-indigo-700 text-indigo-300 font-mono">
+                                ⭐ {item.submission.score} / 100
                               </span>
+                            ) : item.isSubmitted ? (
+                              <span className="text-amber-400/90 text-[11px] font-mono italic">Belum Dinilai</span>
                             ) : (
                               <span className="text-slate-600">-</span>
                             )}
@@ -676,78 +807,180 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
               <div className="flex-1 overflow-y-auto p-5 space-y-5 text-xs">
                 {/* 3 Diagram Preview Grid */}
                 <div className="space-y-2">
-                  <h4 className="font-bold text-slate-300 uppercase tracking-wider text-[11px]">
-                    Hasil Visual Diagram Panah Siswa:
+                  <h4 className="font-bold text-slate-300 uppercase tracking-wider text-[11px] flex items-center justify-between">
+                    <span>Hasil Visual 3 Diagram Panah Siswa:</span>
+                    <span className="text-[10px] text-slate-400 font-normal">Klik foto untuk perbesar (Zoom Lightbox)</span>
                   </h4>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     {/* Kasus 1 */}
-                    <div className="bg-slate-950 border border-slate-800 rounded-xl p-2.5 space-y-1.5">
-                      <span className="font-bold text-indigo-400 block">Kasus 1: Pesanan Standar</span>
-                      {selectedSub.case1?.imageBase64 ? (
-                        <img 
-                          src={selectedSub.case1.imageBase64} 
-                          alt="Diagram Kasus 1" 
-                          className="w-full rounded-lg border border-slate-800"
-                        />
-                      ) : (
-                        <div className="h-28 bg-slate-900 rounded-lg flex items-center justify-center text-slate-600">
-                          Tidak ada snapshot
+                    <div className="bg-slate-950 border border-slate-800 rounded-xl p-2.5 space-y-1.5 flex flex-col justify-between">
+                      <div className="space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-indigo-400 block text-xs">Kasus 1: Skenario Kasir</span>
+                          {selectedSub.case1?.imageBase64 && (
+                            <button
+                              type="button"
+                              onClick={() => setZoomImage({
+                                url: selectedSub.case1.imageBase64!,
+                                title: `Diagram Kasus 1: Skenario Kasir`,
+                                subtitle: `${selectedSub.studentName} (${selectedSub.className})`
+                              })}
+                              className="text-[10px] text-indigo-400 hover:text-indigo-300 flex items-center gap-1"
+                            >
+                              <ZoomIn className="w-3 h-3" /> Zoom
+                            </button>
+                          )}
                         </div>
-                      )}
-                      <div className="pt-1">
-                        <span className="font-bold text-slate-400">Status: </span>
-                        <span className={selectedSub.case1?.status === 'Fungsi' ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold'}>
-                          {selectedSub.case1?.status}
-                        </span>
-                        <p className="text-slate-300 mt-1 italic">&quot;{selectedSub.case1?.reason}&quot;</p>
+
+                        {selectedSub.case1?.imageBase64 ? (
+                          <div 
+                            onClick={() => setZoomImage({
+                              url: selectedSub.case1.imageBase64!,
+                              title: `Diagram Kasus 1: Skenario Kasir`,
+                              subtitle: `${selectedSub.studentName} (${selectedSub.className})`
+                            })}
+                            className="relative group cursor-pointer overflow-hidden rounded-lg border border-slate-800 bg-slate-900"
+                          >
+                            <img 
+                              src={selectedSub.case1.imageBase64} 
+                              alt="Diagram Kasus 1" 
+                              className="w-full h-32 object-contain group-hover:scale-105 transition-transform"
+                            />
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white text-[11px] font-bold gap-1">
+                              <ZoomIn className="w-4 h-4" /> Klik Perbesar
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="h-32 bg-slate-900 rounded-lg flex items-center justify-center text-slate-600 text-[11px]">
+                            Tidak ada snapshot
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="pt-2 border-t border-slate-800/80">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-slate-400 text-[11px]">Status: </span>
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${selectedSub.case1?.status === 'Fungsi' ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-rose-950 text-rose-300 border border-rose-700'}`}>
+                            {selectedSub.case1?.status || '-'}
+                          </span>
+                        </div>
+                        <p className="text-slate-300 mt-1 italic text-[11px] line-clamp-3">&quot;{selectedSub.case1?.reason || 'Tidak ada alasan'}&quot;</p>
                       </div>
                     </div>
 
                     {/* Kasus 2 */}
-                    <div className="bg-slate-950 border border-slate-800 rounded-xl p-2.5 space-y-1.5">
-                      <span className="font-bold text-rose-400 block">Kasus 2: Pelanggaran</span>
-                      {selectedSub.case2?.imageBase64 ? (
-                        <img 
-                          src={selectedSub.case2.imageBase64} 
-                          alt="Diagram Kasus 2" 
-                          className="w-full rounded-lg border border-slate-800"
-                        />
-                      ) : (
-                        <div className="h-28 bg-slate-900 rounded-lg flex items-center justify-center text-slate-600">
-                          Tidak ada snapshot
+                    <div className="bg-slate-950 border border-slate-800 rounded-xl p-2.5 space-y-1.5 flex flex-col justify-between">
+                      <div className="space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-rose-400 block text-xs">Kasus 2: Pelanggaran</span>
+                          {selectedSub.case2?.imageBase64 && (
+                            <button
+                              type="button"
+                              onClick={() => setZoomImage({
+                                url: selectedSub.case2.imageBase64!,
+                                title: `Diagram Kasus 2: Pelanggaran`,
+                                subtitle: `${selectedSub.studentName} (${selectedSub.className})`
+                              })}
+                              className="text-[10px] text-rose-400 hover:text-rose-300 flex items-center gap-1"
+                            >
+                              <ZoomIn className="w-3 h-3" /> Zoom
+                            </button>
+                          )}
                         </div>
-                      )}
-                      <div className="pt-1">
-                        <span className="font-bold text-slate-400">Status: </span>
-                        <span className={selectedSub.case2?.status === 'Fungsi' ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold'}>
-                          {selectedSub.case2?.status}
-                        </span>
-                        <p className="text-slate-300 mt-1 italic">&quot;{selectedSub.case2?.violator} - {selectedSub.case2?.reason}&quot;</p>
+
+                        {selectedSub.case2?.imageBase64 ? (
+                          <div 
+                            onClick={() => setZoomImage({
+                              url: selectedSub.case2.imageBase64!,
+                              title: `Diagram Kasus 2: Pelanggaran`,
+                              subtitle: `${selectedSub.studentName} (${selectedSub.className})`
+                            })}
+                            className="relative group cursor-pointer overflow-hidden rounded-lg border border-slate-800 bg-slate-900"
+                          >
+                            <img 
+                              src={selectedSub.case2.imageBase64} 
+                              alt="Diagram Kasus 2" 
+                              className="w-full h-32 object-contain group-hover:scale-105 transition-transform"
+                            />
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white text-[11px] font-bold gap-1">
+                              <ZoomIn className="w-4 h-4" /> Klik Perbesar
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="h-32 bg-slate-900 rounded-lg flex items-center justify-center text-slate-600 text-[11px]">
+                            Tidak ada snapshot
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="pt-2 border-t border-slate-800/80">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-slate-400 text-[11px]">Status: </span>
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${selectedSub.case2?.status === 'Fungsi' ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-rose-950 text-rose-300 border border-rose-700'}`}>
+                            {selectedSub.case2?.status || '-'}
+                          </span>
+                        </div>
+                        <p className="text-slate-300 mt-1 italic text-[11px] line-clamp-3">
+                          &quot;{selectedSub.case2?.violator ? `Pelanggar: ${selectedSub.case2.violator}. ` : ''}{selectedSub.case2?.reason || 'Tidak ada alasan'}&quot;
+                        </p>
                       </div>
                     </div>
 
                     {/* Kasus 3 (Kreasi Mandiri) */}
-                    <div className="bg-slate-950 border border-slate-800 rounded-xl p-2.5 space-y-1.5">
-                      <span className="font-bold text-cyan-400 block">
-                        Kasus 3: {selectedSub.case3?.setAName} ➔ {selectedSub.case3?.setBName}
-                      </span>
-                      {selectedSub.case3?.imageBase64 ? (
-                        <img 
-                          src={selectedSub.case3.imageBase64} 
-                          alt="Diagram Kasus 3" 
-                          className="w-full rounded-lg border border-slate-800"
-                        />
-                      ) : (
-                        <div className="h-28 bg-slate-900 rounded-lg flex items-center justify-center text-slate-600">
-                          Tidak ada snapshot
+                    <div className="bg-slate-950 border border-slate-800 rounded-xl p-2.5 space-y-1.5 flex flex-col justify-between">
+                      <div className="space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-cyan-400 block text-xs truncate max-w-[170px]">
+                            Kasus 3: {selectedSub.case3?.setAName || 'A'} ➔ {selectedSub.case3?.setBName || 'B'}
+                          </span>
+                          {selectedSub.case3?.imageBase64 && (
+                            <button
+                              type="button"
+                              onClick={() => setZoomImage({
+                                url: selectedSub.case3.imageBase64!,
+                                title: `Diagram Kasus 3: ${selectedSub.case3?.setAName} ➔ ${selectedSub.case3?.setBName}`,
+                                subtitle: `${selectedSub.studentName} (${selectedSub.className})`
+                              })}
+                              className="text-[10px] text-cyan-400 hover:text-cyan-300 flex items-center gap-1"
+                            >
+                              <ZoomIn className="w-3 h-3" /> Zoom
+                            </button>
+                          )}
                         </div>
-                      )}
-                      <div className="pt-1">
-                        <span className="font-bold text-slate-400">Status: </span>
-                        <span className={selectedSub.case3?.status === 'Fungsi' ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold'}>
-                          {selectedSub.case3?.status}
-                        </span>
-                        <p className="text-slate-300 mt-1 italic">&quot;{selectedSub.case3?.reason}&quot;</p>
+
+                        {selectedSub.case3?.imageBase64 ? (
+                          <div 
+                            onClick={() => setZoomImage({
+                              url: selectedSub.case3.imageBase64!,
+                              title: `Diagram Kasus 3: ${selectedSub.case3?.setAName} ➔ ${selectedSub.case3?.setBName}`,
+                              subtitle: `${selectedSub.studentName} (${selectedSub.className})`
+                            })}
+                            className="relative group cursor-pointer overflow-hidden rounded-lg border border-slate-800 bg-slate-900"
+                          >
+                            <img 
+                              src={selectedSub.case3.imageBase64} 
+                              alt="Diagram Kasus 3" 
+                              className="w-full h-32 object-contain group-hover:scale-105 transition-transform"
+                            />
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white text-[11px] font-bold gap-1">
+                              <ZoomIn className="w-4 h-4" /> Klik Perbesar
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="h-32 bg-slate-900 rounded-lg flex items-center justify-center text-slate-600 text-[11px]">
+                            Tidak ada snapshot
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="pt-2 border-t border-slate-800/80">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-slate-400 text-[11px]">Status: </span>
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${selectedSub.case3?.status === 'Fungsi' ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-rose-950 text-rose-300 border border-rose-700'}`}>
+                            {selectedSub.case3?.status || '-'}
+                          </span>
+                        </div>
+                        <p className="text-slate-300 mt-1 italic text-[11px] line-clamp-3">&quot;{selectedSub.case3?.reason || 'Tidak ada alasan'}&quot;</p>
                       </div>
                     </div>
                   </div>
@@ -773,12 +1006,16 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                   </div>
                 </div>
 
-                {/* Form Grading & Feedback Guru */}
+                {/* Form Grading & Feedback Manual Guru */}
                 <div className="p-4 bg-amber-950/30 border border-amber-800/80 rounded-2xl space-y-3">
-                  <h4 className="font-bold text-amber-400 flex items-center gap-1.5 uppercase tracking-wider text-[11px]">
-                    <Award className="w-4 h-4" />
-                    Penilaian Guru & Feedback:
-                  </h4>
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-bold text-amber-400 flex items-center gap-1.5 uppercase tracking-wider text-[11px]">
+                      <Award className="w-4 h-4" />
+                      Penilaian Manual Guru:
+                    </h4>
+                    <span className="text-[10px] text-slate-400">Pilih nilai preset atau ketik manual</span>
+                  </div>
+
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div>
                       <label className="font-bold text-slate-300 block mb-1">Nilai Skor (0 - 100):</label>
@@ -791,16 +1028,52 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                         placeholder="Contoh: 95"
                         className="w-full bg-slate-900 border border-amber-600/50 rounded-xl px-3 py-2 text-sm text-white font-bold focus:outline-none focus:border-amber-400"
                       />
+                      {/* Preset Skor Cepat */}
+                      <div className="flex flex-wrap gap-1 mt-1.5">
+                        {[100, 95, 90, 85, 80, 75, 70].map(val => (
+                          <button
+                            key={val}
+                            type="button"
+                            onClick={() => setGradeScore(val)}
+                            className={`px-2 py-0.5 rounded-lg text-[10px] font-bold border transition-all ${
+                              gradeScore === val 
+                                ? 'bg-amber-500 text-slate-950 border-amber-400 font-extrabold shadow-sm' 
+                                : 'bg-slate-900 text-slate-300 border-slate-700 hover:border-amber-500/60'
+                            }`}
+                          >
+                            {val}
+                          </button>
+                        ))}
+                      </div>
                     </div>
+
                     <div className="sm:col-span-2">
-                      <label className="font-bold text-slate-300 block mb-1">Catatan Guru / Feedback:</label>
+                      <label className="font-bold text-slate-300 block mb-1">Catatan Guru / Feedback Siswa:</label>
                       <input
                         type="text"
                         value={gradeFeedback}
                         onChange={e => setGradeFeedback(e.target.value)}
-                        placeholder="Contoh: Kasus mandirinya sangat kreatif dan logikanya tepat!"
+                        placeholder="Tulis umpan balik guru atau pilih template di bawah..."
                         className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400"
                       />
+                      {/* Template Catatan Cepat */}
+                      <div className="flex flex-wrap gap-1 mt-1.5">
+                        {[
+                          'Analisis sangat tepat & diagram rapi! 🌟',
+                          'Identifikasi pelanggaran di Kasus 2 tepat.',
+                          'Kreasi Kasus 3 orisinal & logikanya kuat.',
+                          'Perhatikan kembali syarat himpunan asal.'
+                        ].map(tmpl => (
+                          <button
+                            key={tmpl}
+                            type="button"
+                            onClick={() => setGradeFeedback(prev => prev ? `${prev} ${tmpl}` : tmpl)}
+                            className="px-2 py-0.5 rounded-lg text-[10px] bg-slate-900 border border-slate-700 text-slate-300 hover:text-white hover:border-amber-500/60 transition-all text-left"
+                          >
+                            + {tmpl}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -841,50 +1114,264 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
         {/* ============================================================ */}
         {showcaseSub && (
           <div className="fixed inset-0 z-70 bg-black/95 backdrop-blur-xl flex flex-col items-center justify-center p-4">
-            <div className="w-full max-w-4xl bg-slate-900 border border-indigo-500/50 rounded-3xl p-6 shadow-2xl relative space-y-4">
+            <div className="w-full max-w-4xl bg-slate-900 border border-indigo-500/50 rounded-3xl p-6 shadow-2xl relative space-y-4 max-h-[95vh] overflow-y-auto">
               <button
                 onClick={() => setShowcaseSub(null)}
-                className="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-800 hover:bg-slate-700 text-white flex items-center justify-center"
+                className="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-800 hover:bg-slate-700 text-white flex items-center justify-center transition-all"
+                title="Tutup Mode Showcase"
               >
                 <X className="w-5 h-5" />
               </button>
 
               <div className="text-center space-y-1">
-                <span className="text-xs uppercase tracking-widest font-mono text-indigo-400 font-bold">
-                  🌟 Karya Pilihan Siswa · Diskusi Kelas
+                <span className="text-xs uppercase tracking-widest font-mono text-indigo-400 font-bold flex items-center justify-center gap-1.5">
+                  <Sparkles className="w-4 h-4 text-amber-400" />
+                  Karya Pilihan Siswa · Diskusi Kelas Proyektor
                 </span>
                 <h2 className="text-2xl font-black text-white">
-                  {showcaseSub.studentName} ({showcaseSub.className})
+                  {showcaseSub.studentName} <span className="text-indigo-400 font-bold">({showcaseSub.className})</span>
                 </h2>
               </div>
 
-              {/* Tampilkan Diagram Kasus 3 (Kreasi Mandiri) Siswa */}
-              <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-3">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-base font-bold text-cyan-400">
-                    Kasus Kreasi: {showcaseSub.case3?.setAName} ➔ {showcaseSub.case3?.setBName}
+              {/* Tab Selector untuk 3 Kasus */}
+              <div className="flex justify-center gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={() => setShowcaseCase(1)}
+                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                    showcaseCase === 1
+                      ? 'bg-amber-500 text-slate-950 shadow-md font-extrabold'
+                      : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                  }`}
+                >
+                  Kasus 1: Pesanan Kantin
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowcaseCase(2)}
+                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                    showcaseCase === 2
+                      ? 'bg-amber-500 text-slate-950 shadow-md font-extrabold'
+                      : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                  }`}
+                >
+                  Kasus 2: Pelanggaran
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowcaseCase(3)}
+                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                    showcaseCase === 3
+                      ? 'bg-amber-500 text-slate-950 shadow-md font-extrabold'
+                      : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                  }`}
+                >
+                  Kasus 3: Kreasi Mandiri
+                </button>
+              </div>
+
+              {/* Konten Kasus Aktif */}
+              <div className="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-4">
+                {/* Header Kasus */}
+                <div className="flex flex-wrap justify-between items-center gap-2">
+                  <h3 className="text-base font-bold text-white flex items-center gap-2">
+                    {showcaseCase === 1 && (
+                      <span className="text-amber-400">Kasus 1: Pesanan Makanan Kantin ➔ Meja Pemesan (Many-to-One)</span>
+                    )}
+                    {showcaseCase === 2 && (
+                      <span className="text-rose-400">Kasus 2: Identifikasi Pelanggaran Syarat Relasi</span>
+                    )}
+                    {showcaseCase === 3 && (
+                      <span className="text-cyan-400">
+                        Kasus 3: {showcaseSub.case3?.setAName || 'A'} ➔ {showcaseSub.case3?.setBName || 'B'} (Kreasi Mandiri)
+                      </span>
+                    )}
                   </h3>
-                  <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                    showcaseSub.case3?.status === 'Fungsi' ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-rose-950 text-rose-300 border border-rose-700'
-                  }`}>
-                    {showcaseSub.case3?.status === 'Fungsi' ? '✓ FUNGSI SAH' : '✗ BUKAN FUNGSI'}
-                  </span>
+
+                  <div className="flex items-center gap-2">
+                    {/* Status Badge */}
+                    {showcaseCase === 1 && (
+                      <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                        showcaseSub.case1?.status === 'Fungsi' ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-rose-950 text-rose-300 border border-rose-700'
+                      }`}>
+                        {showcaseSub.case1?.status === 'Fungsi' ? '✓ FUNGSI SAH' : '✗ BUKAN FUNGSI'}
+                      </span>
+                    )}
+                    {showcaseCase === 2 && (
+                      <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                        showcaseSub.case2?.status === 'Fungsi' ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-rose-950 text-rose-300 border border-rose-700'
+                      }`}>
+                        {showcaseSub.case2?.status === 'Fungsi' ? '✓ FUNGSI SAH' : '✗ BUKAN FUNGSI'}
+                      </span>
+                    )}
+                    {showcaseCase === 3 && (
+                      <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                        showcaseSub.case3?.status === 'Fungsi' ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-rose-950 text-rose-300 border border-rose-700'
+                      }`}>
+                        {showcaseSub.case3?.status === 'Fungsi' ? '✓ FUNGSI SAH' : '✗ BUKAN FUNGSI'}
+                      </span>
+                    )}
+
+                    {/* Tombol Zoom */}
+                    {((showcaseCase === 1 && showcaseSub.case1?.imageBase64) ||
+                      (showcaseCase === 2 && showcaseSub.case2?.imageBase64) ||
+                      (showcaseCase === 3 && showcaseSub.case3?.imageBase64)) && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const img = showcaseCase === 1 ? showcaseSub.case1?.imageBase64 : showcaseCase === 2 ? showcaseSub.case2?.imageBase64 : showcaseSub.case3?.imageBase64;
+                          if (img) {
+                            setZoomImage({
+                              url: img,
+                              title: `Diagram Kasus ${showcaseCase}`,
+                              subtitle: `${showcaseSub.studentName} (${showcaseSub.className})`
+                            });
+                          }
+                        }}
+                        className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300 flex items-center gap-1 transition-all"
+                      >
+                        <ZoomIn className="w-3.5 h-3.5" />
+                        <span>Zoom</span>
+                      </button>
+                    )}
+                  </div>
                 </div>
 
-                {showcaseSub.case3?.imageBase64 && (
-                  <img
-                    src={showcaseSub.case3.imageBase64}
-                    alt="Diagram Showcase"
-                    className="w-full max-h-[380px] object-contain rounded-xl border border-slate-800 bg-slate-900"
-                  />
+                {/* Gambar Snapshot Diagram */}
+                {showcaseCase === 1 && showcaseSub.case1?.imageBase64 && (
+                  <div 
+                    onClick={() => setZoomImage({
+                      url: showcaseSub.case1!.imageBase64!,
+                      title: 'Diagram Kasus 1: Pesanan Kantin',
+                      subtitle: `${showcaseSub.studentName} (${showcaseSub.className})`
+                    })}
+                    className="cursor-pointer group relative overflow-hidden rounded-xl border border-slate-800 bg-slate-900 flex justify-center"
+                  >
+                    <img
+                      src={showcaseSub.case1.imageBase64}
+                      alt="Diagram Kasus 1"
+                      className="w-full max-h-[360px] object-contain group-hover:scale-102 transition-transform"
+                    />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white text-xs font-bold gap-1.5">
+                      <ZoomIn className="w-4 h-4" /> Klik untuk Perbesar Layar Penuh
+                    </div>
+                  </div>
                 )}
 
-                <div className="bg-slate-900/80 p-3 rounded-xl border border-slate-800 text-sm">
-                  <span className="text-slate-400 font-semibold">Argumen Matematis Siswa:</span>
-                  <p className="text-white mt-1 italic text-base">
-                    &quot;{showcaseSub.case3?.reason}&quot;
+                {showcaseCase === 2 && showcaseSub.case2?.imageBase64 && (
+                  <div 
+                    onClick={() => setZoomImage({
+                      url: showcaseSub.case2!.imageBase64!,
+                      title: 'Diagram Kasus 2: Pelanggaran Relasi',
+                      subtitle: `${showcaseSub.studentName} (${showcaseSub.className})`
+                    })}
+                    className="cursor-pointer group relative overflow-hidden rounded-xl border border-slate-800 bg-slate-900 flex justify-center"
+                  >
+                    <img
+                      src={showcaseSub.case2.imageBase64}
+                      alt="Diagram Kasus 2"
+                      className="w-full max-h-[360px] object-contain group-hover:scale-102 transition-transform"
+                    />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white text-xs font-bold gap-1.5">
+                      <ZoomIn className="w-4 h-4" /> Klik untuk Perbesar Layar Penuh
+                    </div>
+                  </div>
+                )}
+
+                {showcaseCase === 3 && showcaseSub.case3?.imageBase64 && (
+                  <div 
+                    onClick={() => setZoomImage({
+                      url: showcaseSub.case3!.imageBase64!,
+                      title: `Diagram Kasus 3: ${showcaseSub.case3?.setAName} ➔ ${showcaseSub.case3?.setBName}`,
+                      subtitle: `${showcaseSub.studentName} (${showcaseSub.className})`
+                    })}
+                    className="cursor-pointer group relative overflow-hidden rounded-xl border border-slate-800 bg-slate-900 flex justify-center"
+                  >
+                    <img
+                      src={showcaseSub.case3.imageBase64}
+                      alt="Diagram Kasus 3"
+                      className="w-full max-h-[360px] object-contain group-hover:scale-102 transition-transform"
+                    />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white text-xs font-bold gap-1.5">
+                      <ZoomIn className="w-4 h-4" /> Klik untuk Perbesar Layar Penuh
+                    </div>
+                  </div>
+                )}
+
+                {/* Argumen Siswa */}
+                <div className="bg-slate-900/90 p-4 rounded-xl border border-slate-800 text-sm space-y-1">
+                  <span className="text-slate-400 font-semibold text-xs block">Argumen Matematis Siswa:</span>
+                  <p className="text-white italic text-base leading-relaxed">
+                    {showcaseCase === 1 && (showcaseSub.case1?.reason ? `"${showcaseSub.case1.reason}"` : 'Tidak ada penjelasan')}
+                    {showcaseCase === 2 && (
+                      <>
+                        {showcaseSub.case2?.violator && (
+                          <span className="text-rose-400 font-bold not-italic block mb-0.5">
+                            Pelanggar Terdeteksi: {showcaseSub.case2.violator}
+                          </span>
+                        )}
+                        &quot;{showcaseSub.case2?.reason || 'Tidak ada penjelasan'}&quot;
+                      </>
+                    )}
+                    {showcaseCase === 3 && (showcaseSub.case3?.reason ? `"${showcaseSub.case3.reason}"` : 'Tidak ada penjelasan')}
                   </p>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ============================================================ */}
+        {/* MODAL LIGHTBOX ZOOM GAMBAR DIAGRAM */}
+        {/* ============================================================ */}
+        {zoomImage && (
+          <div 
+            className="fixed inset-0 z-80 bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-4 animate-in fade-in duration-200"
+            onClick={() => setZoomImage(null)}
+          >
+            <div 
+              className="max-w-4xl w-full bg-slate-900 border border-slate-700 rounded-3xl p-4 shadow-2xl relative space-y-3"
+              onClick={e => e.stopPropagation()}
+            >
+              {/* Header Lightbox */}
+              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div>
+                  <h3 className="text-base font-bold text-white">{zoomImage.title}</h3>
+                  {zoomImage.subtitle && (
+                    <p className="text-xs text-amber-400 font-medium">{zoomImage.subtitle}</p>
+                  )}
+                </div>
+                <div className="flex items-center gap-2">
+                  <a
+                    href={zoomImage.url}
+                    download="diagram-siswa.webp"
+                    className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold flex items-center gap-1.5 transition-all"
+                    title="Unduh file gambar diagram"
+                  >
+                    <Download className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Unduh Gambar</span>
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => setZoomImage(null)}
+                    className="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-white flex items-center justify-center transition-all"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Preview Gambar Resolusi Penuh */}
+              <div className="flex items-center justify-center bg-slate-950 rounded-2xl border border-slate-800/80 p-2 overflow-hidden">
+                <img
+                  src={zoomImage.url}
+                  alt={zoomImage.title}
+                  className="max-h-[75vh] w-auto object-contain rounded-xl"
+                />
+              </div>
+
+              <div className="text-center text-[11px] text-slate-500">
+                Tekan tombol Silang atau klik di luar untuk menutup preview gambar
               </div>
             </div>
           </div>

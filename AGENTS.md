@@ -77,6 +77,18 @@ Setiap kali ada perubahan, penambahan fitur, atau perbaikan kode:
   - Dilarang keras menetapkan status "Fungsi Sah" pada kurva bukan fungsi (Lingkaran, Parabola Horizontal) ketika garis scanner berada pada posisi 0 titik potong atau titik singgung ekstrem.
   - Wajib memisahkan secara tegas antara **Status Kurva Global** (Fungsi vs Bukan Fungsi) dan **Hasil Deteksi Scanner Lokal** di posisi $x$ aktif (0 titik potong = Jomblo / di luar kurva tanpa pasangan; 1 titik = pasangan tunggal / batas; $\ge 2$ titik = Mendua).
   - Garis scanner pada kondisi 0 titik potong wajib menggunakan warna Amber/Oranye (`#f59e0b`) putus-putus dengan label "0 Titik Potong", bukan garis hijau fungsi sah.
+- **Standar Ekspor Snapshot Diagram & Persistensi Firestore (Zero Answer Loss)**:
+  - Seluruh elemen SVG hasil clone wajib menyertakan atribut `xmlns="http://www.w3.org/2000/svg"` eksplisit agar serialisasi via `XMLSerializer` dan `new Image()` dapat me-render ke elemen `<canvas>` offscreen secara andal di semua browser (Chrome, Safari, Firefox).
+  - Format penyimpanan: Gambar diagram dikonversi ke **WebP Base64 (quality 0.85)** dengan ukuran per gambar hanya ~20–30 KB (total 3 gambar ~60–85 KB). Ukuran ini sangat aman karena jauh di bawah batas maksimum dokumen Cloud Firestore (1 MiB / 1,048,576 byte).
+  - **Mekanisme Auto-Capture Transisi Stepper**: Untuk mencegah hilangnya data akibat siswa lupa menekan tombol "📸 Simpan Diagram", setiap tombol transisi langkah ("Lanjut ke Kasus 2", "Lanjut ke Kasus 3", "Lanjut ke VLT", atau klik tab stepper) otomatis mengekspor snapshot canvas Base64 dan menyimpannya ke state persisten `case1Image`, `case2Image`, `case3Image`.
+  - **Verifikasi Bukti Visual Ganda**: Langkah 4 menampilkan 3 kartu thumbnail sebagai bukti verifikasi sebelum siswa menekan submit, dan Langkah 5 menampilkan galeri 3 gambar diagram yang telah berhasil mendarat di database sebagai tanda terima digital.
+  - **Payload Jawaban Komprehensif**: Dokumen `submissions` mencakup seluruh atribut pengerjaan siswa: `classId`, `studentName`, `case1` (`arrows`, `status`, `reason`, `imageBase64`), `case2` (`arrows`, `status`, `violator`, `reason`, `imageBase64`), `case3` (`setAName`, `setBName`, `arrows`, `status`, `reason`, `imageBase64`), `vlt` (Q1-Q4), `goldenRule` (`noSingle`, `noAffair`), `submittedAt`, `score`, dan `feedback`.
+- **Standar Dashboard Evaluasi Guru (`TeacherDashboard`)**:
+  - **Tinjauan Visual Langsung**: Seluruh visual diagram siswa wajib ditampilkan langsung di layar modal review tanpa mewajibkan unduh atau unggah file manual.
+  - **Modal Lightbox Zoom**: Setiap gambar diagram wajib menyediakan fitur Lightbox Zoom layar penuh dengan latar blur dan tombol unduh opsional jika ingin menyimpan file.
+  - **Penilaian Manual Fleksibel & Cepat**: Guru memberikan nilai manual (0-100) dengan dukungan chip preset instan (`[100]`, `[95]`, `[90]`, `[85]`, `[80]`, `[75]`, `[70]`) dan chip template catatan/feedback guru 1-klik.
+  - **Mode Showcase Proyektor Multi-Tab**: Guru dapat menampilkan diagram siswa ke proyektor kelas dengan tab selektor untuk Kasus 1 (Pesanan Kantin), Kasus 2 (Pelanggaran), dan Kasus 3 (Kreasi Mandiri), lengkap dengan argumen matematis siswa untuk apresiasi dan diskusi kelas.
+  - **Pembersihan Data Terkonfirmasi (*Reset Data*)**: Menyediakan tombol pembersihan data percobaan pengumpulan siswa via fungsi `deleteDoc` berantai dengan konfirmasi keamanan.
 - **Standar Tampilan 16:9 Proyektor (Zero-Scroll)**:
   - Kontainer aplikasi wajib `h-screen max-h-screen overflow-hidden`.
   - `SlideContainer` dibatasi tepat pada `h-[calc(100vh-3.5rem)]` dengan `overflow-hidden`.
