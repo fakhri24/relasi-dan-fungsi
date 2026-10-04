@@ -11,6 +11,8 @@ import {
   collection, getDocs, doc, updateDoc, setDoc, deleteDoc
 } from 'firebase/firestore';
 import { auth, db, googleProvider, TEACHER_WHITELIST } from '../../lib/firebase';
+import { resolveDiagramSrc } from '../../lib/uploadDiagram';
+import { DiagramReconstruct } from './DiagramReconstruct';
 import { ClassRoster, LkpdSubmission } from '../../types/lkpd';
 
 interface Props {
@@ -86,6 +88,19 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
   }, []);
 
   const isTeacherAuthed = !!currentUser || isPinAuthenticated;
+
+  // Rantai tampilan gambar diagram (Triple Failsafe):
+  // URL Storage -> Base64 Firestore -> render ulang vektor (DiagramReconstruct)
+  const reviewImg1 = selectedSub ? resolveDiagramSrc(selectedSub.case1) : null;
+  const reviewImg2 = selectedSub ? resolveDiagramSrc(selectedSub.case2) : null;
+  const reviewImg3 = selectedSub ? resolveDiagramSrc(selectedSub.case3) : null;
+  const showcaseImg = showcaseSub
+    ? showcaseCase === 1
+      ? resolveDiagramSrc(showcaseSub.case1)
+      : showcaseCase === 2
+      ? resolveDiagramSrc(showcaseSub.case2)
+      : resolveDiagramSrc(showcaseSub.case3)
+    : null;
 
   // Fetch Classes & Submissions saat auth sukses
   const fetchData = async () => {
@@ -817,11 +832,11 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                       <div className="space-y-1.5">
                         <div className="flex items-center justify-between">
                           <span className="font-bold text-indigo-400 block text-xs">Kasus 1: Skenario Kasir</span>
-                          {selectedSub.case1?.imageBase64 && (
+                          {reviewImg1 && (
                             <button
                               type="button"
                               onClick={() => setZoomImage({
-                                url: selectedSub.case1.imageBase64!,
+                                url: reviewImg1,
                                 title: `Diagram Kasus 1: Skenario Kasir`,
                                 subtitle: `${selectedSub.studentName} (${selectedSub.className})`
                               })}
@@ -832,18 +847,18 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                           )}
                         </div>
 
-                        {selectedSub.case1?.imageBase64 ? (
-                          <div 
+                        {reviewImg1 ? (
+                          <div
                             onClick={() => setZoomImage({
-                              url: selectedSub.case1.imageBase64!,
+                              url: reviewImg1,
                               title: `Diagram Kasus 1: Skenario Kasir`,
                               subtitle: `${selectedSub.studentName} (${selectedSub.className})`
                             })}
                             className="relative group cursor-pointer overflow-hidden rounded-lg border border-slate-800 bg-slate-900"
                           >
-                            <img 
-                              src={selectedSub.case1.imageBase64} 
-                              alt="Diagram Kasus 1" 
+                            <img
+                              src={reviewImg1}
+                              alt="Diagram Kasus 1"
                               className="w-full h-32 object-contain group-hover:scale-105 transition-transform"
                             />
                             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white text-[11px] font-bold gap-1">
@@ -851,8 +866,13 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                             </div>
                           </div>
                         ) : (
-                          <div className="h-32 bg-slate-900 rounded-lg flex items-center justify-center text-slate-600 text-[11px]">
-                            Tidak ada snapshot
+                          <div className="h-32 bg-slate-900 rounded-lg overflow-hidden flex items-center justify-center relative">
+                            <div className="pointer-events-none w-full flex justify-center px-2">
+                              <DiagramReconstruct caseNumber={1} caseData={selectedSub.case1} />
+                            </div>
+                            <span className="absolute bottom-1 right-1.5 text-[9px] px-1.5 py-0.5 rounded bg-slate-800/90 text-slate-400 border border-slate-700">
+                              Rekonstruksi vektor
+                            </span>
                           </div>
                         )}
                       </div>
@@ -873,11 +893,11 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                       <div className="space-y-1.5">
                         <div className="flex items-center justify-between">
                           <span className="font-bold text-rose-400 block text-xs">Kasus 2: Pelanggaran</span>
-                          {selectedSub.case2?.imageBase64 && (
+                          {reviewImg2 && (
                             <button
                               type="button"
                               onClick={() => setZoomImage({
-                                url: selectedSub.case2.imageBase64!,
+                                url: reviewImg2,
                                 title: `Diagram Kasus 2: Pelanggaran`,
                                 subtitle: `${selectedSub.studentName} (${selectedSub.className})`
                               })}
@@ -888,18 +908,18 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                           )}
                         </div>
 
-                        {selectedSub.case2?.imageBase64 ? (
-                          <div 
+                        {reviewImg2 ? (
+                          <div
                             onClick={() => setZoomImage({
-                              url: selectedSub.case2.imageBase64!,
+                              url: reviewImg2,
                               title: `Diagram Kasus 2: Pelanggaran`,
                               subtitle: `${selectedSub.studentName} (${selectedSub.className})`
                             })}
                             className="relative group cursor-pointer overflow-hidden rounded-lg border border-slate-800 bg-slate-900"
                           >
-                            <img 
-                              src={selectedSub.case2.imageBase64} 
-                              alt="Diagram Kasus 2" 
+                            <img
+                              src={reviewImg2}
+                              alt="Diagram Kasus 2"
                               className="w-full h-32 object-contain group-hover:scale-105 transition-transform"
                             />
                             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white text-[11px] font-bold gap-1">
@@ -907,8 +927,13 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                             </div>
                           </div>
                         ) : (
-                          <div className="h-32 bg-slate-900 rounded-lg flex items-center justify-center text-slate-600 text-[11px]">
-                            Tidak ada snapshot
+                          <div className="h-32 bg-slate-900 rounded-lg overflow-hidden flex items-center justify-center relative">
+                            <div className="pointer-events-none w-full flex justify-center px-2">
+                              <DiagramReconstruct caseNumber={2} caseData={selectedSub.case2} />
+                            </div>
+                            <span className="absolute bottom-1 right-1.5 text-[9px] px-1.5 py-0.5 rounded bg-slate-800/90 text-slate-400 border border-slate-700">
+                              Rekonstruksi vektor
+                            </span>
                           </div>
                         )}
                       </div>
@@ -933,11 +958,11 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                           <span className="font-bold text-cyan-400 block text-xs truncate max-w-[170px]">
                             Kasus 3: {selectedSub.case3?.setAName || 'A'} ➔ {selectedSub.case3?.setBName || 'B'}
                           </span>
-                          {selectedSub.case3?.imageBase64 && (
+                          {reviewImg3 && (
                             <button
                               type="button"
                               onClick={() => setZoomImage({
-                                url: selectedSub.case3.imageBase64!,
+                                url: reviewImg3,
                                 title: `Diagram Kasus 3: ${selectedSub.case3?.setAName} ➔ ${selectedSub.case3?.setBName}`,
                                 subtitle: `${selectedSub.studentName} (${selectedSub.className})`
                               })}
@@ -948,18 +973,18 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                           )}
                         </div>
 
-                        {selectedSub.case3?.imageBase64 ? (
-                          <div 
+                        {reviewImg3 ? (
+                          <div
                             onClick={() => setZoomImage({
-                              url: selectedSub.case3.imageBase64!,
+                              url: reviewImg3,
                               title: `Diagram Kasus 3: ${selectedSub.case3?.setAName} ➔ ${selectedSub.case3?.setBName}`,
                               subtitle: `${selectedSub.studentName} (${selectedSub.className})`
                             })}
                             className="relative group cursor-pointer overflow-hidden rounded-lg border border-slate-800 bg-slate-900"
                           >
-                            <img 
-                              src={selectedSub.case3.imageBase64} 
-                              alt="Diagram Kasus 3" 
+                            <img
+                              src={reviewImg3}
+                              alt="Diagram Kasus 3"
                               className="w-full h-32 object-contain group-hover:scale-105 transition-transform"
                             />
                             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white text-[11px] font-bold gap-1">
@@ -967,8 +992,13 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                             </div>
                           </div>
                         ) : (
-                          <div className="h-32 bg-slate-900 rounded-lg flex items-center justify-center text-slate-600 text-[11px]">
-                            Tidak ada snapshot
+                          <div className="h-32 bg-slate-900 rounded-lg overflow-hidden flex items-center justify-center relative">
+                            <div className="pointer-events-none w-full flex justify-center px-2">
+                              <DiagramReconstruct caseNumber={3} caseData={selectedSub.case3} />
+                            </div>
+                            <span className="absolute bottom-1 right-1.5 text-[9px] px-1.5 py-0.5 rounded bg-slate-800/90 text-slate-400 border border-slate-700">
+                              Rekonstruksi vektor
+                            </span>
                           </div>
                         )}
                       </div>
@@ -1213,16 +1243,13 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                     )}
 
                     {/* Tombol Zoom */}
-                    {((showcaseCase === 1 && showcaseSub.case1?.imageBase64) ||
-                      (showcaseCase === 2 && showcaseSub.case2?.imageBase64) ||
-                      (showcaseCase === 3 && showcaseSub.case3?.imageBase64)) && (
+                    {showcaseImg && (
                       <button
                         type="button"
                         onClick={() => {
-                          const img = showcaseCase === 1 ? showcaseSub.case1?.imageBase64 : showcaseCase === 2 ? showcaseSub.case2?.imageBase64 : showcaseSub.case3?.imageBase64;
-                          if (img) {
+                          if (showcaseImg) {
                             setZoomImage({
-                              url: img,
+                              url: showcaseImg,
                               title: `Diagram Kasus ${showcaseCase}`,
                               subtitle: `${showcaseSub.studentName} (${showcaseSub.className})`
                             });
@@ -1237,64 +1264,42 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                   </div>
                 </div>
 
-                {/* Gambar Snapshot Diagram */}
-                {showcaseCase === 1 && showcaseSub.case1?.imageBase64 && (
-                  <div 
+                {/* Gambar Snapshot Diagram (Triple Failsafe: URL -> Base64 -> render ulang vektor) */}
+                {showcaseImg ? (
+                  <div
                     onClick={() => setZoomImage({
-                      url: showcaseSub.case1!.imageBase64!,
-                      title: 'Diagram Kasus 1: Pesanan Kantin',
+                      url: showcaseImg,
+                      title: showcaseCase === 3
+                        ? `Diagram Kasus 3: ${showcaseSub.case3?.setAName} ➔ ${showcaseSub.case3?.setBName}`
+                        : `Diagram Kasus ${showcaseCase}`,
                       subtitle: `${showcaseSub.studentName} (${showcaseSub.className})`
                     })}
                     className="cursor-pointer group relative overflow-hidden rounded-xl border border-slate-800 bg-slate-900 flex justify-center"
                   >
                     <img
-                      src={showcaseSub.case1.imageBase64}
-                      alt="Diagram Kasus 1"
+                      src={showcaseImg}
+                      alt={`Diagram Kasus ${showcaseCase}`}
                       className="w-full max-h-[360px] object-contain group-hover:scale-102 transition-transform"
                     />
                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white text-xs font-bold gap-1.5">
                       <ZoomIn className="w-4 h-4" /> Klik untuk Perbesar Layar Penuh
                     </div>
                   </div>
-                )}
-
-                {showcaseCase === 2 && showcaseSub.case2?.imageBase64 && (
-                  <div 
-                    onClick={() => setZoomImage({
-                      url: showcaseSub.case2!.imageBase64!,
-                      title: 'Diagram Kasus 2: Pelanggaran Relasi',
-                      subtitle: `${showcaseSub.studentName} (${showcaseSub.className})`
-                    })}
-                    className="cursor-pointer group relative overflow-hidden rounded-xl border border-slate-800 bg-slate-900 flex justify-center"
-                  >
-                    <img
-                      src={showcaseSub.case2.imageBase64}
-                      alt="Diagram Kasus 2"
-                      className="w-full max-h-[360px] object-contain group-hover:scale-102 transition-transform"
-                    />
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white text-xs font-bold gap-1.5">
-                      <ZoomIn className="w-4 h-4" /> Klik untuk Perbesar Layar Penuh
+                ) : (
+                  <div className="bg-slate-950 rounded-xl border border-slate-800 p-3 flex flex-col items-center gap-2">
+                    <div className="pointer-events-none w-full max-w-xl">
+                      <DiagramReconstruct
+                        caseNumber={showcaseCase}
+                        caseData={
+                          showcaseCase === 1 ? showcaseSub.case1
+                            : showcaseCase === 2 ? showcaseSub.case2
+                            : showcaseSub.case3
+                        }
+                      />
                     </div>
-                  </div>
-                )}
-
-                {showcaseCase === 3 && showcaseSub.case3?.imageBase64 && (
-                  <div 
-                    onClick={() => setZoomImage({
-                      url: showcaseSub.case3!.imageBase64!,
-                      title: `Diagram Kasus 3: ${showcaseSub.case3?.setAName} ➔ ${showcaseSub.case3?.setBName}`,
-                      subtitle: `${showcaseSub.studentName} (${showcaseSub.className})`
-                    })}
-                    className="cursor-pointer group relative overflow-hidden rounded-xl border border-slate-800 bg-slate-900 flex justify-center"
-                  >
-                    <img
-                      src={showcaseSub.case3.imageBase64}
-                      alt="Diagram Kasus 3"
-                      className="w-full max-h-[360px] object-contain group-hover:scale-102 transition-transform"
-                    />
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white text-xs font-bold gap-1.5">
-                      <ZoomIn className="w-4 h-4" /> Klik untuk Perbesar Layar Penuh
-                    </div>
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-slate-800/90 text-slate-400 border border-slate-700">
+                      ⚠️ Snapshot gambar tidak tersedia — direkonstruksi dari data panah siswa
+                    </span>
                   </div>
                 )}
 

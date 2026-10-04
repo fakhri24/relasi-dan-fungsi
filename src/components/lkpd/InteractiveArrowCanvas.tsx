@@ -24,6 +24,8 @@ interface Props {
   allowDownload?: boolean;
   savedImage?: string;
   onSaveSnapshot?: (base64: string) => void;
+  // Mode baca-saja: render ulang vektor (fallback lapisan 3) untuk dashboard guru
+  readOnly?: boolean;
 }
 
 export const InteractiveArrowCanvas = forwardRef<InteractiveArrowCanvasRef, Props>(({
@@ -42,7 +44,8 @@ export const InteractiveArrowCanvas = forwardRef<InteractiveArrowCanvasRef, Prop
   onUpdateItemsB,
   allowDownload = true,
   savedImage,
-  onSaveSnapshot
+  onSaveSnapshot,
+  readOnly = false
 }, ref) => {
   const [selectedA, setSelectedA] = useState<string | null>(null);
   const [newItemA, setNewItemA] = useState('');
@@ -92,6 +95,7 @@ export const InteractiveArrowCanvas = forwardRef<InteractiveArrowCanvasRef, Prop
 
   // Handle klik item A
   const handleItemAClick = (item: string) => {
+    if (readOnly) return;
     if (selectedA === item) {
       setSelectedA(null);
     } else {
@@ -101,6 +105,7 @@ export const InteractiveArrowCanvas = forwardRef<InteractiveArrowCanvasRef, Prop
 
   // Handle klik item B
   const handleItemBClick = (itemB: string) => {
+    if (readOnly) return;
     if (!selectedA) return;
 
     // Cek apakah relasi sudah ada
@@ -168,6 +173,10 @@ export const InteractiveArrowCanvas = forwardRef<InteractiveArrowCanvasRef, Prop
         const svgElement = svgRef.current;
         const svgClone = svgElement.cloneNode(true) as SVGSVGElement;
         svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+        // FIX akar bug snapshot kosong: browser membutuhkan width/height eksplisit
+        // saat SVG dirender via new Image() — viewBox saja tidak memberi ukuran intrinsik.
+        svgClone.setAttribute('width', String(width));
+        svgClone.setAttribute('height', String(height));
         const svgString = new XMLSerializer().serializeToString(svgClone);
         const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
         const URL = window.URL || window.webkitURL || window;
@@ -183,7 +192,11 @@ export const InteractiveArrowCanvas = forwardRef<InteractiveArrowCanvasRef, Prop
             ctx.fillStyle = '#090d16';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-            const dataUrl = canvas.toDataURL('image/webp', 0.85);
+            // WebP dengan fallback PNG untuk browser yang belum mendukung WebP
+            let dataUrl = canvas.toDataURL('image/webp', 0.85);
+            if (!dataUrl.startsWith('data:image/webp')) {
+              dataUrl = canvas.toDataURL('image/png');
+            }
             URL.revokeObjectURL(blobURL);
             resolve(dataUrl);
           } else {
@@ -235,8 +248,9 @@ export const InteractiveArrowCanvas = forwardRef<InteractiveArrowCanvasRef, Prop
   };
 
   return (
-    <div className="bg-slate-900/90 border border-slate-700/80 rounded-2xl p-3 md:p-4 shadow-xl flex flex-col space-y-3">
+    <div className={`border rounded-2xl p-3 md:p-4 shadow-xl flex flex-col space-y-3 ${readOnly ? 'bg-slate-950 border-slate-800' : 'bg-slate-900/90 border-slate-700/80'}`}>
       {/* Header Interaktif */}
+      {!readOnly && (
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2">
         <div>
           <h4 className="text-sm font-bold text-white flex items-center gap-2">
@@ -334,9 +348,10 @@ export const InteractiveArrowCanvas = forwardRef<InteractiveArrowCanvasRef, Prop
           )}
         </div>
       </div>
+      )}
 
       {/* Editor Anggota Himpunan (Khusus Kasus 3: Kreasi Mandiri) */}
-      {isEditableSets && (
+      {isEditableSets && !readOnly && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-2.5 bg-slate-950/60 border border-slate-800 rounded-xl text-xs">
           {/* Editor Himpunan A */}
           <div className="space-y-1.5">
@@ -437,6 +452,7 @@ export const InteractiveArrowCanvas = forwardRef<InteractiveArrowCanvasRef, Prop
       )}
 
       {/* Instruksi Sentuh & Klik */}
+      {!readOnly && (
       <div className="text-[11px] text-slate-400 flex items-center justify-between px-1">
         <span>
           💡 <strong>Cara Pakai:</strong> Klik 1 nama di <strong>Himpunan A</strong> (akan menyala), lalu klik 1 pilihan di <strong>Himpunan B</strong> untuk menarik panah. Klik panah yang sama untuk menghapus.
@@ -447,6 +463,7 @@ export const InteractiveArrowCanvas = forwardRef<InteractiveArrowCanvasRef, Prop
           </span>
         )}
       </div>
+      )}
 
       {/* Kanvas Diagram SVG */}
       <div className="relative w-full overflow-hidden rounded-xl bg-slate-950 border border-slate-800 flex justify-center py-2">
@@ -454,8 +471,8 @@ export const InteractiveArrowCanvas = forwardRef<InteractiveArrowCanvasRef, Prop
           ref={svgRef}
           xmlns="http://www.w3.org/2000/svg"
           viewBox={`0 0 ${width} ${height}`}
-          className="w-full max-w-xl h-auto select-none"
-          style={{ minHeight: '260px' }}
+          className={`w-full h-auto select-none ${readOnly ? '' : 'max-w-xl'}`}
+          style={readOnly ? undefined : { minHeight: '260px' }}
         >
           <defs>
             {/* Definisi Mata Panah Tajam Bergradien */}
@@ -565,6 +582,7 @@ export const InteractiveArrowCanvas = forwardRef<InteractiveArrowCanvasRef, Prop
                   stroke="transparent"
                   strokeWidth="16"
                   onClick={() => {
+                    if (readOnly) return;
                     const updated = arrows.filter((_, i) => i !== idx);
                     onChangeArrows(updated);
                   }}

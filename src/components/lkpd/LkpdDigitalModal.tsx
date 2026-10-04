@@ -6,6 +6,7 @@ import {
 import confetti from 'canvas-confetti';
 import { collection, getDocs, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
+import { uploadDiagramSnapshot } from '../../lib/uploadDiagram';
 import { InteractiveArrowCanvas, InteractiveArrowCanvasRef } from './InteractiveArrowCanvas';
 import { ClassRoster, ArrowRelation } from '../../types/lkpd';
 
@@ -233,6 +234,15 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
         img3 = await case3Ref.current.exportToBase64();
       }
 
+      // Triple Failsafe — Lapisan 1: upload ke Firebase Storage (URL).
+      // Jika upload gagal/lambat -> Lapisan 2: simpan Base64 ke Firestore.
+      // Lapisan 3 (di dashboard guru): render ulang vektor dari data panah.
+      const [url1, url2, url3] = await Promise.all([
+        img1 ? uploadDiagramSnapshot(img1, 'case1') : Promise.resolve(null),
+        img2 ? uploadDiagramSnapshot(img2, 'case2') : Promise.resolve(null),
+        img3 ? uploadDiagramSnapshot(img3, 'case3') : Promise.resolve(null)
+      ]);
+
       const submissionPayload = {
         classId: selectedClassId,
         className: currentClass.name,
@@ -242,14 +252,16 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
           status: case1Status,
           reason: case1Reason,
           arrows: case1Arrows,
-          imageBase64: img1 || ''
+          imageUrl: url1 || '',
+          imageBase64: url1 ? '' : (img1 || '')
         },
         case2: {
           status: case2Status,
           violator: case2Violator,
           reason: case2Reason,
           arrows: case2Arrows,
-          imageBase64: img2 || ''
+          imageUrl: url2 || '',
+          imageBase64: url2 ? '' : (img2 || '')
         },
         case3: {
           setAName: case3SetAName,
@@ -259,7 +271,8 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
           arrows: case3Arrows,
           status: case3Status,
           reason: case3Reason,
-          imageBase64: img3 || ''
+          imageUrl: url3 || '',
+          imageBase64: url3 ? '' : (img3 || '')
         },
         vlt: {
           q1: vlt1,
@@ -1053,7 +1066,7 @@ export const LkpdDigitalModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
                   <div>
                     <label className="font-semibold text-slate-300 block mb-1">
-                      2. Syarat kedua: <strong className="text-cyan-400">&quot;Tidak Boleh Mendua / Selingkuh&quot;</strong>, artinya:
+                      2. Syarat kedua: <strong className="text-cyan-400">&quot;Tidak Boleh Mendua&quot;</strong>, artinya:
                     </label>
                     <input
                       type="text"

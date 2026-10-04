@@ -4,7 +4,32 @@ Dokumen perencanaan dan pelacakan progres pengembangan media pembelajaran intera
 
 ---
 
-## 📌 Status Terkini: v2.1.4 (Penyimpanan Diagram Otomatis ke Firestore, Dashboard Penilaian Manual Guru, & Zero Data Loss ✅)
+## 📌 Status Terkini: v2.2.1 (Pembersihan Istilah "Selingkuh" Menjadi "Mendua" pada LKPD Cetak & Digital ✅)
+- [x] **Pembersihan Diksi & Konsistensi Pedagogi**:
+  - Mengganti istilah "selingkuh/mendua" menjadi "mendua" pada LKPD Cetak (`lks-siswa.html` & `public/lks-siswa.html` Bagian C).
+  - Menghapus seluruh istilah "Selingkuh" di Panduan Guru (`panduan-guru.html` & `public/panduan-guru.html`) dan LKPD Digital (`LkpdDigitalModal.tsx`) sehingga hanya menggunakan istilah formal & ramah kelas: **"Mendua"**.
+  - Verifikasi seluruh kode sumber: 0 kemunculan kata "selingkuh" tersisa di repositori.
+
+## 📌 Arsip Status v2.2.0 (Fix Akar Bug Snapshot Kosong & Triple Failsafe Firebase Storage ✅ / Deploy Rules ⏳)
+- [x] **Root Cause Analysis Bug "Gambar Tidak Ada / Tidak Ada Snapshot" (Laporan Guru 24 Sep 07:16)**:
+  - Gejala: seluruh field `imageBase64` pada dokumen `submissions` kosong (length 0) meskipun auto-capture berjalan.
+  - Root cause: SVG hasil clone pada `exportToBase64` hanya memiliki `viewBox` tanpa atribut `width`/`height` eksplisit — `new Image()` tidak memperoleh ukuran intrinsik sehingga render ke `<canvas>` gagal diam-diam (`onload` tidak menghasilkan piksel / `onerror`) dan menghasilkan string kosong.
+- [x] **Perbaikan `exportToBase64` (`InteractiveArrowCanvas.tsx`)**:
+  - Menetapkan `width`/`height` eksplisit (560×320) pada SVG clone sebelum serialisasi.
+  - Fallback ekspor `image/webp` → `image/png` otomatis untuk browser tanpa dukungan WebP.
+- [x] **Implementasi Sistem 3 Lapis (Triple Failsafe) — Diputuskan via diskusi 24 Sep**:
+  - **Lapisan 1**: Upload gambar diagram siswa ke **Firebase Storage (Paket Blaze)** sebagai file WebP/PNG/JPEG < 2 MB → simpan `imageUrl` ke Firestore (`src/lib/uploadDiagram.ts`, timeout 12 detik).
+  - **Lapisan 2**: Jika upload gagal/lambat → simpan `imageBase64` ke Firestore seperti sebelumnya.
+  - **Lapisan 3**: Jika keduanya kosong → dashboard guru me-render ulang **vektor SVG dari data panah siswa** (`DiagramReconstruct.tsx`, mode `readOnly` pada `InteractiveArrowCanvas`).
+  - Siswa tetap **tanpa login** (upload publik tervalidasi: `image/(png|jpeg|webp)`, maks 2 MB via `storage.rules`).
+- [x] **Pembaruan Tampilan Guru (`TeacherDashboard.tsx`)**:
+  - Seluruh slot gambar (3 kartu review + 3 tab showcase) kini memakai `resolveDiagramSrc()` (URL → Base64) dengan fallback kartu "Rekonstruksi vektor" bila gambar tidak tersedia.
+  - Blok showcase 3 kasus disatukan menjadi satu blok dinamis + fallback rekonstruksi.
+- [x] **Konfigurasi Backend**: `storage.rules` baru (read publik, create tervalidasi, write/delete guru) + `firebase.json` menambah blok `storage`.
+- [x] **Build Verification**: `npm run build` (`tsc -b && vite build`) lolos 100% tanpa error.
+- [ ] **Deploy Storage Rules**: `npx firebase-tools deploy --only storage` menunggu persetujuan (pastikan Firebase Storage aktif di project `relasi-fungsi-edu-x` / Paket Blaze).
+
+## 📌 Arsip Status v2.1.4 (Penyimpanan Diagram Otomatis ke Firestore, Dashboard Penilaian Manual Guru, & Zero Data Loss ✅)
 - [x] **Pembersihan Database Hasil Percobaan Siswa**:
   - Seluruh dokumen percobaan pengumpulan pada koleksi Cloud Firestore `submissions` telah dihapus bersih via Firebase CLI (`npx firebase-tools firestore:delete -r -f submissions`).
   - Fitur tombol *"Reset Data"* di dashboard guru ditambahkan dengan dialog konfirmasi aman untuk pembersihan berkala oleh guru.

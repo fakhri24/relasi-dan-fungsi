@@ -1,6 +1,7 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 
 // Konfigurasi resmi Firebase SDK untuk project relasi-fungsi-edu-x
 export const firebaseConfig = {
@@ -15,9 +16,10 @@ export const firebaseConfig = {
 // Inisialisasi Firebase App (Singleton)
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
-// Inisialisasi Auth & Firestore
+// Inisialisasi Auth, Firestore & Storage
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+export const storage = getStorage(app);
 
 // Provider Google Auth
 export const googleProvider = new GoogleAuthProvider();

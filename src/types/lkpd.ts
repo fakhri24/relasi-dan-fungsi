@@ -8,6 +8,7 @@ export interface Case1Answer {
   reason: string;
   arrows: ArrowRelation[];
   imageBase64?: string;
+  imageUrl?: string;
 }
 
 export interface Case2Answer {
@@ -16,6 +17,7 @@ export interface Case2Answer {
   reason: string;
   arrows: ArrowRelation[];
   imageBase64?: string;
+  imageUrl?: string;
 }
 
 export interface Case3CustomAnswer {
@@ -27,6 +29,7 @@ export interface Case3CustomAnswer {
   status: 'Fungsi' | 'Bukan';
   reason: string;
   imageBase64?: string;
+  imageUrl?: string;
 }
 
 export interface VltAnswers {

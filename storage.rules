@@ -1,0 +1,25 @@
+rules_version = '2';
+
+// Aturan Firebase Storage untuk gambar diagram LKPD siswa
+// Triple Failsafe: URL Storage (lapisan 1) -> Base64 Firestore (lapisan 2) -> render ulang SVG (lapisan 3)
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isTeacher() {
+      return request.auth != null && (
+        request.auth.token.email == 'fkhr2nd@gmail.com' ||
+        request.auth.token.email == 'f.fadllillah@gmail.com'
+      );
+    }
+
+    // Folder penyimpanan snapshot diagram siswa
+    match /submissions/{fileName} {
+      // Guru & pratinjau publik (tampilan tanda terima) boleh membaca
+      allow read: if true;
+      // Siswa publik (tanpa login) hanya boleh membuat file gambar kecil tervalidasi
+      allow create: if request.resource.size < 2 * 1024 * 1024
+                    && request.resource.contentType.matches('image/(png|jpeg|webp)');
+      // Hapus / ubah hanya untuk guru
+      allow update, delete: if isTeacher();
+    }
+  }
+}
