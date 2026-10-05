@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   X, LogOut, CheckCircle2, AlertCircle, FileSpreadsheet, 
   Tv, Eye, Award, Users, Plus, Save, RefreshCw, KeyRound,
-  Trash2, ZoomIn, Download, Sparkles
+  Trash2, ZoomIn, Download, Sparkles, TrendingUp
 } from 'lucide-react';
 import { 
   signInWithPopup, signOut, onAuthStateChanged, User as FirebaseUser 
@@ -13,7 +13,8 @@ import {
 import { auth, db, googleProvider, TEACHER_WHITELIST } from '../../lib/firebase';
 import { resolveDiagramSrc } from '../../lib/uploadDiagram';
 import { DiagramReconstruct } from './DiagramReconstruct';
-import { ClassRoster, LkpdSubmission } from '../../types/lkpd';
+import { InteractiveLinearPlotCanvas } from '../lkpd/InteractiveLinearPlotCanvas';
+import { ClassRoster, LkpdSubmission, Lkpd2Submission, AnyLkpdSubmission } from '../../types/lkpd';
 
 interface Props {
   isOpen: boolean;
@@ -31,23 +32,26 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
   const [authError, setAuthError] = useState<string | null>(null);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
+  // Active Meeting Tab: 1 (Pertemuan 1: Relasi & VLT) | 2 (Pertemuan 2: Batasan & Linear)
+  const [activeMeetingTab, setActiveMeetingTab] = useState<1 | 2>(1);
+
   // Active Tab: 'submissions' | 'roster'
   const [activeTab, setActiveTab] = useState<'submissions' | 'roster'>('submissions');
 
   // Data state
   const [classes, setClasses] = useState<ClassRoster[]>([]);
   const [selectedClassId, setSelectedClassId] = useState<string>('');
-  const [submissions, setSubmissions] = useState<LkpdSubmission[]>([]);
+  const [submissions, setSubmissions] = useState<AnyLkpdSubmission[]>([]);
   const [loadingData, setLoadingData] = useState(false);
 
   // Selected Submission for Review Modal
-  const [selectedSub, setSelectedSub] = useState<LkpdSubmission | null>(null);
+  const [selectedSub, setSelectedSub] = useState<AnyLkpdSubmission | null>(null);
   const [gradeScore, setGradeScore] = useState<number | ''>('');
   const [gradeFeedback, setGradeFeedback] = useState<string>('');
   const [isSavingGrade, setIsSavingGrade] = useState(false);
 
   // Showcase Modal State (untuk menampilkan karya siswa di proyektor)
-  const [showcaseSub, setShowcaseSub] = useState<LkpdSubmission | null>(null);
+  const [showcaseSub, setShowcaseSub] = useState<AnyLkpdSubmission | null>(null);
   const [showcaseCase, setShowcaseCase] = useState<1 | 2 | 3>(3);
 
   // Zoom Lightbox Modal
@@ -89,17 +93,26 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
 
   const isTeacherAuthed = !!currentUser || isPinAuthenticated;
 
-  // Rantai tampilan gambar diagram (Triple Failsafe):
-  // URL Storage -> Base64 Firestore -> render ulang vektor (DiagramReconstruct)
-  const reviewImg1 = selectedSub ? resolveDiagramSrc(selectedSub.case1) : null;
-  const reviewImg2 = selectedSub ? resolveDiagramSrc(selectedSub.case2) : null;
-  const reviewImg3 = selectedSub ? resolveDiagramSrc(selectedSub.case3) : null;
-  const showcaseImg = showcaseSub
+  // Type helpers untuk membedakan P1 vs P2
+  const selectedP1 = selectedSub && ((selectedSub as any).meeting || 1) === 1 ? (selectedSub as LkpdSubmission) : null;
+  const selectedP2 = selectedSub && (selectedSub as any).meeting === 2 ? (selectedSub as Lkpd2Submission) : null;
+
+  const reviewImg1 = selectedP1 ? resolveDiagramSrc(selectedP1.case1) : null;
+  const reviewImg2 = selectedP1 ? resolveDiagramSrc(selectedP1.case2) : null;
+  const reviewImg3 = selectedP1 ? resolveDiagramSrc(selectedP1.case3) : null;
+  const reviewImgP2 = selectedP2 ? resolveDiagramSrc(selectedP2.plotData) : null;
+
+  const showcaseP1 = showcaseSub && ((showcaseSub as any).meeting || 1) === 1 ? (showcaseSub as LkpdSubmission) : null;
+  const showcaseP2 = showcaseSub && (showcaseSub as any).meeting === 2 ? (showcaseSub as Lkpd2Submission) : null;
+
+  const showcaseImg = showcaseP1
     ? showcaseCase === 1
-      ? resolveDiagramSrc(showcaseSub.case1)
+      ? resolveDiagramSrc(showcaseP1.case1)
       : showcaseCase === 2
-      ? resolveDiagramSrc(showcaseSub.case2)
-      : resolveDiagramSrc(showcaseSub.case3)
+      ? resolveDiagramSrc(showcaseP1.case2)
+      : resolveDiagramSrc(showcaseP1.case3)
+    : showcaseP2
+    ? resolveDiagramSrc(showcaseP2.plotData)
     : null;
 
   // Fetch Classes & Submissions saat auth sukses
@@ -140,9 +153,9 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
 
       // 2. Fetch Submissions
       const subSnap = await getDocs(collection(db, 'submissions'));
-      const subList: LkpdSubmission[] = subSnap.docs.map(d => ({
+      const subList: AnyLkpdSubmission[] = subSnap.docs.map(d => ({
         id: d.id,
-        ...(d.data() as Omit<LkpdSubmission, 'id'>)
+        ...(d.data() as any)
       }));
       setSubmissions(subList);
 
@@ -197,11 +210,12 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
     setCurrentUser(null);
   };
 
-  // Filter Submissions berdasarkan kelas yang dipilih
+  // Filter Submissions berdasarkan kelas & pertemuan yang dipilih
   const currentClass = classes.find(c => c.id === selectedClassId);
-  const classSubmissions = submissions.filter(s => s.classId === selectedClassId);
+  const currentMeetingSubmissions = submissions.filter(s => ((s as any).meeting || 1) === activeMeetingTab);
+  const classSubmissions = currentMeetingSubmissions.filter(s => s.classId === selectedClassId);
 
-  // Buat mapping pengerjaan per siswa di kelas aktif
+  // Buat mapping pengerjaan per siswa di kelas aktif untuk sesi pertemuan aktif
   const studentRosterWithSubmissions = (currentClass?.students || []).map(studentName => {
     const sub = classSubmissions.find(s => s.studentName.toLowerCase().trim() === studentName.toLowerCase().trim());
     return {
@@ -263,7 +277,7 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
   };
 
   // Buka Modal Review untuk satu siswa
-  const handleOpenReview = (sub: LkpdSubmission) => {
+  const handleOpenReview = (sub: AnyLkpdSubmission) => {
     setSelectedSub(sub);
     setGradeScore(sub.score ?? '');
     setGradeFeedback(sub.teacherFeedback ?? '');
@@ -294,25 +308,44 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
     }
   };
 
-  // Ekspor Nilai ke File CSV
+  // Ekspor Nilai ke File CSV (Adaptif Sesi P1 / P2)
   const handleExportCsv = () => {
     if (!currentClass) return;
 
     let csvContent = 'data:text/csv;charset=utf-8,';
-    csvContent += 'No,Nama Siswa,Kelas,Status,Nilai,Catatan Guru,Waktu Pengumpulan\n';
-
-    studentRosterWithSubmissions.forEach((item, idx) => {
-      const status = item.isSubmitted ? 'Sudah Mengumpulkan' : 'Belum';
-      const score = item.submission?.score ?? '-';
-      const feedback = item.submission?.teacherFeedback ? `"${item.submission.teacherFeedback.replace(/"/g, '""')}"` : '-';
-      const time = item.submission?.submittedAt ? new Date(item.submission.submittedAt).toLocaleString() : '-';
-      csvContent += `${idx + 1},"${item.studentName}","${currentClass.name}","${status}",${score},${feedback},"${time}"\n`;
-    });
+    if (activeMeetingTab === 1) {
+      csvContent += 'No,Nama Siswa,Kelas,Sesi,Status,Nilai,Catatan Guru,Waktu Pengumpulan\n';
+      studentRosterWithSubmissions.forEach((item, idx) => {
+        const status = item.isSubmitted ? 'Sudah Mengumpulkan' : 'Belum';
+        const score = item.submission?.score ?? '-';
+        const feedback = item.submission?.teacherFeedback ? `"${item.submission.teacherFeedback.replace(/"/g, '""')}"` : '-';
+        const time = item.submission?.submittedAt ? new Date(item.submission.submittedAt).toLocaleString() : '-';
+        csvContent += `${idx + 1},"${item.studentName}","${currentClass.name}","P1: Relasi & VLT","${status}",${score},${feedback},"${time}"\n`;
+      });
+    } else {
+      csvContent += 'No,Nama Siswa,Kelas,Sesi,Status,Nilai,Catatan Guru,Jarak Ojol,Baterai HP,Muatan Lift,Notasi Selang,Model Linear,Titik Plot,Refleksi Intercept b,Refleksi Gradien a,Waktu Pengumpulan\n';
+      studentRosterWithSubmissions.forEach((item, idx) => {
+        const sub = item.submission as Lkpd2Submission | null;
+        const status = item.isSubmitted ? 'Sudah Mengumpulkan' : 'Belum';
+        const score = sub?.score ?? '-';
+        const feedback = sub?.teacherFeedback ? `"${sub.teacherFeedback.replace(/"/g, '""')}"` : '-';
+        const ojol = sub?.physicalLimits?.ojol?.answer || '-';
+        const baterai = sub?.physicalLimits?.baterai?.answer || '-';
+        const lift = sub?.physicalLimits?.lift?.dataType || '-';
+        const notasi = sub?.setNotations?.q1Bracket ? `"${sub.setNotations.q1Bracket} & ${sub.setNotations.q2Inequality}"` : '-';
+        const formula = sub?.linearModel?.formulaText ? `"${sub.linearModel.formulaText}"` : '-';
+        const pointsCount = sub?.plotData?.points?.length ?? '-';
+        const refB = sub?.goldenRule?.meaningOfB ? `"${sub.goldenRule.meaningOfB.replace(/"/g, '""')}"` : '-';
+        const refA = sub?.goldenRule?.meaningOfA ? `"${sub.goldenRule.meaningOfA.replace(/"/g, '""')}"` : '-';
+        const time = sub?.submittedAt ? new Date(sub.submittedAt).toLocaleString() : '-';
+        csvContent += `${idx + 1},"${item.studentName}","${currentClass.name}","P2: Batasan & Linear","${status}",${score},${feedback},"${ojol}","${baterai}","${lift}",${notasi},${formula},${pointsCount},${refB},${refA},"${time}"\n`;
+      });
+    }
 
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `Rekap_Nilai_LKPD_${currentClass.name.replace(/\s+/g, '_')}.csv`);
+    link.setAttribute('download', `Rekap_Nilai_LKPD_P${activeMeetingTab}_${currentClass.name.replace(/\s+/g, '_')}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -528,6 +561,46 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
             {/* ============================================================ */}
             {activeTab === 'submissions' && (
               <div className="flex-1 flex flex-col overflow-hidden p-4 sm:p-5 space-y-4">
+                {/* Meeting Selector: P1 vs P2 */}
+                <div className="flex items-center gap-2 bg-slate-950 p-1.5 rounded-2xl border border-slate-800">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveMeetingTab(1);
+                      setSelectedSub(null);
+                      setShowcaseSub(null);
+                    }}
+                    className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${
+                      activeMeetingTab === 1
+                        ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+                        : 'text-slate-400 hover:text-white hover:bg-slate-900'
+                    }`}
+                  >
+                    <span>Pertemuan 1: Relasi & VLT</span>
+                    <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-black/30 font-mono">
+                      {submissions.filter(s => ((s as any).meeting || 1) === 1 && s.classId === selectedClassId).length} Kumpul
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveMeetingTab(2);
+                      setSelectedSub(null);
+                      setShowcaseSub(null);
+                    }}
+                    className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${
+                      activeMeetingTab === 2
+                        ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+                        : 'text-slate-400 hover:text-white hover:bg-slate-900'
+                    }`}
+                  >
+                    <span>Pertemuan 2: Batasan & Linear</span>
+                    <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-black/30 font-mono">
+                      {submissions.filter(s => (s as any).meeting === 2 && s.classId === selectedClassId).length} Kumpul
+                    </span>
+                  </button>
+                </div>
+
                 {/* Statistik Cepat */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
                   <div className="bg-slate-950/70 border border-slate-800 p-3 rounded-2xl">
@@ -818,9 +891,183 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                 </button>
               </div>
 
-              {/* Konten Review: 3 Diagram & Form Nilai */}
+              {/* Konten Review: P1 vs P2 & Form Nilai */}
               <div className="flex-1 overflow-y-auto p-5 space-y-5 text-xs">
-                {/* 3 Diagram Preview Grid */}
+                {selectedP2 ? (
+                  /* ============================================================ */
+                  /* REVIEW DETAIL UNTUK PERTEMUAN 2 (DOMAIN, RANGE, LINEAR)      */
+                  /* ============================================================ */
+                  <div className="space-y-4">
+                    {/* Visual Grafik Kartesius Siswa */}
+                    <div className="bg-slate-950 border border-slate-800 rounded-2xl p-4 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h4 className="font-bold text-indigo-400 text-xs uppercase tracking-wider flex items-center gap-1.5">
+                            <TrendingUp className="w-4 h-4 text-emerald-400" />
+                            Hasil Visual Grafik Koordinat Kartesius Siswa:
+                          </h4>
+                          <span className="text-[10px] text-slate-400">
+                            {selectedP2.plotData?.points?.length || 0} Titik Terplot • {selectedP2.plotData?.hasLine ? 'Garis Linear Aktif' : 'Tanpa Garis'}
+                          </span>
+                        </div>
+                        {reviewImgP2 && (
+                          <button
+                            type="button"
+                            onClick={() => setZoomImage({
+                              url: reviewImgP2,
+                              title: `Grafik Linear Sewa Kamera`,
+                              subtitle: `${selectedSub.studentName} (${selectedSub.className})`
+                            })}
+                            className="px-2.5 py-1 rounded-lg bg-indigo-600/20 text-indigo-300 hover:bg-indigo-600/30 text-xs font-semibold flex items-center gap-1"
+                          >
+                            <ZoomIn className="w-3 h-3" />
+                            <span>Perbesar (Zoom)</span>
+                          </button>
+                        )}
+                      </div>
+
+                      {reviewImgP2 ? (
+                        <div
+                          onClick={() => setZoomImage({
+                            url: reviewImgP2,
+                            title: `Grafik Linear Sewa Kamera`,
+                            subtitle: `${selectedSub.studentName} (${selectedSub.className})`
+                          })}
+                          className="relative group cursor-pointer overflow-hidden rounded-xl border border-slate-800 bg-slate-900 max-w-xl mx-auto flex justify-center"
+                        >
+                          <img
+                            src={reviewImgP2}
+                            alt="Grafik Siswa"
+                            className="w-full max-h-64 object-contain group-hover:scale-102 transition-transform"
+                          />
+                          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white text-xs font-bold gap-1.5">
+                            <ZoomIn className="w-4 h-4" /> Klik untuk Perbesar Layar Penuh
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="max-w-xl mx-auto">
+                          <InteractiveLinearPlotCanvas
+                            points={selectedP2.plotData?.points || []}
+                            onChangePoints={() => {}}
+                            hasLine={selectedP2.plotData?.hasLine || false}
+                            onToggleLine={() => {}}
+                            readOnly={true}
+                          />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Model Linear & Tabel Perhitungan */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {/* Kartu Model Rumus & Tabel */}
+                      <div className="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-2">
+                        <span className="font-bold text-amber-400 block text-xs">
+                          Pemodelan Fungsi Linear f(x) = ax + b:
+                        </span>
+                        <div className="p-2 bg-slate-900 rounded-lg text-xs space-y-1">
+                          <div className="flex justify-between">
+                            <span className="text-slate-400">Rumus Siswa:</span>
+                            <span className="font-mono text-emerald-400 font-bold">{selectedP2.linearModel?.formulaText || 'f(x) = 10.000x + 20.000'}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-slate-400">Parameter a (Tarif/Jam):</span>
+                            <span className="font-mono text-white">Rp {selectedP2.linearModel?.paramA?.toLocaleString('id-ID')}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-slate-400">Parameter b (Buka Segel):</span>
+                            <span className="font-mono text-white">Rp {selectedP2.linearModel?.paramB?.toLocaleString('id-ID')}</span>
+                          </div>
+                        </div>
+
+                        {/* Tabel Nilai */}
+                        <div className="overflow-x-auto">
+                          <table className="w-full text-[11px] text-center border-collapse">
+                            <thead>
+                              <tr className="bg-slate-900 text-slate-400 border-b border-slate-800">
+                                <th className="p-1">Durasi</th>
+                                <th className="p-1">Total Biaya</th>
+                                <th className="p-1">Titik (x, y)</th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-850">
+                              {(selectedP2.linearModel?.tableRows || []).map((row, idx) => (
+                                <tr key={idx}>
+                                  <td className="p-1 text-slate-300 font-mono">{row.x} jam</td>
+                                  <td className="p-1 text-emerald-400 font-mono">Rp {Number(row.cost).toLocaleString('id-ID')}</td>
+                                  <td className="p-1 text-indigo-400 font-mono">{row.pointStr}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+
+                      {/* Kartu Batasan Fisik & Notasi Interval */}
+                      <div className="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-2">
+                        <span className="font-bold text-cyan-400 block text-xs">
+                          Analisis Batasan Fisik & Notasi Interval:
+                        </span>
+                        <div className="space-y-1.5 text-[11px]">
+                          <div className="p-2 bg-slate-900 rounded-lg">
+                            <div className="flex justify-between">
+                              <span className="font-bold text-slate-300">1. Jarak Ojol:</span>
+                              <span className={`px-1.5 py-0.2 rounded font-bold ${selectedP2.physicalLimits?.ojol?.answer === 'Mustahil' ? 'bg-emerald-950 text-emerald-300' : 'bg-rose-950 text-rose-300'}`}>
+                                {selectedP2.physicalLimits?.ojol?.answer || '-'}
+                              </span>
+                            </div>
+                            <p className="text-slate-400 italic text-[10px] mt-0.5">&quot;{selectedP2.physicalLimits?.ojol?.reason || '-'}&quot;</p>
+                          </div>
+
+                          <div className="p-2 bg-slate-900 rounded-lg">
+                            <div className="flex justify-between">
+                              <span className="font-bold text-slate-300">2. Baterai HP (120%):</span>
+                              <span className={`px-1.5 py-0.2 rounded font-bold ${selectedP2.physicalLimits?.baterai?.answer === 'Mustahil' ? 'bg-emerald-950 text-emerald-300' : 'bg-rose-950 text-rose-300'}`}>
+                                {selectedP2.physicalLimits?.baterai?.answer || '-'}
+                              </span>
+                            </div>
+                            <p className="text-slate-400 italic text-[10px] mt-0.5">&quot;{selectedP2.physicalLimits?.baterai?.reason || '-'}&quot;</p>
+                          </div>
+
+                          <div className="p-2 bg-slate-900 rounded-lg">
+                            <div className="flex justify-between">
+                              <span className="font-bold text-slate-300">3. Muatan Lift:</span>
+                              <span className="font-bold text-indigo-300">
+                                {selectedP2.physicalLimits?.lift?.dataType || '-'} ({selectedP2.physicalLimits?.lift?.answer || '-'})
+                              </span>
+                            </div>
+                            <p className="text-slate-400 italic text-[10px] mt-0.5">&quot;{selectedP2.physicalLimits?.lift?.reason || '-'}&quot;</p>
+                          </div>
+
+                          <div className="p-2 bg-slate-900 rounded-lg flex justify-between items-center text-[10px]">
+                            <span className="text-slate-400">Notasi Interval:</span>
+                            <span className="font-mono text-amber-300 font-bold">
+                              Q1: {selectedP2.setNotations?.q1Bracket || '-'} | Q2: {selectedP2.setNotations?.q2Inequality || '-'}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Refleksi Siswa P2 */}
+                    <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1.5 text-xs">
+                      <span className="font-bold text-amber-400 block text-[11px] uppercase tracking-wider">
+                        Refleksi Aturan Emas Siswa:
+                      </span>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
+                        <div className="p-2 bg-slate-900 rounded-lg">
+                          <strong className="text-emerald-400 block mb-0.5">• Arti Nilai b (Intercept):</strong>
+                          <p className="text-slate-300 italic">&quot;{selectedP2.goldenRule?.meaningOfB || '-'}&quot;</p>
+                        </div>
+                        <div className="p-2 bg-slate-900 rounded-lg">
+                          <strong className="text-indigo-400 block mb-0.5">• Arti Nilai a (Kemiringan/Gradien):</strong>
+                          <p className="text-slate-300 italic">&quot;{selectedP2.goldenRule?.meaningOfA || '-'}&quot;</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    {/* 3 Diagram Preview Grid */}
                 <div className="space-y-2">
                   <h4 className="font-bold text-slate-300 uppercase tracking-wider text-[11px] flex items-center justify-between">
                     <span>Hasil Visual 3 Diagram Panah Siswa:</span>
@@ -868,7 +1115,7 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                         ) : (
                           <div className="h-32 bg-slate-900 rounded-lg overflow-hidden flex items-center justify-center relative">
                             <div className="pointer-events-none w-full flex justify-center px-2">
-                              <DiagramReconstruct caseNumber={1} caseData={selectedSub.case1} />
+                              {selectedP1 && <DiagramReconstruct caseNumber={1} caseData={selectedP1.case1} />}
                             </div>
                             <span className="absolute bottom-1 right-1.5 text-[9px] px-1.5 py-0.5 rounded bg-slate-800/90 text-slate-400 border border-slate-700">
                               Rekonstruksi vektor
@@ -880,11 +1127,11 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                       <div className="pt-2 border-t border-slate-800/80">
                         <div className="flex items-center justify-between">
                           <span className="font-bold text-slate-400 text-[11px]">Status: </span>
-                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${selectedSub.case1?.status === 'Fungsi' ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-rose-950 text-rose-300 border border-rose-700'}`}>
-                            {selectedSub.case1?.status || '-'}
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${selectedP1?.case1?.status === 'Fungsi' ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-rose-950 text-rose-300 border border-rose-700'}`}>
+                            {selectedP1?.case1?.status || '-'}
                           </span>
                         </div>
-                        <p className="text-slate-300 mt-1 italic text-[11px] line-clamp-3">&quot;{selectedSub.case1?.reason || 'Tidak ada alasan'}&quot;</p>
+                        <p className="text-slate-300 mt-1 italic text-[11px] line-clamp-3">&quot;{selectedP1?.case1?.reason || 'Tidak ada alasan'}&quot;</p>
                       </div>
                     </div>
 
@@ -929,7 +1176,7 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                         ) : (
                           <div className="h-32 bg-slate-900 rounded-lg overflow-hidden flex items-center justify-center relative">
                             <div className="pointer-events-none w-full flex justify-center px-2">
-                              <DiagramReconstruct caseNumber={2} caseData={selectedSub.case2} />
+                              {selectedP1 && <DiagramReconstruct caseNumber={2} caseData={selectedP1.case2} />}
                             </div>
                             <span className="absolute bottom-1 right-1.5 text-[9px] px-1.5 py-0.5 rounded bg-slate-800/90 text-slate-400 border border-slate-700">
                               Rekonstruksi vektor
@@ -941,12 +1188,12 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                       <div className="pt-2 border-t border-slate-800/80">
                         <div className="flex items-center justify-between">
                           <span className="font-bold text-slate-400 text-[11px]">Status: </span>
-                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${selectedSub.case2?.status === 'Fungsi' ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-rose-950 text-rose-300 border border-rose-700'}`}>
-                            {selectedSub.case2?.status || '-'}
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${selectedP1?.case2?.status === 'Fungsi' ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-rose-950 text-rose-300 border border-rose-700'}`}>
+                            {selectedP1?.case2?.status || '-'}
                           </span>
                         </div>
                         <p className="text-slate-300 mt-1 italic text-[11px] line-clamp-3">
-                          &quot;{selectedSub.case2?.violator ? `Pelanggar: ${selectedSub.case2.violator}. ` : ''}{selectedSub.case2?.reason || 'Tidak ada alasan'}&quot;
+                          &quot;{selectedP1?.case2?.violator ? `Pelanggar: ${selectedP1.case2.violator}. ` : ''}{selectedP1?.case2?.reason || 'Tidak ada alasan'}&quot;
                         </p>
                       </div>
                     </div>
@@ -956,14 +1203,14 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                       <div className="space-y-1.5">
                         <div className="flex items-center justify-between">
                           <span className="font-bold text-cyan-400 block text-xs truncate max-w-[170px]">
-                            Kasus 3: {selectedSub.case3?.setAName || 'A'} ➔ {selectedSub.case3?.setBName || 'B'}
+                            Kasus 3: {selectedP1?.case3?.setAName || 'A'} ➔ {selectedP1?.case3?.setBName || 'B'}
                           </span>
                           {reviewImg3 && (
                             <button
                               type="button"
                               onClick={() => setZoomImage({
                                 url: reviewImg3,
-                                title: `Diagram Kasus 3: ${selectedSub.case3?.setAName} ➔ ${selectedSub.case3?.setBName}`,
+                                title: `Diagram Kasus 3: ${selectedP1?.case3?.setAName} ➔ ${selectedP1?.case3?.setBName}`,
                                 subtitle: `${selectedSub.studentName} (${selectedSub.className})`
                               })}
                               className="text-[10px] text-cyan-400 hover:text-cyan-300 flex items-center gap-1"
@@ -977,7 +1224,7 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                           <div
                             onClick={() => setZoomImage({
                               url: reviewImg3,
-                              title: `Diagram Kasus 3: ${selectedSub.case3?.setAName} ➔ ${selectedSub.case3?.setBName}`,
+                              title: `Diagram Kasus 3: ${selectedP1?.case3?.setAName} ➔ ${selectedP1?.case3?.setBName}`,
                               subtitle: `${selectedSub.studentName} (${selectedSub.className})`
                             })}
                             className="relative group cursor-pointer overflow-hidden rounded-lg border border-slate-800 bg-slate-900"
@@ -994,7 +1241,7 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                         ) : (
                           <div className="h-32 bg-slate-900 rounded-lg overflow-hidden flex items-center justify-center relative">
                             <div className="pointer-events-none w-full flex justify-center px-2">
-                              <DiagramReconstruct caseNumber={3} caseData={selectedSub.case3} />
+                              {selectedP1 && <DiagramReconstruct caseNumber={3} caseData={selectedP1.case3} />}
                             </div>
                             <span className="absolute bottom-1 right-1.5 text-[9px] px-1.5 py-0.5 rounded bg-slate-800/90 text-slate-400 border border-slate-700">
                               Rekonstruksi vektor
@@ -1006,11 +1253,11 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                       <div className="pt-2 border-t border-slate-800/80">
                         <div className="flex items-center justify-between">
                           <span className="font-bold text-slate-400 text-[11px]">Status: </span>
-                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${selectedSub.case3?.status === 'Fungsi' ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-rose-950 text-rose-300 border border-rose-700'}`}>
-                            {selectedSub.case3?.status || '-'}
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${selectedP1?.case3?.status === 'Fungsi' ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-rose-950 text-rose-300 border border-rose-700'}`}>
+                            {selectedP1?.case3?.status || '-'}
                           </span>
                         </div>
-                        <p className="text-slate-300 mt-1 italic text-[11px] line-clamp-3">&quot;{selectedSub.case3?.reason || 'Tidak ada alasan'}&quot;</p>
+                        <p className="text-slate-300 mt-1 italic text-[11px] line-clamp-3">&quot;{selectedP1?.case3?.reason || 'Tidak ada alasan'}&quot;</p>
                       </div>
                     </div>
                   </div>
@@ -1021,20 +1268,22 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                   <div>
                     <span className="font-bold text-slate-400 block mb-1">Jawaban Uji Garis Vertikal (VLT):</span>
                     <div className="flex gap-2">
-                      <span className="px-2 py-0.5 rounded bg-slate-900 border border-slate-700">K1: {selectedSub.vlt?.q1 || '-'}</span>
-                      <span className="px-2 py-0.5 rounded bg-slate-900 border border-slate-700">K2: {selectedSub.vlt?.q2 || '-'}</span>
-                      <span className="px-2 py-0.5 rounded bg-slate-900 border border-slate-700">K3: {selectedSub.vlt?.q3 || '-'}</span>
-                      <span className="px-2 py-0.5 rounded bg-slate-900 border border-slate-700">K4: {selectedSub.vlt?.q4 || '-'}</span>
+                      <span className="px-2 py-0.5 rounded bg-slate-900 border border-slate-700">K1: {selectedP1?.vlt?.q1 || '-'}</span>
+                      <span className="px-2 py-0.5 rounded bg-slate-900 border border-slate-700">K2: {selectedP1?.vlt?.q2 || '-'}</span>
+                      <span className="px-2 py-0.5 rounded bg-slate-900 border border-slate-700">K3: {selectedP1?.vlt?.q3 || '-'}</span>
+                      <span className="px-2 py-0.5 rounded bg-slate-900 border border-slate-700">K4: {selectedP1?.vlt?.q4 || '-'}</span>
                     </div>
                   </div>
                   <div>
                     <span className="font-bold text-slate-400 block mb-1">Refleksi Aturan Emas Siswa:</span>
                     <p className="text-slate-300">
-                      • <strong>Jomblo:</strong> {selectedSub.goldenRule?.noSingle || '-'}<br />
-                      • <strong>Mendua:</strong> {selectedSub.goldenRule?.noAffair || '-'}
+                      • <strong>Jomblo:</strong> {selectedP1?.goldenRule?.noSingle || '-'}<br />
+                      • <strong>Mendua:</strong> {selectedP1?.goldenRule?.noAffair || '-'}
                     </p>
                   </div>
                 </div>
+                  </>
+                )}
 
                 {/* Form Grading & Feedback Manual Guru */}
                 <div className="p-4 bg-amber-950/30 border border-amber-800/80 rounded-2xl space-y-3">
@@ -1163,8 +1412,76 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                 </h2>
               </div>
 
-              {/* Tab Selector untuk 3 Kasus */}
-              <div className="flex justify-center gap-2 pt-1">
+              {showcaseP2 ? (
+                /* Showcase untuk P2: Grafik Linear & Model */
+                <div className="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-4">
+                  <div className="flex flex-wrap justify-between items-center gap-2">
+                    <h3 className="text-base font-bold text-white flex items-center gap-2">
+                      <TrendingUp className="w-5 h-5 text-emerald-400" />
+                      <span className="text-indigo-400 font-mono">
+                        {showcaseP2.linearModel?.formulaText || 'f(x) = 10.000x + 20.000'}
+                      </span>
+                    </h3>
+                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-indigo-950 text-indigo-300 border border-indigo-700">
+                      {showcaseP2.plotData?.points?.length || 0} Titik Terplot • Garis Lurus Aktif
+                    </span>
+                  </div>
+
+                  {/* Gambar Grafik Siswa */}
+                  {showcaseImg ? (
+                    <div
+                      onClick={() => setZoomImage({
+                        url: showcaseImg,
+                        title: `Grafik Linear: ${showcaseP2.linearModel?.formulaText || 'f(x) = 10.000x + 20.000'}`,
+                        subtitle: `${showcaseSub.studentName} (${showcaseSub.className})`
+                      })}
+                      className="cursor-pointer group relative overflow-hidden rounded-xl border border-slate-800 bg-slate-900 flex justify-center max-w-xl mx-auto"
+                    >
+                      <img
+                        src={showcaseImg}
+                        alt="Grafik Linear Siswa"
+                        className="w-full max-h-[380px] object-contain group-hover:scale-102 transition-transform"
+                      />
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white text-xs font-bold gap-1.5">
+                        <ZoomIn className="w-4 h-4" /> Klik untuk Perbesar Layar Penuh
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="max-w-xl mx-auto">
+                      <InteractiveLinearPlotCanvas
+                        points={showcaseP2.plotData?.points || []}
+                        onChangePoints={() => {}}
+                        hasLine={showcaseP2.plotData?.hasLine || false}
+                        onToggleLine={() => {}}
+                        readOnly={true}
+                      />
+                    </div>
+                  )}
+
+                  {/* Refleksi Siswa */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                    <div className="bg-slate-900/90 p-3.5 rounded-xl border border-slate-800">
+                      <strong className="text-emerald-400 text-xs block mb-1">
+                        Arti Intercept b (Biaya Awal):
+                      </strong>
+                      <p className="text-white italic text-sm">
+                        &quot;{showcaseP2.goldenRule?.meaningOfB || '-'}&quot;
+                      </p>
+                    </div>
+                    <div className="bg-slate-900/90 p-3.5 rounded-xl border border-slate-800">
+                      <strong className="text-indigo-400 text-xs block mb-1">
+                        Arti Gradien a (Kemiringan):
+                      </strong>
+                      <p className="text-white italic text-sm">
+                        &quot;{showcaseP2.goldenRule?.meaningOfA || '-'}&quot;
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {/* Tab Selector untuk 3 Kasus */}
+                  <div className="flex justify-center gap-2 pt-1">
                 <button
                   type="button"
                   onClick={() => setShowcaseCase(1)}
@@ -1213,7 +1530,7 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                     )}
                     {showcaseCase === 3 && (
                       <span className="text-cyan-400">
-                        Kasus 3: {showcaseSub.case3?.setAName || 'A'} ➔ {showcaseSub.case3?.setBName || 'B'} (Kreasi Mandiri)
+                        Kasus 3: {showcaseP1?.case3?.setAName || 'A'} ➔ {showcaseP1?.case3?.setBName || 'B'} (Kreasi Mandiri)
                       </span>
                     )}
                   </h3>
@@ -1222,23 +1539,23 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                     {/* Status Badge */}
                     {showcaseCase === 1 && (
                       <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                        showcaseSub.case1?.status === 'Fungsi' ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-rose-950 text-rose-300 border border-rose-700'
+                        showcaseP1?.case1?.status === 'Fungsi' ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-rose-950 text-rose-300 border border-rose-700'
                       }`}>
-                        {showcaseSub.case1?.status === 'Fungsi' ? '✓ FUNGSI SAH' : '✗ BUKAN FUNGSI'}
+                        {showcaseP1?.case1?.status === 'Fungsi' ? '✓ FUNGSI SAH' : '✗ BUKAN FUNGSI'}
                       </span>
                     )}
                     {showcaseCase === 2 && (
                       <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                        showcaseSub.case2?.status === 'Fungsi' ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-rose-950 text-rose-300 border border-rose-700'
+                        showcaseP1?.case2?.status === 'Fungsi' ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-rose-950 text-rose-300 border border-rose-700'
                       }`}>
-                        {showcaseSub.case2?.status === 'Fungsi' ? '✓ FUNGSI SAH' : '✗ BUKAN FUNGSI'}
+                        {showcaseP1?.case2?.status === 'Fungsi' ? '✓ FUNGSI SAH' : '✗ BUKAN FUNGSI'}
                       </span>
                     )}
                     {showcaseCase === 3 && (
                       <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                        showcaseSub.case3?.status === 'Fungsi' ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-rose-950 text-rose-300 border border-rose-700'
+                        showcaseP1?.case3?.status === 'Fungsi' ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-rose-950 text-rose-300 border border-rose-700'
                       }`}>
-                        {showcaseSub.case3?.status === 'Fungsi' ? '✓ FUNGSI SAH' : '✗ BUKAN FUNGSI'}
+                        {showcaseP1?.case3?.status === 'Fungsi' ? '✓ FUNGSI SAH' : '✗ BUKAN FUNGSI'}
                       </span>
                     )}
 
@@ -1270,7 +1587,7 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                     onClick={() => setZoomImage({
                       url: showcaseImg,
                       title: showcaseCase === 3
-                        ? `Diagram Kasus 3: ${showcaseSub.case3?.setAName} ➔ ${showcaseSub.case3?.setBName}`
+                        ? `Diagram Kasus 3: ${showcaseP1?.case3?.setAName} ➔ ${showcaseP1?.case3?.setBName}`
                         : `Diagram Kasus ${showcaseCase}`,
                       subtitle: `${showcaseSub.studentName} (${showcaseSub.className})`
                     })}
@@ -1288,14 +1605,16 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                 ) : (
                   <div className="bg-slate-950 rounded-xl border border-slate-800 p-3 flex flex-col items-center gap-2">
                     <div className="pointer-events-none w-full max-w-xl">
-                      <DiagramReconstruct
-                        caseNumber={showcaseCase}
-                        caseData={
-                          showcaseCase === 1 ? showcaseSub.case1
-                            : showcaseCase === 2 ? showcaseSub.case2
-                            : showcaseSub.case3
-                        }
-                      />
+                      {showcaseP1 && (
+                        <DiagramReconstruct
+                          caseNumber={showcaseCase}
+                          caseData={
+                            showcaseCase === 1 ? showcaseP1.case1
+                              : showcaseCase === 2 ? showcaseP1.case2
+                              : showcaseP1.case3
+                          }
+                        />
+                      )}
                     </div>
                     <span className="text-[10px] px-2 py-0.5 rounded bg-slate-800/90 text-slate-400 border border-slate-700">
                       ⚠️ Snapshot gambar tidak tersedia — direkonstruksi dari data panah siswa
@@ -1307,24 +1626,26 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                 <div className="bg-slate-900/90 p-4 rounded-xl border border-slate-800 text-sm space-y-1">
                   <span className="text-slate-400 font-semibold text-xs block">Argumen Matematis Siswa:</span>
                   <p className="text-white italic text-base leading-relaxed">
-                    {showcaseCase === 1 && (showcaseSub.case1?.reason ? `"${showcaseSub.case1.reason}"` : 'Tidak ada penjelasan')}
+                    {showcaseCase === 1 && (showcaseP1?.case1?.reason ? `"${showcaseP1.case1.reason}"` : 'Tidak ada penjelasan')}
                     {showcaseCase === 2 && (
                       <>
-                        {showcaseSub.case2?.violator && (
+                        {showcaseP1?.case2?.violator && (
                           <span className="text-rose-400 font-bold not-italic block mb-0.5">
-                            Pelanggar Terdeteksi: {showcaseSub.case2.violator}
+                            Pelanggar Terdeteksi: {showcaseP1.case2.violator}
                           </span>
                         )}
-                        &quot;{showcaseSub.case2?.reason || 'Tidak ada penjelasan'}&quot;
+                        &quot;{showcaseP1?.case2?.reason || 'Tidak ada penjelasan'}&quot;
                       </>
                     )}
-                    {showcaseCase === 3 && (showcaseSub.case3?.reason ? `"${showcaseSub.case3.reason}"` : 'Tidak ada penjelasan')}
+                    {showcaseCase === 3 && (showcaseP1?.case3?.reason ? `"${showcaseP1.case3.reason}"` : 'Tidak ada penjelasan')}
                   </p>
                 </div>
               </div>
-            </div>
-          </div>
-        )}
+            </>
+          )}
+        </div>
+      </div>
+    )}
 
         {/* ============================================================ */}
         {/* MODAL LIGHTBOX ZOOM GAMBAR DIAGRAM */}

@@ -22,6 +22,7 @@ import { Slide10ProjectHub } from './components/slides/Slide10ProjectHub';
 
 // Modul LKPD Digital & Dashboard Guru
 import { LkpdDigitalModal } from './components/lkpd/LkpdDigitalModal';
+import { LkpdDigitalModalP2 } from './components/lkpd/LkpdDigitalModalP2';
 import { TeacherDashboard } from './components/admin/TeacherDashboard';
 import { ProjectorQrModal } from './components/lkpd/ProjectorQrModal';
 
@@ -66,17 +67,21 @@ export const App: React.FC = () => {
 
   const [currentSlideIndex, setCurrentSlideIndex] = useState<number>(getInitialSlide);
 
-  // State Modal LKPD Digital, Dashboard Guru & QR Code Proyektor
+  // State Modal LKPD Digital (P1 & P2), Dashboard Guru & QR Code Proyektor
   const [isLkpdOpen, setIsLkpdOpen] = useState(false);
+  const [isLkpd2Open, setIsLkpd2Open] = useState(false);
   const [isTeacherDashboardOpen, setIsTeacherDashboardOpen] = useState(false);
   const [isProjectorQrOpen, setIsProjectorQrOpen] = useState(false);
+  const [projectorQrMeeting, setProjectorQrMeeting] = useState<1 | 2>(1);
 
-  // Auto-detect mode via URL parameters (cth: ?mode=lkpd atau ?mode=admin)
+  // Auto-detect mode via URL parameters (cth: ?mode=lkpd1, ?mode=lkpd2, ?mode=admin)
   useEffect(() => {
     try {
       const params = new URLSearchParams(window.location.search);
       const mode = params.get('mode');
-      if (mode === 'lkpd' || params.get('lkpd') === '1') {
+      if (mode === 'lkpd2' || params.get('lkpd') === '2') {
+        setIsLkpd2Open(true);
+      } else if (mode === 'lkpd' || mode === 'lkpd1' || params.get('lkpd') === '1') {
         setIsLkpdOpen(true);
       } else if (mode === 'admin' || params.get('admin') === '1') {
         setIsTeacherDashboardOpen(true);
@@ -163,13 +168,13 @@ export const App: React.FC = () => {
       case 3:
         return <Slide3ArrowDiagram />;
       case 4:
-        return <Slide4VerticalLineTest onOpenQrModal={() => setIsProjectorQrOpen(true)} />;
+        return <Slide4VerticalLineTest onOpenQrModal={() => { setProjectorQrMeeting(1); setIsProjectorQrOpen(true); }} />;
       case 5:
         return <Slide6OpeningDomain onNext={handleNext} />;
       case 6:
         return <Slide5DomainRange />;
       case 7:
-        return <Slide6LinearGraph />;
+        return <Slide6LinearGraph onOpenQrModal={() => { setProjectorQrMeeting(2); setIsProjectorQrOpen(true); }} />;
       case 8:
         return <Slide9OpeningPiecewise onNext={handleNext} />;
       case 9:
@@ -198,9 +203,12 @@ export const App: React.FC = () => {
         onPrev={handlePrev}
         theme={theme}
         onToggleTheme={toggleTheme}
-        onOpenLkpd={() => setIsLkpdOpen(true)}
+        onOpenLkpd={(m) => (m === 2 ? setIsLkpd2Open(true) : setIsLkpdOpen(true))}
         onOpenTeacherDashboard={() => setIsTeacherDashboardOpen(true)}
-        onOpenProjectorQr={() => setIsProjectorQrOpen(true)}
+        onOpenProjectorQr={(m) => {
+          setProjectorQrMeeting(m || 1);
+          setIsProjectorQrOpen(true);
+        }}
       />
 
       {/* Slide Presentation Frame */}
@@ -211,10 +219,16 @@ export const App: React.FC = () => {
       {/* Print-Only A4 Project Worksheet */}
       <WorksheetPrint />
 
-      {/* Modal Interaktif LKPD Digital Siswa */}
+      {/* Modal Interaktif LKPD Digital Siswa Pertemuan 1 */}
       <LkpdDigitalModal
         isOpen={isLkpdOpen}
         onClose={() => setIsLkpdOpen(false)}
+      />
+
+      {/* Modal Interaktif LKPD Digital Siswa Pertemuan 2 */}
+      <LkpdDigitalModalP2
+        isOpen={isLkpd2Open}
+        onClose={() => setIsLkpd2Open(false)}
       />
 
       {/* Panel Dashboard Guru (Admin & Roster) */}
@@ -223,11 +237,12 @@ export const App: React.FC = () => {
         onClose={() => setIsTeacherDashboardOpen(false)}
       />
 
-      {/* Modal QR Code Proyektor Akses Siswa di Kelas */}
+      {/* Modal QR Code Proyektor Akses Siswa di Kelas (P1 & P2) */}
       <ProjectorQrModal
         isOpen={isProjectorQrOpen}
         onClose={() => setIsProjectorQrOpen(false)}
-        onOpenLkpd={() => setIsLkpdOpen(true)}
+        meeting={projectorQrMeeting}
+        onOpenLkpd={(m) => (m === 2 ? setIsLkpd2Open(true) : setIsLkpdOpen(true))}
         onOpenTeacherDashboard={() => setIsTeacherDashboardOpen(true)}
       />
     </div>

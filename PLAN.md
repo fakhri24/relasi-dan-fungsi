@@ -4,7 +4,35 @@ Dokumen perencanaan dan pelacakan progres pengembangan media pembelajaran intera
 
 ---
 
-## 📌 Status Terkini: v2.2.1 (Pembersihan Istilah "Selingkuh" Menjadi "Mendua" pada LKPD Cetak & Digital ✅)
+## 📌 Status Terkini: v2.3.0 (Implementasi Penuh LKPD Digital Pertemuan 2: Batasan Fisik & Pemodelan Linear, Kanvas Plot Kartesius, Dashboard Guru P1/P2, & Integrasi Proyektor ✅)
+- [x] **Kanvas Plot Kartesius Interaktif (`InteractiveLinearPlotCanvas.tsx`)**:
+  - Grid koordinat presisi $x \in [0, 6]$ jam dan $y \in [0, 80\text{k}]$ rupiah.
+  - Interaksi tap grid responsif + chip pintasan plot titik cepat: $(0, 20\text{k}), (1, 30\text{k}), (2, 40\text{k}), (3, 50\text{k}), (5, 70\text{k})$.
+  - Tombol sakelar *"Hubungkan Menjadi Garis Linear"* untuk visualisasi garis fungsi kontinu $f(x) = 10.000x + 20.000$.
+  - Snapshot export Base64/Storage andal dengan dimensi intrinsik SVG eksplisit (560×320) & fallback PNG/WebP.
+  - Mode `readOnly` untuk preview dan showcase di Dashboard Guru proyektor.
+- [x] **Modal LKPD Digital Siswa Pertemuan 2 (`LkpdDigitalModalP2.tsx`)**:
+  - **Langkah 1 (Identitas & Kelas)**: Sinkronisasi daftar hadir siswa dari Cloud Firestore collection `classes`.
+  - **Langkah 2 (Batasan Fisik Nyata)**: Investigasi studi kasus baterai HP & durasi sewa kamera analog.
+  - **Langkah 3 (Notasi Selang & Himpunan)**: Latihan notasi kurung siku $[a, b]$ vs pertidaksamaan $a \le x \le b$.
+  - **Langkah 4 (Pemodelan Tarif Linear Rental)**: Tabel hubungan durasi sewa $x$ terhadap biaya $y$, formulasi rumus fungsi $f(x) = ax + b$.
+  - **Langkah 5 (Plot Titik Kartesius)**: Visualisasi grafis pada kanvas plot dengan auto-capture snapshot transisi.
+  - **Langkah 6 (Refleksi Aturan Emas & Submit)**: Analisis makna matematis intersep $b$ (biaya dasar) dan gradien $a$ (kemiringan/tarif per jam), verifikasi tanda terima digital, dan animasi confetti selebrasi.
+- [x] **Dashboard Guru Multi-Sesi (`TeacherDashboard.tsx`)**:
+  - Tab Switcher Sesi: *"Pertemuan 1"* vs *"Pertemuan 2"*.
+  - Pemisahan data roster dan status pengumpulan (`meeting: 1` vs `meeting: 2`).
+  - Modal Review Khusus P2: Tampilan grafik koordinat kartesius siswa, tabel perhitungan tarif, batas domain $[0, 6]$ dan range $[20\text{k}, 80\text{k}]$, serta refleksi makna $a$ & $b$.
+  - Mode Showcase Proyektor untuk Pertemuan 2: Memproyeksikan grafik dan model fungsi linear pilihan siswa ke layar kelas.
+  - Ekspor Nilai CSV Terpisah: Kolom khusus parameter model P2 ($a, b$, formula, refleksi).
+- [x] **Integrasi Proyektor, Navbar, & Deep Linking (`App.tsx`, `Navbar.tsx`, `Slide6LinearGraph.tsx`, `ProjectorQrModal.tsx`)**:
+  - Tombol proyektor *"Mulai LKPD Digital P2 ➔"* pada Slide 8 (`Slide6LinearGraph.tsx`).
+  - Modal QR Proyektor adaptif dengan tab selektor P1 & P2 (`?mode=lkpd1` vs `?mode=lkpd2`).
+  - Drawer menu Navbar menyediakan tombol langsung *"LKPD 1 (P1)"* dan *"LKPD 2 (P2)"*.
+  - Deep linking instan: perangkat siswa langsung membuka modal LKPD saat mengakses URL `?mode=lkpd2` atau `?lkpd=2`.
+- [x] **Build Verification**:
+  - `npm run build` (`tsc -b && vite build`) 100% lolos tanpa error.
+
+## 📌 Arsip Status v2.2.1 (Pembersihan Istilah "Selingkuh" Menjadi "Mendua" pada LKPD Cetak & Digital ✅)
 - [x] **Pembersihan Diksi & Konsistensi Pedagogi**:
   - Mengganti istilah "selingkuh/mendua" menjadi "mendua" pada LKPD Cetak (`lks-siswa.html` & `public/lks-siswa.html` Bagian C).
   - Menghapus seluruh istilah "Selingkuh" di Panduan Guru (`panduan-guru.html` & `public/panduan-guru.html`) dan LKPD Digital (`LkpdDigitalModal.tsx`) sehingga hanya menggunakan istilah formal & ramah kelas: **"Mendua"**.

@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
-import { TrendingUp, DollarSign, MapPin } from 'lucide-react';
+import { useState } from 'react';
+import { TrendingUp, DollarSign, MapPin, Smartphone } from 'lucide-react';
 import { MathFormula } from '../MathFormula';
 
-export const Slide6LinearGraph: React.FC = () => {
+interface Props {
+  onOpenQrModal?: () => void;
+}
+
+export const Slide6LinearGraph: React.FC<Props> = ({ onOpenQrModal }) => {
   // a = tarif per km (ribuan), b = buka pintu (ribuan)
   const [a, setA] = useState<number>(3); // 3 rb/km
   const [b, setB] = useState<number>(8); // 8 rb dasar
@@ -197,14 +201,24 @@ export const Slide6LinearGraph: React.FC = () => {
         </div>
       </div>
 
-      {/* Footer Takeaway */}
-      <div className="bg-slate-900 border-l-4 border-brand-500 px-4 py-2.5 rounded-r-xl flex items-center justify-between mt-1 shrink-0">
+      {/* Footer Takeaway & Tombol LKPD P2 */}
+      <div className="bg-slate-900 border-l-4 border-brand-500 px-4 py-2 rounded-r-xl flex flex-wrap items-center justify-between gap-3 mt-1 shrink-0">
         <div className="flex items-center gap-2.5">
           <span className="font-mono text-xs px-2 py-0.5 rounded bg-brand-500/20 text-brand-300 font-bold">KUNCI</span>
-          <p className="text-slate-200 text-sm md:text-base font-semibold">
+          <p className="text-slate-200 text-xs md:text-sm font-semibold">
             <MathFormula math="a" /> menentukan kemiringan grafik, <MathFormula math="b" /> menentukan titik potong sumbu-y
           </p>
         </div>
+
+        {onOpenQrModal && (
+          <button
+            onClick={onOpenQrModal}
+            className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold text-xs flex items-center gap-1.5 shadow-md shadow-brand-500/30 transition-all cursor-pointer"
+          >
+            <Smartphone className="w-3.5 h-3.5 text-cyan-300" />
+            <span>Mulai LKPD Digital P2 ➔</span>
+          </button>
+        )}
       </div>
     </div>
   );

@@ -24,9 +24,9 @@ interface NavbarProps {
   onPrev: () => void;
   theme?: 'dark' | 'light';
   onToggleTheme?: () => void;
-  onOpenLkpd?: () => void;
+  onOpenLkpd?: (meeting?: 1 | 2) => void;
   onOpenTeacherDashboard?: () => void;
-  onOpenProjectorQr?: () => void;
+  onOpenProjectorQr?: (meeting?: 1 | 2) => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -173,9 +173,9 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {onOpenProjectorQr && (
               <button
-                onClick={onOpenProjectorQr}
+                onClick={() => onOpenProjectorQr(currentMeeting === 2 ? 2 : 1)}
                 className="p-2.5 rounded-xl bg-gradient-to-r from-brand-600/30 to-indigo-600/30 hover:from-brand-600/50 hover:to-indigo-600/50 border border-brand-500/50 text-brand-300 hover:text-white transition-all ml-1 flex items-center gap-1.5 text-xs font-bold shadow-sm"
-                title="Buka LKPD Digital Siswa (Scan QR / Laptop)"
+                title={`Buka LKPD Digital Siswa P${currentMeeting === 2 ? 2 : 1} (Scan QR / Laptop)`}
               >
                 <QrCode className="w-4 h-4 text-cyan-400" />
                 <span className="hidden xl:inline">LKPD Digital</span>
@@ -337,16 +337,28 @@ export const Navbar: React.FC<NavbarProps> = ({
               )}
 
               {onOpenLkpd && (
-                <button
-                  onClick={() => {
-                    setMenuOpen(false);
-                    onOpenLkpd();
-                  }}
-                  className="w-full p-2.5 rounded-xl bg-indigo-600/20 hover:bg-indigo-600/30 border border-indigo-500/40 text-indigo-300 transition-all flex items-center justify-center gap-2 text-xs font-bold"
-                >
-                  <FileText className="w-4 h-4 text-indigo-400" />
-                  <span>Kerjakan LKPD Digital (Laptop) ➔</span>
-                </button>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => {
+                      setMenuOpen(false);
+                      onOpenLkpd(1);
+                    }}
+                    className="p-2.5 rounded-xl bg-indigo-600/20 hover:bg-indigo-600/30 border border-indigo-500/40 text-indigo-300 transition-all flex items-center justify-center gap-1.5 text-xs font-bold"
+                  >
+                    <FileText className="w-4 h-4 text-indigo-400" />
+                    <span>LKPD 1 (P1)</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setMenuOpen(false);
+                      onOpenLkpd(2);
+                    }}
+                    className="p-2.5 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-emerald-300 transition-all flex items-center justify-center gap-1.5 text-xs font-bold"
+                  >
+                    <FileText className="w-4 h-4 text-emerald-400" />
+                    <span>LKPD 2 (P2)</span>
+                  </button>
+                </div>
               )}
 
               <a

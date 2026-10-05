@@ -93,6 +93,11 @@ Setiap kali ada perubahan, penambahan fitur, atau perbaikan kode:
   - Kontainer aplikasi wajib `h-screen max-h-screen overflow-hidden`.
   - `SlideContainer` dibatasi tepat pada `h-[calc(100vh-3.5rem)]` dengan `overflow-hidden`.
   - Setiap slide wajib memanfaatkan `flex-1 min-h-0` dan batas tinggi komponen (misal SVG $\le$ 230px) agar seluruh konten dan footer terlihat 100% pada resolusi 1366×768 (WXGA proyektor) tanpa memicu scrollbar vertikal.
+- **Standar LKPD Digital Siswa Pertemuan 2 (`InteractiveLinearPlotCanvas` & `LkpdDigitalModalP2`)**:
+  - **Kanvas Plot Kartesius Interaktif**: Koordinat $x \in [0, 6]$ jam dan $y \in [0, 80\text{k}]$ rupiah dengan titik sentuh grid, chip cepat, dan sakelar garis linear $f(x) = ax + b$.
+  - **Pemodelan Dunia Nyata & Batasan Fisik**: Investigasi domain-range baterai HP ($[0, 100]\%$) dan sewa kamera analog ($[0, 6]$ jam, $[20\text{k}, 80\text{k}]$ rupiah).
+  - **6-Step Sequential Progress Lock**: Alur bertahap (Identitas -> Batasan Fisik -> Notasi Selang -> Pemodelan Linear -> Plot Kartesius -> Refleksi & Konfeti).
+  - **Dukungan Multi-Pertemuan di Dashboard Guru**: Tab pemisah Pertemuan 1 vs 2, review plot linear siswa, ekspor CSV adaptif, dan showcase proyektor P2.
 - **Ikonografi**: Lucide React.
 - **Deployment**: GitHub Pages melalui GitHub Actions (`.github/workflows/deploy.yml`) dengan `base: './'` di `vite.config.ts`.
 
@@ -118,30 +123,34 @@ relasi-dan-fungsi/
 │   ├── index.css                  # Tailwind imports & utility glow proyektor
 │   ├── types/
 │   │   ├── slides.ts              # Tipe TypeScript data slide dan topik proyek
-│   │   └── lkpd.ts                # Tipe TypeScript data pengerjaan LKPD siswa & Firestore model
+│   │   └── lkpd.ts                # Tipe TypeScript data pengerjaan LKPD siswa P1 & P2 & Firestore model
 │   ├── lib/
-│   │   └── firebase.ts            # Konfigurasi client Firebase (Auth, Firestore, Whitelist fkhr2nd@gmail.com)
+│   │   ├── firebase.ts            # Konfigurasi client Firebase (Auth, Firestore, Whitelist fkhr2nd@gmail.com)
+│   │   └── uploadDiagram.ts       # Failsafe pipeline upload snapshot ke Firebase Storage / Base64
 │   └── components/
 │       ├── MathFormula.tsx        # Komponen wrapper KaTeX yang aman
 │       ├── CanteenItemIcon.tsx    # Ilustrasi SVG vektor jajanan kantin proyektor
-│       ├── Navbar.tsx             # Navigasi atas, progress bar dengan penanda sesi, drawer & link panduan guru / LKPD
+│       ├── Navbar.tsx             # Navigasi atas, progress bar dengan penanda sesi, drawer & link LKPD 1 & 2
 │       ├── SlideContainer.tsx     # Frame slide 16:9 + event listener keyboard (←, →, Spasi)
 │       ├── WorksheetPrint.tsx     # Lembar kerja siswa A4 print-only (Ctrl+P)
 │       ├── admin/
-│       │   └── TeacherDashboard.tsx # Panel evaluasi guru: live feed, scoring, ekspor CSV, showcase & roster
+│       │   ├── TeacherDashboard.tsx   # Panel evaluasi guru P1 & P2: live feed, scoring, ekspor CSV, showcase & roster
+│       │   └── DiagramReconstruct.tsx # Rekonstruksi vektor SVG diagram siswa saat gambar absen
 │       ├── lkpd/
-│       │   ├── InteractiveArrowCanvas.tsx # Kanvas diagram panah interaktif dengan export Base64
-│       │   ├── LkpdDigitalModal.tsx       # Modal pengerjaan LKPD digital siswa (6 stepper terhubung Firestore)
-│       │   └── ProjectorQrModal.tsx       # Modal QR Code proyektor untuk akses siswa serentak di kelas
+│       │   ├── InteractiveArrowCanvas.tsx       # Kanvas diagram panah interaktif P1 dengan export Base64
+│       │   ├── InteractiveLinearPlotCanvas.tsx  # Kanvas plot kartesius interaktif P2 dengan export Base64
+│       │   ├── LkpdDigitalModal.tsx             # Modal pengerjaan LKPD digital siswa P1 (6 stepper Firestore)
+│       │   ├── LkpdDigitalModalP2.tsx           # Modal pengerjaan LKPD digital siswa P2 (6 stepper Firestore)
+│       │   └── ProjectorQrModal.tsx             # Modal QR Code proyektor adaptif P1 & P2 untuk akses siswa
 │       └── slides/
 │           ├── Slide1OpeningRelasi.tsx    # Slide 1: Pembuka P1 (Konsep Besar "RELASI" & 3 Target Belajar)
 │           ├── Slide1Hook.tsx             # Slide 2: Mesin Kasir (Scanner Kasir Kantin & Multi-Barang Many-to-One)
 │           ├── Slide2Machine.tsx          # Slide 3: Mesin Fungsi (Model Mental Mesin f(x))
 │           ├── Slide3ArrowDiagram.tsx     # Slide 4: Diagram Panah (Syarat Emas Relasi vs Fungsi)
-│           ├── Slide4VerticalLineTest.tsx # Slide 5: Uji Garis Vertikal & Tombol Buka LKPD Digital Siswa
+│           ├── Slide4VerticalLineTest.tsx # Slide 5: Uji Garis Vertikal & Tombol Buka LKPD Digital Siswa P1
 │           ├── Slide6OpeningDomain.tsx    # Slide 6: Pembuka P2 (Konsep "BATASAN NYATA" & 3 Target Belajar)
 │           ├── Slide5DomainRange.tsx      # Slide 7: Domain & Range (Batasan Fisik)
-│           ├── Slide6LinearGraph.tsx      # Slide 8: Model Linier (f(x) = ax + b)
+│           ├── Slide6LinearGraph.tsx      # Slide 8: Model Linier (f(x) = ax + b) & Tombol LKPD P2
 │           ├── Slide9OpeningPiecewise.tsx # Slide 9: Pembuka P3 (Konsep "PIECEWISE" & 3 Target Belajar)
 │           ├── Slide7WhyPiecewise.tsx     # Slide 10: Batasan 1 Garis (Dilema Tarif)
 │           ├── Slide8PiecewiseIntro.tsx   # Slide 11: Fungsi Bercabang (Piecewise & Titik ●, ○)
