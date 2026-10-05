@@ -215,13 +215,41 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
   const currentMeetingSubmissions = submissions.filter(s => ((s as any).meeting || 1) === activeMeetingTab);
   const classSubmissions = currentMeetingSubmissions.filter(s => s.classId === selectedClassId);
 
+  // Hitung jumlah siswa unik & dokumen untuk tab switcher pertemuan
+  const p1Subs = submissions.filter(s => ((s as any).meeting || 1) === 1 && s.classId === selectedClassId);
+  const p1UniqueCount = new Set(p1Subs.map(s => s.studentName.toLowerCase().trim())).size;
+  const p1Revisions = p1Subs.length - p1UniqueCount;
+
+  const p2Subs = submissions.filter(s => (s as any).meeting === 2 && s.classId === selectedClassId);
+  const p2UniqueCount = new Set(p2Subs.map(s => s.studentName.toLowerCase().trim())).size;
+  const p2Revisions = p2Subs.length - p2UniqueCount;
+
+  // Daftar nama siswa dari roster ditambah nama siswa yang mengumpulkan secara manual (jika ada nama baru di luar roster)
+  const rosterStudents = currentClass?.students || [];
+  const submittedStudentNames = Array.from(
+    new Set(classSubmissions.map(s => s.studentName.trim()).filter(Boolean))
+  );
+  const allStudentNames = [
+    ...rosterStudents,
+    ...submittedStudentNames.filter(
+      name => !rosterStudents.some(r => r.toLowerCase().trim() === name.toLowerCase().trim())
+    )
+  ];
+
   // Buat mapping pengerjaan per siswa di kelas aktif untuk sesi pertemuan aktif
-  const studentRosterWithSubmissions = (currentClass?.students || []).map(studentName => {
-    const sub = classSubmissions.find(s => s.studentName.toLowerCase().trim() === studentName.toLowerCase().trim());
+  // Disortir berdasarkan submittedAt menurun (terbaru di index 0)
+  const studentRosterWithSubmissions = allStudentNames.map(studentName => {
+    const studentSubs = classSubmissions
+      .filter(s => s.studentName.toLowerCase().trim() === studentName.toLowerCase().trim())
+      .sort((a, b) => new Date(b.submittedAt || 0).getTime() - new Date(a.submittedAt || 0).getTime());
+
+    const latestSub = studentSubs[0] || null;
     return {
       studentName,
-      submission: sub || null,
-      isSubmitted: !!sub
+      submission: latestSub,
+      allSubmissions: studentSubs,
+      submissionCount: studentSubs.length,
+      isSubmitted: !!latestSub
     };
   });
 
@@ -230,6 +258,7 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
   const needsGradingCount = studentRosterWithSubmissions.filter(s => s.isSubmitted && (s.submission?.score === null || s.submission?.score === undefined)).length;
   const gradedCount = studentRosterWithSubmissions.filter(s => s.isSubmitted && s.submission?.score !== null && s.submission?.score !== undefined).length;
   const unsubmittedCount = totalStudents - totalSubmitted;
+  const totalRevisionsCount = studentRosterWithSubmissions.reduce((acc, curr) => acc + (curr.submissionCount > 1 ? curr.submissionCount - 1 : 0), 0);
 
   // Filter siswa berdasarkan status pengerjaan / penilaian & pencarian
   const filteredStudents = studentRosterWithSubmissions
@@ -296,8 +325,24 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
       };
       await updateDoc(subRef, updateData);
 
+      // Sinkronkan juga ke seluruh submission/revisi dari siswa yang sama untuk sesi ini jika ada
+      const studentSubs = classSubmissions.filter(
+        s => s.studentName.toLowerCase().trim() === selectedSub.studentName.toLowerCase().trim()
+      );
+      if (studentSubs.length > 1) {
+        const otherSubs = studentSubs.filter((s): s is typeof s & { id: string } => !!s.id && s.id !== selectedSub.id);
+        await Promise.all(
+          otherSubs.map(s => updateDoc(doc(db, 'submissions', s.id), updateData))
+        );
+      }
+
       // Perbarui local state
-      setSubmissions(prev => prev.map(s => s.id === selectedSub.id ? { ...s, ...updateData } : s));
+      setSubmissions(prev => prev.map(s => {
+        if (s.studentName.toLowerCase().trim() === selectedSub.studentName.toLowerCase().trim() && ((s as any).meeting || 1) === activeMeetingTab) {
+          return { ...s, ...updateData };
+        }
+        return s;
+      }));
       setSelectedSub(prev => prev ? { ...prev, ...updateData } : null);
       alert('Nilai dan catatan guru berhasil disimpan!');
     } catch (err) {
@@ -314,19 +359,21 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
 
     let csvContent = 'data:text/csv;charset=utf-8,';
     if (activeMeetingTab === 1) {
-      csvContent += 'No,Nama Siswa,Kelas,Sesi,Status,Nilai,Catatan Guru,Waktu Pengumpulan\n';
+      csvContent += 'No,Nama Siswa,Kelas,Sesi,Status,Jumlah Kirim,Nilai,Catatan Guru,Waktu Pengumpulan Terakhir\n';
       studentRosterWithSubmissions.forEach((item, idx) => {
         const status = item.isSubmitted ? 'Sudah Mengumpulkan' : 'Belum';
+        const submitCount = item.isSubmitted ? (item.submissionCount > 1 ? `${item.submissionCount}x (Ada Revisi)` : '1x') : '-';
         const score = item.submission?.score ?? '-';
         const feedback = item.submission?.teacherFeedback ? `"${item.submission.teacherFeedback.replace(/"/g, '""')}"` : '-';
-        const time = item.submission?.submittedAt ? new Date(item.submission.submittedAt).toLocaleString() : '-';
-        csvContent += `${idx + 1},"${item.studentName}","${currentClass.name}","P1: Relasi & VLT","${status}",${score},${feedback},"${time}"\n`;
+        const time = item.submission?.submittedAt ? new Date(item.submission.submittedAt).toLocaleString('id-ID') : '-';
+        csvContent += `${idx + 1},"${item.studentName}","${currentClass.name}","P1: Relasi & VLT","${status}","${submitCount}",${score},${feedback},"${time}"\n`;
       });
     } else {
-      csvContent += 'No,Nama Siswa,Kelas,Sesi,Status,Nilai,Catatan Guru,Jarak Ojol,Baterai HP,Muatan Lift,Notasi Selang,Model Linear,Titik Plot,Refleksi Intercept b,Refleksi Gradien a,Waktu Pengumpulan\n';
+      csvContent += 'No,Nama Siswa,Kelas,Sesi,Status,Jumlah Kirim,Nilai,Catatan Guru,Jarak Ojol,Baterai HP,Muatan Lift,Notasi Selang,Model Linear,Titik Plot,Refleksi Intercept b,Refleksi Gradien a,Waktu Pengumpulan Terakhir\n';
       studentRosterWithSubmissions.forEach((item, idx) => {
         const sub = item.submission as Lkpd2Submission | null;
         const status = item.isSubmitted ? 'Sudah Mengumpulkan' : 'Belum';
+        const submitCount = item.isSubmitted ? (item.submissionCount > 1 ? `${item.submissionCount}x (Ada Revisi)` : '1x') : '-';
         const score = sub?.score ?? '-';
         const feedback = sub?.teacherFeedback ? `"${sub.teacherFeedback.replace(/"/g, '""')}"` : '-';
         const ojol = sub?.physicalLimits?.ojol?.answer || '-';
@@ -337,8 +384,8 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
         const pointsCount = sub?.plotData?.points?.length ?? '-';
         const refB = sub?.goldenRule?.meaningOfB ? `"${sub.goldenRule.meaningOfB.replace(/"/g, '""')}"` : '-';
         const refA = sub?.goldenRule?.meaningOfA ? `"${sub.goldenRule.meaningOfA.replace(/"/g, '""')}"` : '-';
-        const time = sub?.submittedAt ? new Date(sub.submittedAt).toLocaleString() : '-';
-        csvContent += `${idx + 1},"${item.studentName}","${currentClass.name}","P2: Batasan & Linear","${status}",${score},${feedback},"${ojol}","${baterai}","${lift}",${notasi},${formula},${pointsCount},${refB},${refA},"${time}"\n`;
+        const time = sub?.submittedAt ? new Date(sub.submittedAt).toLocaleString('id-ID') : '-';
+        csvContent += `${idx + 1},"${item.studentName}","${currentClass.name}","P2: Batasan & Linear","${status}","${submitCount}",${score},${feedback},"${ojol}","${baterai}","${lift}",${notasi},${formula},${pointsCount},${refB},${refA},"${time}"\n`;
       });
     }
 
@@ -401,6 +448,13 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
       setIsSavingRoster(false);
     }
   };
+
+  // Semua versi pengerjaan siswa yang sedang di-review (disortir terbaru lebih dulu)
+  const selectedStudentAllSubs = selectedSub
+    ? classSubmissions
+        .filter(s => s.studentName.toLowerCase().trim() === selectedSub.studentName.toLowerCase().trim())
+        .sort((a, b) => new Date(b.submittedAt || 0).getTime() - new Date(a.submittedAt || 0).getTime())
+    : [];
 
   return (
     <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
@@ -578,7 +632,7 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                   >
                     <span>Pertemuan 1: Relasi & VLT</span>
                     <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-black/30 font-mono">
-                      {submissions.filter(s => ((s as any).meeting || 1) === 1 && s.classId === selectedClassId).length} Kumpul
+                      {p1UniqueCount} Siswa {p1Revisions > 0 && `(${p1Subs.length} Kumpul)`}
                     </span>
                   </button>
                   <button
@@ -596,7 +650,7 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                   >
                     <span>Pertemuan 2: Batasan & Linear</span>
                     <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-black/30 font-mono">
-                      {submissions.filter(s => (s as any).meeting === 2 && s.classId === selectedClassId).length} Kumpul
+                      {p2UniqueCount} Siswa {p2Revisions > 0 && `(${p2Subs.length} Kumpul)`}
                     </span>
                   </button>
                 </div>
@@ -609,9 +663,15 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                   </div>
                   <div className="bg-slate-950/70 border border-slate-800 p-3 rounded-2xl">
                     <span className="text-slate-400 block text-[11px]">Sudah Mengumpulkan</span>
-                    <span className="text-xl font-black text-emerald-400">
-                      {totalSubmitted} <span className="text-xs text-slate-500 font-normal">({Math.round((totalSubmitted / Math.max(1, totalStudents)) * 100)}%)</span>
-                    </span>
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="text-xl font-black text-emerald-400">{totalSubmitted}</span>
+                      <span className="text-xs text-slate-500 font-normal">({Math.round((totalSubmitted / Math.max(1, totalStudents)) * 100)}%)</span>
+                    </div>
+                    {totalRevisionsCount > 0 && (
+                      <span className="text-[10px] text-purple-400 font-medium block mt-0.5">
+                        +{totalRevisionsCount} revisi baru terdeteksi
+                      </span>
+                    )}
                   </div>
                   <div className="bg-slate-950/70 border border-slate-800 p-3 rounded-2xl">
                     <span className="text-slate-400 block text-[11px]">Perlu Dinilai</span>
@@ -723,7 +783,17 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                         <tr key={item.studentName} className="hover:bg-slate-900/60 transition-colors">
                           <td className="p-3 text-center text-slate-500 font-mono">{idx + 1}</td>
                           <td className="p-3 font-semibold text-white">
-                            {item.studentName}
+                            <div className="flex items-center gap-2">
+                              <span>{item.studentName}</span>
+                              {item.submissionCount > 1 && (
+                                <span 
+                                  className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-purple-950 border border-purple-700/80 text-purple-300 font-bold text-[9px] shadow-sm"
+                                  title={`Siswa ini mengumpulkan ${item.submissionCount} kali. Data terbaru otomatis ditampilkan.`}
+                                >
+                                  Revisi {item.submissionCount}x
+                                </span>
+                              )}
+                            </div>
                           </td>
                           <td className="p-3">
                             {item.isSubmitted ? (
@@ -749,9 +819,16 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                             )}
                           </td>
                           <td className="p-3 text-slate-400 font-mono text-[11px]">
-                            {item.submission?.submittedAt 
-                              ? new Date(item.submission.submittedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-                              : '-'}
+                            {item.submission?.submittedAt ? (
+                              <div className="flex flex-col">
+                                <span>{new Date(item.submission.submittedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                {item.submissionCount > 1 && (
+                                  <span className="text-[9px] text-purple-400 font-sans font-medium">Terbaru</span>
+                                )}
+                              </div>
+                            ) : (
+                              '-'
+                            )}
                           </td>
                           <td className="p-3 text-center font-bold">
                             {item.submission?.score !== undefined && item.submission?.score !== null ? (
@@ -871,21 +948,66 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
           <div className="fixed inset-0 z-60 bg-black/90 backdrop-blur-md flex items-center justify-center p-3 overflow-y-auto">
             <div className="bg-slate-900 border border-slate-700 rounded-3xl w-full max-w-4xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden text-white my-auto">
               {/* Header Modal Review */}
-              <div className="px-5 py-3 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
-                <div>
-                  <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                    Pengerjaan: <span className="text-amber-400">{selectedSub.studentName}</span>
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300">
-                      {selectedSub.className}
-                    </span>
-                  </h3>
-                  <span className="text-[11px] text-slate-500 font-mono">
-                    Dikirim: {new Date(selectedSub.submittedAt).toLocaleString()}
-                  </span>
+              <div className="px-5 py-3 bg-slate-950 border-b border-slate-800 flex items-start justify-between gap-3">
+                <div className="space-y-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                      Pengerjaan: <span className="text-amber-400">{selectedSub.studentName}</span>
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300">
+                        {selectedSub.className}
+                      </span>
+                    </h3>
+                    {selectedStudentAllSubs.length > 1 && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-purple-950 border border-purple-700/80 text-purple-300 font-bold text-[10px]">
+                        Total {selectedStudentAllSubs.length} Pengumpulan
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-[11px] text-slate-500 font-mono">
+                    Waktu Kirim: {new Date(selectedSub.submittedAt).toLocaleString('id-ID')}
+                  </div>
+
+                  {/* Switcher Versi jika siswa mengumpulkan >1 kali */}
+                  {selectedStudentAllSubs.length > 1 && (
+                    <div className="flex flex-wrap items-center gap-1.5 pt-1.5">
+                      <span className="text-[10px] text-slate-400 font-bold">Pilih Versi:</span>
+                      {selectedStudentAllSubs.map((verSub, vIdx) => {
+                        const isSelectedVer = verSub.id === selectedSub.id;
+                        const isLatest = vIdx === 0;
+                        const verNumber = selectedStudentAllSubs.length - vIdx;
+                        return (
+                          <button
+                            key={verSub.id}
+                            type="button"
+                            onClick={() => {
+                              setSelectedSub(verSub);
+                              setGradeScore(verSub.score ?? '');
+                              setGradeFeedback(verSub.teacherFeedback ?? '');
+                            }}
+                            className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all flex items-center gap-1.5 ${
+                              isSelectedVer
+                                ? 'bg-amber-600 text-white shadow-md shadow-amber-600/30'
+                                : 'bg-slate-800/90 text-slate-300 hover:bg-slate-700'
+                            }`}
+                          >
+                            <span>Versi {verNumber}</span>
+                            {isLatest && (
+                              <span className="text-[9px] px-1 rounded bg-emerald-950 border border-emerald-700 text-emerald-300 font-mono">
+                                Terbaru
+                              </span>
+                            )}
+                            <span className="text-[9px] opacity-75 font-mono">
+                              {new Date(verSub.submittedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
                 <button
                   onClick={() => setSelectedSub(null)}
-                  className="w-7 h-7 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center"
+                  className="w-7 h-7 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center shrink-0 mt-0.5"
                 >
                   <X className="w-4 h-4" />
                 </button>

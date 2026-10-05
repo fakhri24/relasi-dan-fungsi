@@ -88,6 +88,13 @@ Setiap kali ada perubahan, penambahan fitur, atau perbaikan kode:
   - **Modal Lightbox Zoom**: Setiap gambar diagram wajib menyediakan fitur Lightbox Zoom layar penuh dengan latar blur dan tombol unduh opsional jika ingin menyimpan file.
   - **Penilaian Manual Fleksibel & Cepat**: Guru memberikan nilai manual (0-100) dengan dukungan chip preset instan (`[100]`, `[95]`, `[90]`, `[85]`, `[80]`, `[75]`, `[70]`) dan chip template catatan/feedback guru 1-klik.
   - **Mode Showcase Proyektor Multi-Tab**: Guru dapat menampilkan diagram siswa ke proyektor kelas dengan tab selektor untuk Kasus 1 (Pesanan Kantin), Kasus 2 (Pelanggaran), dan Kasus 3 (Kreasi Mandiri), lengkap dengan argumen matematis siswa untuk apresiasi dan diskusi kelas.
+  - **Penanganan Pengumpulan Ganda & Deteksi Revisi (Opsi A)**:
+    * Seluruh pengerjaan siswa diurutkan berdasarkan `submittedAt` menurun (*descending*). Tampilan utama tabel, modal review, dan showcase selalu menyajikan pengerjaan paling baru.
+    * Dilengkapi penanda visual badge `Revisi Nx` pada nama siswa dan status `(Terbaru)` pada kolom waktu pengumpulan.
+    * Modal Review menyediakan *Version Switcher* (`Versi 2 (Terbaru)`, `Versi 1`, dst.) sehingga guru dapat meninjau riwayat sebelum dan sesudah revisi siswa secara interaktif.
+    * Penyimpanan nilai & feedback otomatis disinkronkan ke seluruh dokumen riwayat pengumpulan siswa terkait di Firestore agar data konsisten tanpa menyisakan dokumen *orphan un-graded*.
+    * Siswa yang menginput nama manual di luar roster kelas otomatis terpetakan dan tidak hilang dari dashboard.
+    * Ekspor CSV menyertakan kolom `Jumlah Kirim` (misal `2x (Ada Revisi)`) dan waktu pengumpulan terakhir.
   - **Pembersihan Data Terkonfirmasi (*Reset Data*)**: Menyediakan tombol pembersihan data percobaan pengumpulan siswa via fungsi `deleteDoc` berantai dengan konfirmasi keamanan.
 - **Standar Tampilan 16:9 Proyektor (Zero-Scroll)**:
   - Kontainer aplikasi wajib `h-screen max-h-screen overflow-hidden`.

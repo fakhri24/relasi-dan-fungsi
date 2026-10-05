@@ -4,7 +4,28 @@ Dokumen perencanaan dan pelacakan progres pengembangan media pembelajaran intera
 
 ---
 
-## 📌 Status Terkini: v2.3.0 (Implementasi Penuh LKPD Digital Pertemuan 2: Batasan Fisik & Pemodelan Linear, Kanvas Plot Kartesius, Dashboard Guru P1/P2, & Integrasi Proyektor ✅)
+## 📌 Status Terkini: v2.3.1 (Penanganan Pengumpulan Ganda & Deteksi Revisi Otomatis pada Dashboard Guru - Opsi A ✅)
+- [x] **Logika Sorting & Resolusi Submission Terbaru (`TeacherDashboard.tsx`)**:
+  - Seluruh pengerjaan siswa kini disortir secara otomatis berdasarkan timestamp `submittedAt` menurun (descending, terbaru di index 0).
+  - Data yang ditampilkan di tabel, modal review utama, dan showcase proyektor dijamin merupakan **versi pengerjaan paling baru** dari siswa.
+  - Memperluas pemetaan siswa agar siswa yang mengetik nama secara manual di luar roster kelas tetap muncul di tabel review dashboard guru.
+- [x] **Indikator Visual Revisi pada Tabel Siswa**:
+  - Kolom Nama Siswa: Dilengkapi badge ungu `Revisi Nx` jika siswa mengumpulkan lebih dari 1 kali.
+  - Kolom Waktu Submit: Menampilkan timestamp pengumpulan terbaru beserta label `(Terbaru)`.
+  - Kartu Ringkasan: Menampilkan teks indikator `+N revisi baru terdeteksi`.
+- [x] **Riwayat Pengumpulan & Version Switcher pada Modal Review**:
+  - Header Modal Review kini dilengkapi bilah selector versi: `Versi 2 (Terbaru)` | `Versi 1`, dst.
+  - Guru dapat dengan mudah berpindah antar versi untuk melihat evolusi jawaban, perbaikan gambar, atau alasan yang ditulis siswa.
+- [x] **Sinkronisasi Nilai & Catatan Guru**:
+  - Saat guru menyimpan nilai atau catatan, sistem memperbarui dokumen aktif dan otomatis mensinkronkan nilai ke seluruh riwayat revisi siswa tersebut di Firestore agar tidak ada data *orphan* yang tertinggal.
+- [x] **Penyempurnaan Ekspor CSV Excel**:
+  - Menambahkan kolom `Jumlah Kirim` pada ekspor CSV (misal `2x (Ada Revisi)`) dan waktu pengumpulan terakhir untuk evaluasi guru.
+- [x] **Counter Tab Pertemuan Siswa Unik**:
+  - Tab "Pertemuan 1" & "Pertemuan 2" kini menampilkan jumlah siswa unik yang mengumpulkan: `{N} Siswa ({M} Kumpul)`.
+- [x] **Build Verification**:
+  - `npm run build` (`tsc -b && vite build`) 100% lolos tanpa error.
+
+## 📌 Arsip Status v2.3.0 (Implementasi Penuh LKPD Digital Pertemuan 2: Batasan Fisik & Pemodelan Linear, Kanvas Plot Kartesius, Dashboard Guru P1/P2, & Integrasi Proyektor ✅)
 - [x] **Kanvas Plot Kartesius Interaktif (`InteractiveLinearPlotCanvas.tsx`)**:
   - Grid koordinat presisi $x \in [0, 6]$ jam dan $y \in [0, 80\text{k}]$ rupiah.
   - Interaksi tap grid responsif + chip pintasan plot titik cepat: $(0, 20\text{k}), (1, 30\text{k}), (2, 40\text{k}), (3, 50\text{k}), (5, 70\text{k})$.
