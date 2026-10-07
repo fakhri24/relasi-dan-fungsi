@@ -72,7 +72,7 @@ export const Slide13OpeningProject: React.FC<Slide13OpeningProjectProps> = ({ on
             PERTEMUAN 4 · 2 JP (90 MENIT)
           </span>
           <span className="px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 text-xs font-semibold">
-            13 · PROYEK PEMODELAN NYATA
+            14 · PROYEK PEMODELAN NYATA
           </span>
         </div>
         <div className="flex items-center gap-2 text-xs text-slate-400">

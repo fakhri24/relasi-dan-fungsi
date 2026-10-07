@@ -12,6 +12,7 @@ import { Slide3ArrowDiagram } from './components/slides/Slide3ArrowDiagram';
 import { Slide4VerticalLineTest } from './components/slides/Slide4VerticalLineTest';
 import { Slide6OpeningDomain } from './components/slides/Slide6OpeningDomain';
 import { Slide5DomainRange } from './components/slides/Slide5DomainRange';
+import { Slide8IntervalNotation } from './components/slides/Slide8IntervalNotation';
 import { Slide6LinearGraph } from './components/slides/Slide6LinearGraph';
 import { Slide9OpeningPiecewise } from './components/slides/Slide9OpeningPiecewise';
 import { Slide7WhyPiecewise } from './components/slides/Slide7WhyPiecewise';
@@ -34,20 +35,21 @@ const SLIDES: SlideItem[] = [
   { id: 4, meetingNumber: 1, meetingTitle: 'Fondasi Relasi & Fungsi', meetingJP: '2 JP', title: 'Relasi & Fungsi', subtitle: 'Diagram Panah', tag: '04 · DIAGRAM' },
   { id: 5, meetingNumber: 1, meetingTitle: 'Fondasi Relasi & Fungsi', meetingJP: '2 JP', title: 'Uji Garis Vertikal', subtitle: 'Scanner Garis', tag: '05 · UJI GRAFIK' },
 
-  // Pertemuan 2 (Slide 6–8)
+  // Pertemuan 2 (Slide 6–9)
   { id: 6, meetingNumber: 2, meetingTitle: 'Batasan Nyata & Linear', meetingJP: '2 JP', title: 'Batasan Nyata', subtitle: 'Target Belajar P2', tag: '06 · PEMBUKA' },
   { id: 7, meetingNumber: 2, meetingTitle: 'Batasan Nyata & Linear', meetingJP: '2 JP', title: 'Domain & Range', subtitle: 'Batasan Nyata', tag: '07 · DOMAIN' },
-  { id: 8, meetingNumber: 2, meetingTitle: 'Batasan Nyata & Linear', meetingJP: '2 JP', title: 'Model Linier', subtitle: 'f(x) = ax + b', tag: '08 · MODEL' },
+  { id: 8, meetingNumber: 2, meetingTitle: 'Batasan Nyata & Linear', meetingJP: '2 JP', title: 'Notasi Selang', subtitle: 'Simbol Matematika', tag: '08 · NOTASI' },
+  { id: 9, meetingNumber: 2, meetingTitle: 'Batasan Nyata & Linear', meetingJP: '2 JP', title: 'Model Linier', subtitle: 'f(x) = ax + b', tag: '09 · MODEL' },
 
-  // Pertemuan 3 (Slide 9–12)
-  { id: 9, meetingNumber: 3, meetingTitle: 'Fungsi Sepenggal (Piecewise)', meetingJP: '2 JP', title: 'Piecewise', subtitle: 'Target Belajar P3', tag: '09 · PEMBUKA' },
-  { id: 10, meetingNumber: 3, meetingTitle: 'Fungsi Sepenggal (Piecewise)', meetingJP: '2 JP', title: 'Batasan 1 Garis', subtitle: 'Dilema Tarif', tag: '10 · MASALAH' },
-  { id: 11, meetingNumber: 3, meetingTitle: 'Fungsi Sepenggal (Piecewise)', meetingJP: '2 JP', title: 'Fungsi Bercabang', subtitle: 'Piecewise & Titik', tag: '11 · PIECEWISE' },
-  { id: 12, meetingNumber: 3, meetingTitle: 'Fungsi Sepenggal (Piecewise)', meetingJP: '2 JP', title: 'Rancang Fungsi', subtitle: 'Sandbox Builder', tag: '12 · SANDBOX' },
+  // Pertemuan 3 (Slide 10–13)
+  { id: 10, meetingNumber: 3, meetingTitle: 'Fungsi Sepenggal (Piecewise)', meetingJP: '2 JP', title: 'Piecewise', subtitle: 'Target Belajar P3', tag: '10 · PEMBUKA' },
+  { id: 11, meetingNumber: 3, meetingTitle: 'Fungsi Sepenggal (Piecewise)', meetingJP: '2 JP', title: 'Batasan 1 Garis', subtitle: 'Dilema Tarif', tag: '11 · MASALAH' },
+  { id: 12, meetingNumber: 3, meetingTitle: 'Fungsi Sepenggal (Piecewise)', meetingJP: '2 JP', title: 'Fungsi Bercabang', subtitle: 'Piecewise & Titik', tag: '12 · PIECEWISE' },
+  { id: 13, meetingNumber: 3, meetingTitle: 'Fungsi Sepenggal (Piecewise)', meetingJP: '2 JP', title: 'Rancang Fungsi', subtitle: 'Sandbox Builder', tag: '13 · SANDBOX' },
 
-  // Pertemuan 4 (Slide 13–14)
-  { id: 13, meetingNumber: 4, meetingTitle: 'Proyek Nyata & Asesmen', meetingJP: '2 JP', title: 'Proyek Nyata', subtitle: 'Target Belajar P4', tag: '13 · PEMBUKA' },
-  { id: 14, meetingNumber: 4, meetingTitle: 'Proyek Nyata & Asesmen', meetingJP: '2 JP', title: 'Katalog Proyek', subtitle: 'Kasus & Rubrik', tag: '14 · PROYEK' },
+  // Pertemuan 4 (Slide 14–15)
+  { id: 14, meetingNumber: 4, meetingTitle: 'Proyek Nyata & Asesmen', meetingJP: '2 JP', title: 'Proyek Nyata', subtitle: 'Target Belajar P4', tag: '14 · PEMBUKA' },
+  { id: 15, meetingNumber: 4, meetingTitle: 'Proyek Nyata & Asesmen', meetingJP: '2 JP', title: 'Katalog Proyek', subtitle: 'Kasus & Rubrik', tag: '15 · PROYEK' },
 ];
 
 export const App: React.FC = () => {
@@ -174,18 +176,20 @@ export const App: React.FC = () => {
       case 6:
         return <Slide5DomainRange />;
       case 7:
-        return <Slide6LinearGraph onOpenQrModal={() => { setProjectorQrMeeting(2); setIsProjectorQrOpen(true); }} />;
+        return <Slide8IntervalNotation />;
       case 8:
-        return <Slide9OpeningPiecewise onNext={handleNext} />;
+        return <Slide6LinearGraph onOpenQrModal={() => { setProjectorQrMeeting(2); setIsProjectorQrOpen(true); }} />;
       case 9:
-        return <Slide7WhyPiecewise />;
+        return <Slide9OpeningPiecewise onNext={handleNext} />;
       case 10:
-        return <Slide8PiecewiseIntro />;
+        return <Slide7WhyPiecewise />;
       case 11:
-        return <Slide9SandboxBuilder />;
+        return <Slide8PiecewiseIntro />;
       case 12:
-        return <Slide13OpeningProject onNext={handleNext} />;
+        return <Slide9SandboxBuilder />;
       case 13:
+        return <Slide13OpeningProject onNext={handleNext} />;
+      case 14:
         return <Slide10ProjectHub />;
       default:
         return <Slide1OpeningRelasi onNext={handleNext} />;

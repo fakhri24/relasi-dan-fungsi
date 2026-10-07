@@ -393,7 +393,7 @@ export const InteractiveLinearPlotCanvas = forwardRef<InteractiveLinearPlotCanva
                     stroke="#6366f1"
                     strokeWidth="1.5"
                     strokeDasharray="2 2"
-                    className="opacity-40 group-hover:opacity-100 group-hover:scale-125 transition-all"
+                    className="opacity-40 group-hover:opacity-100 group-hover:stroke-[2.5px] group-hover:fill-indigo-500/25 group-hover:[stroke-dasharray:none] transition-all"
                   />
                 )}
               </g>

@@ -379,7 +379,7 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
         const ojol = sub?.physicalLimits?.ojol?.answer || '-';
         const baterai = sub?.physicalLimits?.baterai?.answer || '-';
         const lift = sub?.physicalLimits?.lift?.dataType || '-';
-        const notasi = sub?.setNotations?.q1Bracket ? `"${sub.setNotations.q1Bracket} & ${sub.setNotations.q2Inequality}"` : '-';
+        const notasi = sub?.setNotations?.q1Bracket ? `"${sub.setNotations.q1Bracket} & ${sub.setNotations.q2Inequality}${sub.setNotations.q3Interval ? ` & ${sub.setNotations.q3Interval}` : ''}"` : '-';
         const formula = sub?.linearModel?.formulaText ? `"${sub.linearModel.formulaText}"` : '-';
         const pointsCount = sub?.plotData?.points?.length ?? '-';
         const refB = sub?.goldenRule?.meaningOfB ? `"${sub.goldenRule.meaningOfB.replace(/"/g, '""')}"` : '-';
@@ -1163,7 +1163,7 @@ export const TeacherDashboard: React.FC<Props> = ({ isOpen, onClose }) => {
                           <div className="p-2 bg-slate-900 rounded-lg flex justify-between items-center text-[10px]">
                             <span className="text-slate-400">Notasi Interval:</span>
                             <span className="font-mono text-amber-300 font-bold">
-                              Q1: {selectedP2.setNotations?.q1Bracket || '-'} | Q2: {selectedP2.setNotations?.q2Inequality || '-'}
+                              Q1: {selectedP2.setNotations?.q1Bracket || '-'} | Q2: {selectedP2.setNotations?.q2Inequality || '-'} | Q3: {selectedP2.setNotations?.q3Interval || '-'}
                             </span>
                           </div>
                         </div>

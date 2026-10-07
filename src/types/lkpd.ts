@@ -86,6 +86,7 @@ export interface Lkpd2PhysicalLimits {
 export interface Lkpd2SetNotations {
   q1Bracket: string; // misal "[0, 10]"
   q2Inequality: string; // misal "x >= 0"
+  q3Interval?: string; // misal "(0, 100)" — selang terbuka/setengah terbuka (opsional untuk data lama)
 }
 
 export interface Lkpd2TableRow {

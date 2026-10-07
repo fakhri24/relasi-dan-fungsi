@@ -31,7 +31,7 @@ export const Slide6LinearGraph: React.FC<Props> = ({ onOpenQrModal }) => {
       {/* Header */}
       <div className="space-y-1">
         <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-xs font-mono font-bold tracking-wider uppercase">
-          <TrendingUp className="w-3.5 h-3.5" /> 08 · MODEL
+          <TrendingUp className="w-3.5 h-3.5" /> 09 · MODEL
         </div>
         <h1 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
           Model Linier

@@ -155,13 +155,14 @@ relasi-dan-fungsi/
 │           ├── Slide2Machine.tsx          # Slide 3: Mesin Fungsi (Model Mental Mesin f(x))
 │           ├── Slide3ArrowDiagram.tsx     # Slide 4: Diagram Panah (Syarat Emas Relasi vs Fungsi)
 │           ├── Slide4VerticalLineTest.tsx # Slide 5: Uji Garis Vertikal & Tombol Buka LKPD Digital Siswa P1
-│           ├── Slide6OpeningDomain.tsx    # Slide 6: Pembuka P2 (Konsep "BATASAN NYATA" & 3 Target Belajar)
-│           ├── Slide5DomainRange.tsx      # Slide 7: Domain & Range (Batasan Fisik)
-│           ├── Slide6LinearGraph.tsx      # Slide 8: Model Linier (f(x) = ax + b) & Tombol LKPD P2
-│           ├── Slide9OpeningPiecewise.tsx # Slide 9: Pembuka P3 (Konsep "PIECEWISE" & 3 Target Belajar)
-│           ├── Slide7WhyPiecewise.tsx     # Slide 10: Batasan 1 Garis (Dilema Tarif)
-│           ├── Slide8PiecewiseIntro.tsx   # Slide 11: Fungsi Bercabang (Piecewise & Titik ●, ○)
-│           ├── Slide9SandboxBuilder.tsx   # Slide 12: Rancang Fungsi (Sandbox Builder)
-│           ├── Slide13OpeningProject.tsx  # Slide 13: Pembuka P4 (Konsep "PROYEK NYATA" & 3 Target Belajar)
-│           └── Slide10ProjectHub.tsx      # Slide 14: Katalog Proyek (Kasus & Simulator)
-```
+│           ├── Slide6OpeningDomain.tsx       # Slide 6: Pembuka P2 (Konsep "BATASAN NYATA" & 3 Target Belajar)
+│           ├── Slide5DomainRange.tsx         # Slide 7: Domain & Range (Batasan Fisik)
+│           ├── Slide8IntervalNotation.tsx    # Slide 8: Notasi Selang & Interval (Garis Bilangan SVG & 4 Cara Notasi)
+│           ├── Slide6LinearGraph.tsx         # Slide 9: Model Linier (f(x) = ax + b) & Tombol LKPD P2
+│           ├── Slide9OpeningPiecewise.tsx    # Slide 10: Pembuka P3 (Konsep "PIECEWISE" & 3 Target Belajar)
+│           ├── Slide7WhyPiecewise.tsx        # Slide 11: Batasan 1 Garis (Dilema Tarif)
+│           ├── Slide8PiecewiseIntro.tsx      # Slide 12: Fungsi Bercabang (Piecewise & Titik ●, ○)
+│           ├── Slide9SandboxBuilder.tsx      # Slide 13: Rancang Fungsi (Sandbox Builder)
+│           ├── Slide13OpeningProject.tsx     # Slide 14: Pembuka P4 (Konsep "PROYEK NYATA" & 3 Target Belajar)
+│           └── Slide10ProjectHub.tsx         # Slide 15: Katalog Proyek (Kasus & Simulator)
+│```

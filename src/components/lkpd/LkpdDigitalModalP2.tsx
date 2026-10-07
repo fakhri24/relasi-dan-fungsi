@@ -9,11 +9,49 @@ import { db } from '../../lib/firebase';
 import { uploadDiagramSnapshot } from '../../lib/uploadDiagram';
 import { InteractiveLinearPlotCanvas, InteractiveLinearPlotCanvasRef } from './InteractiveLinearPlotCanvas';
 import { ClassRoster, LinearPlotPoint, Lkpd2Submission } from '../../types/lkpd';
+import { MathFormula } from '../MathFormula';
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
 }
+
+interface MathChoiceOption {
+  val: string;
+  latex: string;
+}
+
+/** Kartu pilihan notasi ber-KaTeX (pengganti <select> yang tidak bisa merender KaTeX). Tanpa teks petunjuk. */
+const MathChoiceGroup: React.FC<{
+  options: MathChoiceOption[];
+  value: string;
+  onChange: (val: string) => void;
+  columns?: 1 | 2 | 3 | 4;
+}> = ({ options, value, onChange, columns = 1 }) => {
+  const gridCols = { 1: 'grid-cols-1', 2: 'grid-cols-2', 3: 'grid-cols-3', 4: 'grid-cols-2 sm:grid-cols-4' }[columns];
+  return (
+    <div className={`grid ${gridCols} gap-1.5`}>
+      {options.map((opt) => {
+        const active = value === opt.val;
+        return (
+          <button
+            key={opt.val}
+            type="button"
+            onClick={() => onChange(opt.val)}
+            className={`w-full px-3 py-2 rounded-xl border text-sm transition-all flex items-center justify-between gap-2 ${
+              active
+                ? 'bg-indigo-600/30 border-indigo-400 text-slate-900 dark:text-white'
+                : 'bg-slate-900 border-slate-700 text-slate-300 hover:border-slate-500'
+            }`}
+          >
+            <MathFormula math={opt.latex} />
+            {active ? <Check className="w-4 h-4 text-emerald-400 shrink-0" /> : <span className="w-4 h-4 shrink-0" />}
+          </button>
+        );
+      })}
+    </div>
+  );
+};
 
 // Data awal kelas fallback jika Firestore belum diisi oleh guru
 const DEFAULT_CLASSES: ClassRoster[] = [
@@ -58,11 +96,11 @@ export const LkpdDigitalModalP2: React.FC<Props> = ({ isOpen, onClose }) => {
   // State Langkah 1: Batasan Fisik (Ojol, Baterai, Lift)
   const [ojolAnswer, setOjolAnswer] = useState<'Valid' | 'Mustahil' | ''>('');
   const [ojolReason, setOjolReason] = useState('');
-  const [ojolDomain, setOjolDomain] = useState('x >= 0');
+  const [ojolDomain, setOjolDomain] = useState('');
 
   const [bateraiAnswer, setBateraiAnswer] = useState<'Valid' | 'Mustahil' | ''>('');
   const [bateraiReason, setBateraiReason] = useState('');
-  const [bateraiRange, setBateraiRange] = useState('[0%, 100%]');
+  const [bateraiRange, setBateraiRange] = useState('');
 
   const [liftAnswer, setLiftAnswer] = useState<'Valid' | 'Mustahil' | ''>('');
   const [liftDataType, setLiftDataType] = useState<'Diskrit' | 'Kontinu' | ''>('');
@@ -71,6 +109,7 @@ export const LkpdDigitalModalP2: React.FC<Props> = ({ isOpen, onClose }) => {
   // State Langkah 2: Notasi Himpunan & Selang
   const [q1Bracket, setQ1Bracket] = useState<string>('');
   const [q2Inequality, setQ2Inequality] = useState<string>('');
+  const [q3Interval, setQ3Interval] = useState<string>('');
 
   // State Langkah 3: Pemodelan Linear (Kamera)
   const [varX] = useState('Durasi sewa (jam)');
@@ -99,10 +138,10 @@ export const LkpdDigitalModalP2: React.FC<Props> = ({ isOpen, onClose }) => {
   // Validasi Langkah-langkah
   const canProceedStep0 = !!selectedStudentName.trim();
   const canProceedStep1 = 
-    ojolAnswer !== '' && ojolReason.trim().length >= 4 &&
-    bateraiAnswer !== '' && bateraiReason.trim().length >= 4 &&
+    ojolAnswer !== '' && ojolReason.trim().length >= 4 && ojolDomain !== '' &&
+    bateraiAnswer !== '' && bateraiReason.trim().length >= 4 && bateraiRange !== '' &&
     liftAnswer !== '' && liftDataType !== '' && liftReason.trim().length >= 4;
-  const canProceedStep2 = q1Bracket !== '' && q2Inequality !== '';
+  const canProceedStep2 = q1Bracket !== '' && q2Inequality !== '' && q3Interval !== '';
   const canProceedStep3 = 
     row1Cost.trim() !== '' && row2Cost.trim() !== '' && 
     row3Cost.trim() !== '' && row5Cost.trim() !== '';
@@ -226,7 +265,8 @@ export const LkpdDigitalModalP2: React.FC<Props> = ({ isOpen, onClose }) => {
         },
         setNotations: {
           q1Bracket,
-          q2Inequality
+          q2Inequality,
+          q3Interval
         },
         linearModel: {
           varX,
@@ -437,7 +477,7 @@ export const LkpdDigitalModalP2: React.FC<Props> = ({ isOpen, onClose }) => {
                   Bagian A · Menalar Batasan Fisik Realita (Sinkron Slide 6 & 7)
                 </span>
                 <p className="text-xs text-slate-300">
-                  Di matematika murni, variabel $x$ bebas bernilai apa saja. Namun di dunia nyata, hukum fisika dan logika kehidupan membatasi nilai input (Domain) dan hasil (Range). Uji 3 kasus berikut:
+                  Di matematika murni, variabel <MathFormula math="x" /> bebas bernilai apa saja. Namun di dunia nyata, hukum fisika dan logika kehidupan membatasi nilai input (Domain) dan hasil (Range). Uji 3 kasus berikut:
                 </p>
               </div>
 
@@ -446,9 +486,9 @@ export const LkpdDigitalModalP2: React.FC<Props> = ({ isOpen, onClose }) => {
                 {/* Kasus 1: Jarak Ojol */}
                 <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2.5">
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <span className="font-bold text-white text-sm">1. Jarak Tempuh Ojek Online (Variabel x: km)</span>
+                    <span className="font-bold text-white text-sm">1. Jarak Tempuh Ojek Online (Variabel <MathFormula math="x" />: km)</span>
                     <div className="flex items-center gap-1.5">
-                      <span className="text-xs text-slate-400">Apakah $x = -4$ km masuk akal?</span>
+                      <span className="text-xs text-slate-400">Apakah <MathFormula math="x = -4" /> km masuk akal?</span>
                       <button
                         type="button"
                         onClick={() => setOjolAnswer('Valid')}
@@ -476,21 +516,22 @@ export const LkpdDigitalModalP2: React.FC<Props> = ({ isOpen, onClose }) => {
                         type="text"
                         value={ojolReason}
                         onChange={(e) => setOjolReason(e.target.value)}
-                        placeholder="Contoh: Jarak tidak bisa bernilai negatif..."
+                        placeholder="Tulis alasanmu..."
                         className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-indigo-500"
                       />
                     </div>
                     <div>
                       <label className="text-[11px] text-slate-400 block mb-1">Notasi Domain Fisik:</label>
-                      <select
+                      <MathChoiceGroup
+                        columns={3}
                         value={ojolDomain}
-                        onChange={(e) => setOjolDomain(e.target.value)}
-                        className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-indigo-500"
-                      >
-                        <option value="x >= 0">x ≥ 0 (Himpunan Real Non-Negatif)</option>
-                        <option value="x > 0">x &gt; 0 (Hanya Positif)</option>
-                        <option value="x in R">Bebas Semua Bilangan Real</option>
-                      </select>
+                        onChange={setOjolDomain}
+                        options={[
+                          { val: 'x >= 0', latex: 'x \\ge 0' },
+                          { val: 'x > 0', latex: 'x > 0' },
+                          { val: 'x in R', latex: 'x \\in \\mathbb{R}' },
+                        ]}
+                      />
                     </div>
                   </div>
                 </div>
@@ -498,9 +539,9 @@ export const LkpdDigitalModalP2: React.FC<Props> = ({ isOpen, onClose }) => {
                 {/* Kasus 2: Baterai HP */}
                 <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2.5">
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <span className="font-bold text-white text-sm">2. Persentase Baterai HP (Variabel y: %)</span>
+                    <span className="font-bold text-white text-sm">2. Persentase Baterai HP (Variabel <MathFormula math="y" />: %)</span>
                     <div className="flex items-center gap-1.5">
-                      <span className="text-xs text-slate-400">Apakah $y = 120\%$ mungkin terjadi?</span>
+                      <span className="text-xs text-slate-400">Apakah <MathFormula math="y = 120\%" /> mungkin terjadi?</span>
                       <button
                         type="button"
                         onClick={() => setBateraiAnswer('Valid')}
@@ -528,21 +569,22 @@ export const LkpdDigitalModalP2: React.FC<Props> = ({ isOpen, onClose }) => {
                         type="text"
                         value={bateraiReason}
                         onChange={(e) => setBateraiReason(e.target.value)}
-                        placeholder="Contoh: Kapasitas penuh baterai dibatasi 100%..."
+                        placeholder="Tulis alasanmu..."
                         className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-indigo-500"
                       />
                     </div>
                     <div>
                       <label className="text-[11px] text-slate-400 block mb-1">Rentang Range Fisik:</label>
-                      <select
+                      <MathChoiceGroup
+                        columns={3}
                         value={bateraiRange}
-                        onChange={(e) => setBateraiRange(e.target.value)}
-                        className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-indigo-500"
-                      >
-                        <option value="[0%, 100%]">[0%, 100%] (Rentang 0 sampai 100)</option>
-                        <option value="[0%, tak terhingga)">[0%, tak hingga)</option>
-                        <option value="Semua Real">Semua Bilangan Real</option>
-                      </select>
+                        onChange={setBateraiRange}
+                        options={[
+                          { val: '[0%, 100%]', latex: '[0\\%, 100\\%]' },
+                          { val: '[0%, tak terhingga)', latex: '[0\\%, \\infty)' },
+                          { val: 'Semua Real', latex: '\\mathbb{R}' },
+                        ]}
+                      />
                     </div>
                   </div>
                 </div>
@@ -552,7 +594,7 @@ export const LkpdDigitalModalP2: React.FC<Props> = ({ isOpen, onClose }) => {
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <span className="font-bold text-white text-sm">3. Kapasitas Lift (Maksimal 8 Orang)</span>
                     <div className="flex items-center gap-1.5">
-                      <span className="text-xs text-slate-400">Apakah penumpang $x = 3.5$ orang mungkin?</span>
+                      <span className="text-xs text-slate-400">Apakah penumpang <MathFormula math="x = 3{,}5" /> orang mungkin?</span>
                       <button
                         type="button"
                         onClick={() => setLiftAnswer('Valid')}
@@ -603,7 +645,7 @@ export const LkpdDigitalModalP2: React.FC<Props> = ({ isOpen, onClose }) => {
                         type="text"
                         value={liftReason}
                         onChange={(e) => setLiftReason(e.target.value)}
-                        placeholder="Contoh: Manusia harus berupa bilangan bulat utuh..."
+                        placeholder="Tulis alasanmu..."
                         className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-indigo-500"
                       />
                     </div>
@@ -652,10 +694,10 @@ export const LkpdDigitalModalP2: React.FC<Props> = ({ isOpen, onClose }) => {
             <div className="space-y-4">
               <div className="bg-indigo-950/30 border border-indigo-500/30 rounded-2xl p-4">
                 <span className="text-[10px] uppercase font-bold tracking-wider text-indigo-400 block mb-0.5">
-                  Bagian B1 · Memahami Notasi Interval Matematika
+                  Bagian B1 · Memahami Notasi Interval Matematika (Sinkron Slide 8)
                 </span>
                 <p className="text-xs text-slate-300">
-                  Kurung siku $[a, b]$ menyatakan batas ujung <strong>ikut serta (titik penuh ●)</strong>, sedangkan kurung biasa $(a, b)$ menyatakan batas ujung <strong>tidak ikut (titik kosong ○)</strong>.
+                  Kurung siku <MathFormula math="[a, b]" /> menyatakan batas ujung <strong>ikut serta (titik penuh ●)</strong>, sedangkan kurung biasa <MathFormula math="(a, b)" /> menyatakan batas ujung <strong>tidak ikut (titik kosong ○)</strong>.
                 </p>
               </div>
 
@@ -663,57 +705,51 @@ export const LkpdDigitalModalP2: React.FC<Props> = ({ isOpen, onClose }) => {
                 {/* Soal 1 */}
                 <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-3">
                   <h5 className="font-bold text-white text-xs">
-                    1. Nilai $x$ mulai dari 0 hingga 10 (kedua batas ikut serta):
+                    1. Nilai <MathFormula math="x" /> mulai dari 0 hingga 10 (kedua batas ikut serta):
                   </h5>
-                  <div className="space-y-1.5">
-                    {[
-                      { val: '[0, 10]', label: '[0, 10] (Kurung siku, keduanya ikut)' },
-                      { val: '(0, 10)', label: '(0, 10) (Kurung biasa, tidak ikut)' },
-                      { val: '[0, 10)', label: '[0, 10) (0 ikut, 10 tidak ikut)' },
-                    ].map((opt) => (
-                      <button
-                        key={opt.val}
-                        type="button"
-                        onClick={() => setQ1Bracket(opt.val)}
-                        className={`w-full text-left p-2.5 rounded-xl border text-xs font-mono transition-all flex items-center justify-between ${
-                          q1Bracket === opt.val
-                            ? 'bg-indigo-600/30 border-indigo-400 text-white font-bold'
-                            : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
-                        }`}
-                      >
-                        <span>{opt.label}</span>
-                        {q1Bracket === opt.val && <Check className="w-4 h-4 text-emerald-400" />}
-                      </button>
-                    ))}
-                  </div>
+                  <MathChoiceGroup
+                    value={q1Bracket}
+                    onChange={setQ1Bracket}
+                    options={[
+                      { val: '[0, 10]', latex: '[0, 10]' },
+                      { val: '(0, 10)', latex: '(0, 10)' },
+                      { val: '[0, 10)', latex: '[0, 10)' },
+                    ]}
+                  />
                 </div>
 
                 {/* Soal 2 */}
                 <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-3">
                   <h5 className="font-bold text-white text-xs">
-                    2. Nilai jarak $x$ tidak boleh negatif (boleh mulai dari 0 ke atas tanpa batas):
+                    2. Nilai jarak <MathFormula math="x" /> tidak boleh negatif (boleh mulai dari 0 ke atas tanpa batas):
                   </h5>
-                  <div className="space-y-1.5">
-                    {[
-                      { val: 'x >= 0', label: 'Df = {x ∈ ℝ | x ≥ 0} (Lebih dari atau sama dengan 0)' },
-                      { val: 'x > 0', label: 'Df = {x ∈ ℝ | x > 0} (Harus lebih dari 0)' },
-                      { val: 'x <= 0', label: 'Df = {x ∈ ℝ | x ≤ 0} (Kurang dari 0)' },
-                    ].map((opt) => (
-                      <button
-                        key={opt.val}
-                        type="button"
-                        onClick={() => setQ2Inequality(opt.val)}
-                        className={`w-full text-left p-2.5 rounded-xl border text-xs font-mono transition-all flex items-center justify-between ${
-                          q2Inequality === opt.val
-                            ? 'bg-indigo-600/30 border-indigo-400 text-white font-bold'
-                            : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
-                        }`}
-                      >
-                        <span>{opt.label}</span>
-                        {q2Inequality === opt.val && <Check className="w-4 h-4 text-emerald-400" />}
-                      </button>
-                    ))}
-                  </div>
+                  <MathChoiceGroup
+                    value={q2Inequality}
+                    onChange={setQ2Inequality}
+                    options={[
+                      { val: 'x >= 0', latex: 'D_f = \\{x \\in \\mathbb{R} \\mid x \\ge 0\\}' },
+                      { val: 'x > 0', latex: 'D_f = \\{x \\in \\mathbb{R} \\mid x > 0\\}' },
+                      { val: 'x <= 0', latex: 'D_f = \\{x \\in \\mathbb{R} \\mid x \\le 0\\}' },
+                    ]}
+                  />
+                </div>
+
+                {/* Soal 3: Selang Terbuka / Setengah Terbuka */}
+                <div className="md:col-span-2 bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-3">
+                  <h5 className="font-bold text-white text-xs">
+                    3. Suhu air <MathFormula math="x" /> (°C) saat berwujud cair, antara 0°C dan 100°C (kedua batas tidak termasuk):
+                  </h5>
+                  <MathChoiceGroup
+                    columns={4}
+                    value={q3Interval}
+                    onChange={setQ3Interval}
+                    options={[
+                      { val: '[0, 100]', latex: '[0, 100]' },
+                      { val: '(0, 100]', latex: '(0, 100]' },
+                      { val: '(0, 100)', latex: '(0, 100)' },
+                      { val: '[0, 100)', latex: '[0, 100)' },
+                    ]}
+                  />
                 </div>
               </div>
 
@@ -730,7 +766,7 @@ export const LkpdDigitalModalP2: React.FC<Props> = ({ isOpen, onClose }) => {
                 <div className="flex items-center gap-3">
                   {!canProceedStep2 && (
                     <span className="text-[11px] text-amber-400 hidden sm:inline-flex items-center gap-1">
-                      <AlertCircle className="w-3.5 h-3.5" /> Pilih jawaban kedua notasi di atas
+                      <AlertCircle className="w-3.5 h-3.5" /> Pilih jawaban ketiga notasi di atas
                     </span>
                   )}
                   <button
@@ -761,8 +797,8 @@ export const LkpdDigitalModalP2: React.FC<Props> = ({ isOpen, onClose }) => {
                   <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-400">
                     Skenario Kasus Dunia Nyata: Jasa Sewa Kamera Mirrorless
                   </span>
-                  <span className="text-[10px] font-mono bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded">
-                    f(x) = ax + b
+                  <span className="text-[10px] bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded">
+                    <MathFormula math="f(x) = ax + b" />
                   </span>
                 </div>
                 <p className="text-xs text-slate-300">
@@ -923,7 +959,7 @@ export const LkpdDigitalModalP2: React.FC<Props> = ({ isOpen, onClose }) => {
               <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-1">
                 <h4 className="font-bold text-white text-sm flex items-center gap-2">
                   <TrendingUp className="w-4 h-4 text-brand-400" />
-                  Plot Titik $(x, y)$ dan Hubungkan Menjadi Garis Lurus
+                  Plot Titik <MathFormula math="(x, y)" /> dan Hubungkan Menjadi Garis Lurus
                 </h4>
                 <p className="text-xs text-slate-400">
                   Sentuh titik grid pada kanvas atau gunakan tombol chip di bawah untuk mem-plot titik: (0, 20rb), (1, 30rb), (2, 40rb), (3, 50rb), (5, 70rb). Kemudian aktifkan <strong>&quot;Hubungkan Menjadi Garis Linear&quot;</strong>.
@@ -992,26 +1028,26 @@ export const LkpdDigitalModalP2: React.FC<Props> = ({ isOpen, onClose }) => {
                 <div className="space-y-3 text-xs">
                   <div>
                     <label className="font-semibold text-slate-300 block mb-1">
-                      1. Pada rumus $f(x) = ax + b$, nilai <strong>b</strong> disebut titik potong sumbu-Y (<em>intercept</em>). Di dunia nyata, nilai $b$ ini merepresentasikan:
+                      1. Pada rumus <MathFormula math="f(x) = ax + b" />, nilai <MathFormula math="b" /> disebut titik potong sumbu-Y (<em>intercept</em>). Di dunia nyata, nilai <MathFormula math="b" /> ini merepresentasikan:
                     </label>
                     <input
                       type="text"
                       value={meaningOfB}
                       onChange={(e) => setMeaningOfB(e.target.value)}
-                      placeholder="Jelaskan artinya (misal: biaya dasar / biaya awal saat pemakaian belum berjalan)..."
+                      placeholder="Tulis jawabanmu..."
                       className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-indigo-500"
                     />
                   </div>
 
                   <div>
                     <label className="font-semibold text-slate-300 block mb-1">
-                      2. Nilai <strong>a</strong> disebut kemiringan garis (<em>gradien</em>). Jika tarif per jam semakin mahal, bagaimana pengaruhnya terhadap bentuk garis grafik?
+                      2. Nilai <MathFormula math="a" /> disebut kemiringan garis (<em>gradien</em>). Jika tarif per jam semakin mahal, bagaimana pengaruhnya terhadap bentuk garis grafik? Apakah garis semakin curam/tegak atau semakin landai?
                     </label>
                     <input
                       type="text"
                       value={meaningOfA}
                       onChange={(e) => setMeaningOfA(e.target.value)}
-                      placeholder="Jelaskan artinya (apakah garis semakin curam/tegak atau semakin landai?)..."
+                      placeholder="Tulis jawabanmu..."
                       className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-indigo-500"
                     />
                   </div>

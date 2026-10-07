@@ -4,7 +4,33 @@ Dokumen perencanaan dan pelacakan progres pengembangan media pembelajaran intera
 
 ---
 
-## 📌 Status Terkini: v2.3.1 (Penanganan Pengumpulan Ganda & Deteksi Revisi Otomatis pada Dashboard Guru - Opsi A ✅)
+## 📌 Status Terkini: v2.4.0 (Perbaikan KaTeX, Pembersihan Clue LKPD P2, Fix Hover Kanvas, & Slide Baru Notasi Selang ✅)
+- [x] **Perbaikan Render KaTeX & Pembersihan Clue LKPD Digital P2 (`LkpdDigitalModalP2.tsx`)**:
+  - Render KaTeX presisi dengan `<MathFormula />` untuk semua ekspresi matematika inline ($x$, $x = -4$, $y = 120\%$, $x = 3{,}5$ dengan koma desimal Indonesia, $f(x)=ax+b$, $a$, $b$, $(x, y)$).
+  - Mengganti elemen native `<select>` (yang tidak bisa merender KaTeX) dengan komponen kartu pilihan KaTeX terpusat `MathChoiceGroup` tanpa teks petunjuk pembocor jawaban.
+  - Membersihkan seluruh placeholder contoh ("Contoh: ...") menjadi placeholder netral ("Tulis alasanmu...", "Tulis jawabanmu...").
+  - Menghilangkan petunjuk pembocor pada opsi notasi Step 2: hanya menampilkan rumus KaTeX murni tanpa label penjelasan.
+  - Memindahkan petunjuk gradien ("apakah garis semakin curam/tegak atau semakin landai?") ke dalam teks pertanyaan Refleksi Q2 sehingga kotak input tetap bersih.
+  - **Penambahan Soal 3 Notasi Selang**: Menambahkan investigasi suhu air berwujud cair antara 0°C dan 100°C dengan 4 pilihan notasi $(0, 100), [0, 100], (0, 100], [0, 100)$ tersimpan di field `q3Interval`.
+- [x] **Perbaikan Titik Loncat Saat Hover Kanvas Grafik (`InteractiveLinearPlotCanvas.tsx`)**:
+  - Menghilangkan class CSS `group-hover:scale-125` pada elemen `<circle>` SVG yang memicu pergeseran koordinat akibat default SVG `transform-origin` di `(0, 0)`.
+  - Menggantinya dengan highlight visual presisi tanpa transformasi skala: opacity 100%, garis solid, fill transparan indigo, dan stroke lebih tebal tanpa bergeser dari titik koordinat.
+- [x] **Slide Baru "Notasi Selang & Interval" (`Slide8IntervalNotation.tsx`)**:
+  - Disisipkan sebagai Slide 8 (Total menjadi 15 slide across 4 pertemuan).
+  - Garis bilangan interaktif SVG dengan dual mode: Bilangan Real $\mathbb{R}$ (kontinu, garis segmen neon glow) vs Bilangan Bulat $\mathbb{Z}$ (diskrit, titik-titik lepas).
+  - 5 Preset Kasus Dunia Nyata: ① Baterai HP saat menyala $(0, 100]$, ② Suhu air cair $(0, 100)$, ③ Nilai ujian $[0, 100]$, ④ Jarak ojol $[0, \infty)$, ⑤ Muatan lift $\{0, 1, \dots, 8\}$.
+  - Interaksi titik ujung dinamis: klik untuk toggle ● (ikut) vs ○ (tidak ikut) vs $\infty$.
+  - Didaktik "Tebak Dulu, Baru Buktikan" dengan overlay blur dan tombol pembuktian / pintasan keyboard `B`.
+  - 4 Format representasi terpadu: Himpunan Terdaftar, Pertidaksamaan, Pembentuk Himpunan, dan Notasi Selang.
+- [x] **Sinkronisasi Sistem & Penomoran Dokumen (14 $\to$ 15 Slide)**:
+  - `App.tsx`: Pembaruan array `SLIDES` dan index handler `switch (currentSlideIndex)`.
+  - Penyesuaian tag hardcoded di seluruh slide lanjutan: `Slide6LinearGraph` (09), `Slide9OpeningPiecewise` (10), `Slide7WhyPiecewise` (11), `Slide8PiecewiseIntro` (12), `Slide9SandboxBuilder` (13), `Slide13OpeningProject` (14), `Slide10ProjectHub` (15).
+  - `TeacherDashboard.tsx`: Tampilan Q3 pada modal review dan ekspor CSV P2 adaptif.
+  - `lks-siswa.html` & `public/lks-siswa.html`: Pembaruan Bagian B1 dengan 3 butir (termasuk kurung biasa), sinkronisasi label Slide 8, 9, 10–13, dan 14–15.
+  - `panduan-guru.html` & `public/panduan-guru.html`: Alur aktivitas Pertemuan 2 menambahkan panduan Slide 8 Notasi Selang, dan penomoran slide P3–P4 digeser +1.
+- [x] **Build Verification**:
+  - `npm run build` (`tsc -b && vite build`) 100% lolos tanpa error.
+
 - [x] **Logika Sorting & Resolusi Submission Terbaru (`TeacherDashboard.tsx`)**:
   - Seluruh pengerjaan siswa kini disortir secara otomatis berdasarkan timestamp `submittedAt` menurun (descending, terbaru di index 0).
   - Data yang ditampilkan di tabel, modal review utama, dan showcase proyektor dijamin merupakan **versi pengerjaan paling baru** dari siswa.

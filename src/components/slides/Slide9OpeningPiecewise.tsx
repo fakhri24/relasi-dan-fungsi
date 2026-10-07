@@ -27,7 +27,7 @@ export const Slide9OpeningPiecewise: React.FC<Slide9OpeningPiecewiseProps> = ({ 
             PERTEMUAN 3 · 2 JP (90 MENIT)
           </span>
           <span className="px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 text-xs font-semibold">
-            09 · FUNGSI SEPENGCAL
+            10 · FUNGSI SEPENGCAL
           </span>
         </div>
         <div className="flex items-center gap-2 text-xs text-slate-400">
